@@ -17,3 +17,8 @@
         <div class="row">
             <h1>Expense System</h1>
         </div>
+        <c:if test="${message != null}">
+            <div class="row alert-danger">
+                <p><c:out value="${message}" /></p>
+                </div>
+        </c:if>
