@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,9 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("uploadReceipt")
 @SessionAttributes("user")
-@MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
-                 maxFileSize=1024*1024*10,      // 10MB
-                 maxRequestSize=1024*1024*50)
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50)
 public class RecieptUpload {
 
     @RequestMapping(method = RequestMethod.GET)
@@ -43,27 +44,35 @@ public class RecieptUpload {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String handleUpload(HttpServletRequest request) {
+    @ResponseBody
+    public String handleUpload(@RequestParam("file") MultipartFile file) {
         String view = "";
-        
-        
-        
-        File file = new File(request.getParameter("file")); 
-//        if (!file.isEmpty()) {
-//            try {
-//                byte[] bytes = file.getBytes();
-//                BufferedOutputStream stream
-//                        = new BufferedOutputStream(new FileOutputStream(new File(new java.util.Date().getTime() + "")));
-//                stream.write(bytes);
-//                stream.close();
-//                view = "You successfully uploaded!";
-//            } catch (Exception e) {
-//                view = "You failed to upload: "+ e.getMessage();
-//            }
-//        } else {
-//            view = "The file was empty.";
-//        }
+        if (!file.isEmpty()) {
+			try {
+				byte[] bytes = file.getBytes();
 
+				// Creating the directory to store file
+				String rootPath = System.getProperty("catalina.home");
+				File dir = new File(rootPath + File.separator + "tmpFiles");
+				if (!dir.exists())
+					dir.mkdirs();
+
+				// Create the file on server
+				File serverFile = new File(dir.getAbsolutePath()
+						+ File.separator + "file");
+				BufferedOutputStream stream = new BufferedOutputStream(
+						new FileOutputStream(serverFile));
+				stream.write(bytes);
+				stream.close();
+
+
+				//return "You successfully uploaded file=" + name;
+			} catch (Exception e) {
+				//return "You failed to upload " + name + " => " + e.getMessage();
+			}
+		} else {
+			//return "You failed to upload " + name + " because the file was empty.";
+		}
         return view;
 
     }
