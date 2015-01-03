@@ -6,6 +6,11 @@
 package dbHandler;
 
 import com.mongodb.*;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
+import com.mongodb.gridfs.GridFSInputFile;
+import java.io.File;
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -35,14 +40,29 @@ public class MongoDBHandler {
             System.out.print(coll);
         }
     }
-    
-    public void save(ArrayList<Tuplet> information, String collection){
+
+    public void save(ArrayList<Tuplet> information, String collection) {
         DBCollection table = db.getCollection(collection);
         BasicDBObject document = new BasicDBObject();
-        
-        for(Tuplet attribute : information){
+
+        for (Tuplet attribute : information) {
             document.put(attribute.getKey(), attribute.getAttribute());
         }
         
+        table.insert(document);
+    }
+
+    public void saveImage(String filename, File image, String collection) throws IOException {
+        GridFS gfsPhoto = new GridFS(db, collection);
+        GridFSInputFile gfsFile = gfsPhoto.createFile(image);
+        gfsFile.setFilename(filename);
+        gfsFile.save();
+
+    }
+
+    public void getImage(String filename, String collection) {
+        GridFS gfsPhoto = new GridFS(db, collection);
+        GridFSDBFile imageForOutput = gfsPhoto.findOne(filename);
+        System.out.println(imageForOutput);
     }
 }
