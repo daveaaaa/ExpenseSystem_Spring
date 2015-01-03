@@ -12,11 +12,10 @@ package controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Map;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,15 +36,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class RecieptUpload {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String doGet(HttpServletRequest request) {
+    public String doGet() {
 
-        //TODO: Some business logic to ensure that user can see things
         return "uploadReceipt";
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public String handleUpload(@RequestParam("file") MultipartFile file) {
+           
         String view = "";
         if (!file.isEmpty()) {
 			try {
