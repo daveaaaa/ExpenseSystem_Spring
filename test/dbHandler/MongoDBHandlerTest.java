@@ -6,6 +6,7 @@
 package dbHandler;
 
 import java.io.File;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -16,6 +17,8 @@ import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 import utils.Tuplet;
+import com.mongodb.*;
+import com.mongodb.gridfs.*;
 
 /**
  *
@@ -23,6 +26,13 @@ import utils.Tuplet;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MongoDBHandlerTest {
+
+    private static String host = "localhost";
+    private static String db = "test";
+    private static String COLLECTION_INFORMATION = "information";
+    private static String COLLECTION_PHOTO = "photo";
+    private static String TEST_PHOTO = "testphoto";
+    private MongoDBHandler instance;
 
     public MongoDBHandlerTest() {
     }
@@ -33,10 +43,22 @@ public class MongoDBHandlerTest {
 
     @AfterClass
     public static void tearDownClass() {
+        try {
+            MongoClient client = new MongoClient(host);
+            DB database = client.getDB(db);
+            database.dropDatabase();
+        } catch (UnknownHostException uhe) {
+            fail();
+        }
     }
 
     @Before
     public void setUp() {
+        try {
+            instance = new MongoDBHandler(host, db);
+        } catch (UnknownHostException uhe) {
+            fail("UnknownHost");
+        }
     }
 
     @After
@@ -49,12 +71,14 @@ public class MongoDBHandlerTest {
     @Test
     public void test1_SaveInformation() {
         System.out.println("save information");
-        ArrayList<Tuplet> information = null;
-        String collection = "";
-        MongoDBHandler instance = null;
-        instance.save(information, collection);
+        ArrayList<Tuplet> information = new ArrayList<>();
+
+        information.add(new Tuplet("Name", "David"));
+        information.add(new Tuplet("Age", "30"));
+
+        instance.save(information, COLLECTION_INFORMATION);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //fail("The test case is a prototype.");
     }
 
     /**
@@ -62,12 +86,11 @@ public class MongoDBHandlerTest {
      */
     @Test
     public void test2_ListInformation() {
-        System.out.println("list");
-        String collection = "";
-        MongoDBHandler instance = null;
-        instance.list(collection);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        System.out.println("list information");
+
+        instance.list(COLLECTION_INFORMATION);
+        //TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
     }
 
     /**
@@ -76,23 +99,17 @@ public class MongoDBHandlerTest {
     @Test
     public void test3_SaveImage() throws Exception {
         System.out.println("saveImage");
-        String filename = "";
-        File image = null;
-        String collection = "";
-        MongoDBHandler instance = null;
-        instance.saveImage(filename, image, collection);
+        File image = new File("/home/david/Documents/Dropbox/uni/year_4/Project/Coding/ExpensesSystem_Spring/test/dbHandler/face.png");
+        instance.saveImage(TEST_PHOTO, image, COLLECTION_PHOTO);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        ///fail("The test case is a prototype.");
     }
 
+    @Test
     public void test4_getImage() throws Exception {
         System.out.println("getImage");
-        String filename = "";
-        File image = null;
-        String collection = "";
-        MongoDBHandler instance = null;
-        instance.getImage("","");
+        instance.getImage(TEST_PHOTO, COLLECTION_PHOTO);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 }

@@ -6,11 +6,10 @@
 package dbHandler;
 
 import com.mongodb.*;
-import com.mongodb.gridfs.GridFS;
-import com.mongodb.gridfs.GridFSDBFile;
-import com.mongodb.gridfs.GridFSInputFile;
+import com.mongodb.gridfs.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -26,6 +25,10 @@ public class MongoDBHandler {
     private MongoClient client;
     private DB db;
 
+    public MongoDBHandler(String host, String dbName) throws UnknownHostException {
+        this(host, dbName, "", "");
+    }
+
     public MongoDBHandler(String host, String dbName, String dbUser, String dbPassword) throws UnknownHostException {
         client = new MongoClient("localhost");
         db = client.getDB(dbName);
@@ -34,10 +37,11 @@ public class MongoDBHandler {
 
     public void list(String collection) {
         DBCollection table = db.getCollection(collection);
-        Set<String> tables = db.getCollectionNames();
+        DBCursor cursor = table.find();
 
-        for (String coll : tables) {
-            System.out.print(coll);
+        while (cursor.hasNext()) {
+            DBObject obj = cursor.next();
+            System.out.println(obj.toString());
         }
     }
 
@@ -48,7 +52,7 @@ public class MongoDBHandler {
         for (Tuplet attribute : information) {
             document.put(attribute.getKey(), attribute.getAttribute());
         }
-        
+
         table.insert(document);
     }
 
@@ -60,9 +64,28 @@ public class MongoDBHandler {
 
     }
 
-    public void getImage(String filename, String collection) {
+    public ArrayList getImage(String filename, String collection) {
         GridFS gfsPhoto = new GridFS(db, collection);
         GridFSDBFile imageForOutput = gfsPhoto.findOne(filename);
         System.out.println(imageForOutput);
+
+        InputStream inputStream = imageForOutput.getInputStream();
+
+        ArrayList image = new ArrayList<>();
+        try {
+            int current = 0;
+            do {
+                current = inputStream.read();
+                image.add(current);
+            } while (current != -1);
+
+            inputStream.close();
+        } catch (IOException ioE) {
+            ioE.printStackTrace(System.out);
+            System.exit(1);
+        }
+        
+        
+        return image; 
     }
 }

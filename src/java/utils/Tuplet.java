@@ -10,8 +10,18 @@ package utils;
  * @author david
  */
 public class Tuplet {
+
     private String key;
     private String attribute;
+
+    public Tuplet() {
+        this("", "");
+    }
+
+    public Tuplet(String key, String attribute) {
+        this.key = key;
+        this.attribute = attribute;
+    }
 
     public String getKey() {
         return key;
@@ -28,6 +38,5 @@ public class Tuplet {
     public void setAttribute(String attribute) {
         this.attribute = attribute;
     }
-    
-    
+
 }
