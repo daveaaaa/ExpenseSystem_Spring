@@ -15,17 +15,17 @@ import javax.servlet.ServletContextListener;
  */
 public abstract class Helper implements ServletContextListener {
 
-    protected String dbHost;
-    protected String dbUser;
-    protected String dbPassword;
-    
-    public static DBHandler getDBHandler(){
-        return null; 
-    } 
-    
+    protected static String dbHost;
+    protected static String dbUser;
+    protected static String dbPassword;
+
+    public static DBHandler getDBHandler() {
+        return null;
+    }
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        
+
     }
 
     @Override
