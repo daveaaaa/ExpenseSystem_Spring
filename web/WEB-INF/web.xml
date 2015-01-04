@@ -25,10 +25,26 @@
             5
         </session-timeout>
     </session-config>
+    
+    <!-- DB Parameters -->
+    <context-param>
+        <param-name>db</param-name>
+        <param-value>127.0.0.1</param-value>
+    </context-param>
+    <context-param>
+        <param-name>dbUser</param-name>
+        <param-value> </param-value>
+    </context-param>
+    <context-param>
+        <param-name>dbPassword</param-name>
+        <param-value> </param-value>
+    </context-param>
+    
+    <!-- Spring framework -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-    <!-- Spring framework -->
+
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring</artifactId>
@@ -53,16 +69,5 @@
         <version>2.4.0</version>
     </dependency>
     
-    <context-param>
-        <param-name>db</param-name>
-        <param-value>127.0.0.1</param-value>
-    </context-param>
-    <context-param>
-        <param-name>dbUser</param-name>
-        <param-value> </param-value>
-    </context-param>
-    <context-param>
-        <param-name>dbPassword</param-name>
-        <param-value> </param-value>
-    </context-param>
+
 </web-app>
