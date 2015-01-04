@@ -75,4 +75,11 @@ public class RecieptUpload {
 
     }
 
+    private void saveImage(){
+        
+    }
+    
+    private void saveMetaData(){
+        
+    }
 }
