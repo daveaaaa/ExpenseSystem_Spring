@@ -2,23 +2,19 @@ package persistanceLayer.mongoDB;
 
 import java.net.UnknownHostException;
 import persistanceLayer.DBHandler;
-import persistanceLayer.Helper;
+import persistanceLayer.DBHelper;
 import persistanceLayer.NullDBHandler;
 
 /**
  *
  * @author david
  */
-public class MongoDBHelper extends Helper {
+public class MongoDBHelper extends DBHelper {
 
-    public static DBHandler getDBHandler() {
-        try {
-            MongoDBHandler handler = new MongoDBHandler(dbHost, dbUser, dbName, dbPassword);
-            return handler;
-        } catch (UnknownHostException uhe) {
-            System.exit(1);
-        }
-        
-        return new NullDBHandler(); 
+    public static DBHandler getDBHandler() throws Exception{
+
+        MongoDBHandler handler = new MongoDBHandler(dbHost, dbUser, dbName, dbPassword);
+        return handler;
+
     }
 }

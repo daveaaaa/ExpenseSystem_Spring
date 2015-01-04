@@ -9,7 +9,7 @@
     </listener>
     <listener>
         <description>ServletContextListener</description>
-        <listener-class>persistanceLayer.Helper</listener-class>
+        <listener-class>persistanceLayer.DBHelper</listener-class>
     </listener>
     <servlet>
         <servlet-name>dispatcher</servlet-name>
@@ -25,7 +25,6 @@
             5
         </session-timeout>
     </session-config>
-    
     <!-- DB Parameters -->
     <context-param>
         <param-name>db</param-name>
@@ -43,12 +42,10 @@
         <param-name>dbPassword</param-name>
         <param-value> </param-value>
     </context-param>
-    
     <!-- Spring framework -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring</artifactId>
@@ -72,6 +69,4 @@
         <artifactId>commons-io</artifactId>
         <version>2.4.0</version>
     </dependency>
-    
-
 </web-app>

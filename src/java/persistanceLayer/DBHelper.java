@@ -8,14 +8,14 @@ import javax.servlet.ServletContextListener;
  *
  * @author david
  */
-public abstract class Helper implements ServletContextListener {
+public abstract class DBHelper implements ServletContextListener {
 
     protected static String dbHost;
     protected static String dbUser;
     protected static String dbPassword;
-    protected static String dbName; 
-    
-    public static DBHandler getDBHandler() {
+    protected static String dbName;
+
+    public static DBHandler getDBHandler() throws Exception {
         return new NullDBHandler();
     }
 

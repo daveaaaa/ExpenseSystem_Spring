@@ -12,6 +12,7 @@ package controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -37,49 +38,41 @@ public class RecieptUpload {
 
     @RequestMapping(method = RequestMethod.GET)
     public String doGet() {
-
+        try{
+            
+        } catch(Exception ex){
+            //TODO: Log Exception 
+        }
         return "uploadReceipt";
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public String handleUpload(@RequestParam("file") MultipartFile file) {
-           
+    public String handleUpload(@RequestParam("file") MultipartFile multipartfile) {
         String view = "";
-        if (!file.isEmpty()) {
-			try {
-				byte[] bytes = file.getBytes();
+        try{
 
-				// Creating the directory to store file
-				String rootPath = System.getProperty("catalina.home");
-				File dir = new File(rootPath + File.separator + "tmpFiles");
-				if (!dir.exists())
-					dir.mkdirs();
+        File image = createFile(multipartfile);
 
-				// Create the file on server
-				File serverFile = new File(dir.getAbsolutePath()
-						+ File.separator + "file");
-				BufferedOutputStream stream = new BufferedOutputStream(
-						new FileOutputStream(serverFile));
-				stream.write(bytes);
-				stream.close();
-                                
-				//return "You successfully uploaded file=" + name;
-			} catch (Exception e) {
-				//return "You failed to upload " + name + " => " + e.getMessage();
-			}
-		} else {
-			//return "You failed to upload " + name + " because the file was empty.";
-		}
+        business.Reciept.createReciept(image);
+        } catch (Exception ex){
+            //TODO: log exception
+            System.exit(0);
+        }
         return view;
 
     }
 
-    private void saveImage(){
+    private File createFile(MultipartFile file) throws Exception {
+        File newFile = null;
+        FileOutputStream fos;
+
+        newFile = new File(file.getOriginalFilename());
+        newFile.createNewFile();
+        fos = new FileOutputStream(newFile);
+        fos.write(file.getBytes());
+        fos.close();
         
-    }
-    
-    private void saveMetaData(){
-        
+        return newFile;
     }
 }

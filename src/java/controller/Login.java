@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  *
  * @author david
  */
-
 @Controller
 @RequestMapping("login")
 @SessionAttributes("user")
@@ -20,23 +19,30 @@ public class Login {
 
     @RequestMapping(method = RequestMethod.GET)
     public String doGet(Map<String, Object> model) {
-        model.User user = new model.User();
-        model.put("user", user);
-        return ("login");
+        String view = "login";
+        try {
+            model.User user = new model.User();
+            model.put("user", user);
+        } catch (Exception ex) {
+            //TODO: Log Exception 
+        }
+        return (view);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public String doLogin(HttpServletRequest request, @ModelAttribute("user") model.User user, Map<String, Object> model) {
-        String page = "login";
-
-        if (business.User.login(user)) {
-            page = "receiptProviderHomepage";
-            request.getSession(true).setAttribute("user", user);
-        } else {
-            model.put("message", "Username or password invalid");
+        String view = "login";
+        try {
+            if (business.User.login(user)) {
+                view = "receiptProviderHomepage";
+                request.getSession(true).setAttribute("user", user);
+            } else {
+                model.put("message", "Username or password invalid");
+            }
+        } catch (Exception ex) {
+            //TODO: Log Exception 
         }
-
-        return (page);
+        return (view);
     }
 
 }
