@@ -20,7 +20,9 @@ public abstract class Helper implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-
+        dbHost = sce.getServletContext().getInitParameter("db");
+        dbUser = sce.getServletContext().getInitParameter("dbUser");
+        dbPassword = sce.getServletContext().getInitParameter("dbPassword");
     }
 
     @Override
