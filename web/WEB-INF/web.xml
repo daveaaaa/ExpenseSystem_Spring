@@ -9,7 +9,7 @@
     </listener>
     <listener>
         <description>ServletContextListener</description>
-        <listener-class>utils.Helper</listener-class>
+        <listener-class>persistanceLayer.Helper</listener-class>
     </listener>
     <servlet>
         <servlet-name>dispatcher</servlet-name>

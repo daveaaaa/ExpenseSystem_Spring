@@ -5,6 +5,7 @@
  */
 package dbHandler;
 
+import persistanceLayer.mongoDB.MongoDBHandler;
 import java.io.File;
 import java.net.UnknownHostException;
 import java.util.ArrayList;

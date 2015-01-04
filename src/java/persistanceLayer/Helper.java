@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package utils;
+package persistanceLayer;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -13,12 +13,19 @@ import javax.servlet.ServletContextListener;
  *
  * @author david
  */
-public class Helper implements ServletContextListener {
+public abstract class Helper implements ServletContextListener {
 
+    protected String dbHost;
+    protected String dbUser;
+    protected String dbPassword;
+    
+    public static DBHandler getDBHandler(){
+        return null; 
+    } 
     
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
