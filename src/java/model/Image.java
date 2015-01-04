@@ -15,21 +15,17 @@ import org.apache.commons.io.FilenameUtils;
  *
  * @author david
  */
-public class Image extends File {
+public class Image {
 
     private int height;
     private int width;
     private String format;
-   
-    
-    public Image(String pathname) throws IOException{
-        super(pathname);
-        
-        BufferedImage image = ImageIO.read(this);
+    private File imageFile;
 
-        format = FilenameUtils.getExtension(this.getPath());
-        height = image.getHeight();
-        width = image.getWidth();
+    public Image(File file) throws IOException {
+        format = FilenameUtils.getExtension(file.getPath());
+        this.imageFile = file;
+        setImageMetaData();
     }
 
     public int getHeight() {
@@ -44,6 +40,30 @@ public class Image extends File {
         return format;
     }
 
-    
-    
+    public File getImageFile() {
+        return imageFile;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public void setImageFile(File imageFile) throws IOException {
+        this.imageFile = imageFile;
+        setImageMetaData();
+    }
+
+    private void setImageMetaData() throws IOException {
+        BufferedImage image = ImageIO.read(imageFile);
+        height = image.getHeight();
+        width = image.getWidth();
+    }
 }

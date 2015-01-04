@@ -35,6 +35,9 @@ public class MongoDBHandler implements DBHandler {
     private static final String IMAGE_COLLECTION = "image";
     private static final String IMAGE_METADATA_COLLECTION = "image_metadata";
 
+    private static final String FILENAME = "filename";
+    
+    
     public MongoDBHandler(String dbHost, String dbName, String dbUsername, String dbPassword) throws UnknownHostException {
         client = new MongoClient(dbHost);
         db = client.getDB(dbName);
@@ -72,13 +75,16 @@ public class MongoDBHandler implements DBHandler {
     private void saveReceipt(Receipt reciept) {
         DBCollection table = getReceiptCollection();
         BasicDBObject document = getDocumentFromReceipt(reciept);
+        
+        document.put(FILENAME, reciept.getName());
+        
         table.insert(document);
     }
 
     private void saveImage(Image image, String filename) {
         try {
             GridFS gfsPhoto = getImageCollection();
-            GridFSInputFile gfsFile = gfsPhoto.createFile(image);
+            GridFSInputFile gfsFile = gfsPhoto.createFile(image.getImageFile());
             gfsFile.setFilename(filename);
             gfsFile.save();
         } catch (IOException ioE) {
@@ -93,10 +99,10 @@ public class MongoDBHandler implements DBHandler {
 
         BasicDBObject metaData = new BasicDBObject();
 
-        metaData.put("FILENAME", filename);
-        metaData.put("FORMAT", image.getFormat());
-        metaData.put("HEIGHT", image.getHeight());
-        metaData.put("WIDTH", image.getWidth());
+        metaData.put(FILENAME, filename);
+        metaData.put("format", image.getFormat());
+        metaData.put("height", image.getHeight());
+        metaData.put("width", image.getWidth());
 
         table.insert(metaData);
 
