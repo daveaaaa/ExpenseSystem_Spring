@@ -3,7 +3,7 @@ package persistanceLayer.mongoDB;
 import java.net.UnknownHostException;
 import persistanceLayer.DBHandler;
 import persistanceLayer.Helper;
-import persistanceLayer.NullHandler;
+import persistanceLayer.NullDBHandler;
 
 /**
  *
@@ -19,6 +19,6 @@ public class MongoDBHelper extends Helper {
             System.exit(1);
         }
         
-        return new NullHandler(); 
+        return new NullDBHandler(); 
     }
 }

@@ -15,7 +15,7 @@ public abstract class Helper implements ServletContextListener {
     protected static String dbPassword;
 
     public static DBHandler getDBHandler() {
-        return null;
+        return new NullDBHandler();
     }
 
     @Override

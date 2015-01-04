@@ -9,7 +9,7 @@ import model.User;
  *
  * @author david
  */
-public class NullHandler implements DBHandler{
+public class NullDBHandler implements DBHandler{
 
     @Override
     public void createReceipt() {
