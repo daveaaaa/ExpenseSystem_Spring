@@ -12,7 +12,7 @@ import model.User;
 public class NullDBHandler implements DBHandler{
 
     @Override
-    public void createReceipt() {
+    public void createReceipt(Receipt reciept) {
         // do nothing
     }
 
@@ -32,7 +32,7 @@ public class NullDBHandler implements DBHandler{
     }
 
     @Override
-    public void createUser() {
+    public void createUser(User user) {
         // do nothing
     }
 

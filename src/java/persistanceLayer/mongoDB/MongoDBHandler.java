@@ -2,6 +2,8 @@ package persistanceLayer.mongoDB;
 
 import com.mongodb.*;
 import com.mongodb.gridfs.*;
+import model.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,8 +12,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import javax.imageio.ImageIO;
 import model.Receipt;
 import model.User;
+import org.apache.commons.io.FilenameUtils;
 import persistanceLayer.DBHandler;
 import utils.Tuplet;
 
@@ -29,14 +33,123 @@ public class MongoDBHandler implements DBHandler {
     private static final String USER_COLLECTION = "user";
     private static final String RECIEPT_COLLECTION = "reciept";
     private static final String IMAGE_COLLECTION = "image";
-    private static final String IMAGE_METADATA_COLLECTION = "image_metadata"; 
-    
-    public MongoDBHandler(String dbHost, String dbUsername, String dbPassword) throws UnknownHostException {
+    private static final String IMAGE_METADATA_COLLECTION = "image_metadata";
+
+    public MongoDBHandler(String dbHost, String dbName, String dbUsername, String dbPassword) throws UnknownHostException {
         client = new MongoClient(dbHost);
+        db = client.getDB(dbName);
         this.dbUsername = dbUsername;
         this.dbPassword = dbPassword;
     }
-    
+
+    private DBCollection getReceiptCollection() {
+        return db.getCollection(RECIEPT_COLLECTION);
+    }
+
+    private GridFS getImageCollection() {
+        return new GridFS(db, IMAGE_COLLECTION);
+    }
+
+    private DBCollection getUserCollection() {
+        return db.getCollection(USER_COLLECTION);
+    }
+
+    private DBCollection getImageMetaDataCollection() {
+        return db.getCollection(IMAGE_METADATA_COLLECTION);
+    }
+
+    private BasicDBObject getDocumentFromReceipt(Receipt receipt) {
+        return null;
+    }
+
+    //Create Receipt
+    @Override
+    public void createReceipt(Receipt reciept) {
+        saveReceipt(reciept);
+        saveImage(reciept);
+    }
+
+    private void saveReceipt(Receipt reciept) {
+        DBCollection table = getReceiptCollection();
+        BasicDBObject document = getDocumentFromReceipt(reciept);
+        table.insert(document);
+    }
+
+    private void saveImage(Image image, String filename) {
+        try {
+            GridFS gfsPhoto = getImageCollection();
+            GridFSInputFile gfsFile = gfsPhoto.createFile(image);
+            gfsFile.setFilename(filename);
+            gfsFile.save();
+        } catch (IOException ioE) {
+            //TODO: implement logging
+            System.exit(1);
+            //do nothing
+        }
+    }
+
+    private void saveImageMetaData(Image image, String filename) {
+        DBCollection table = getImageMetaDataCollection();
+
+        BasicDBObject metaData = new BasicDBObject();
+
+        metaData.put("FILENAME", filename);
+        metaData.put("FORMAT", image.getFormat());
+        metaData.put("HEIGHT", image.getHeight());
+        metaData.put("WIDTH", image.getWidth());
+
+        table.insert(metaData);
+
+    }
+
+    private void saveImage(Receipt receipt) {
+        saveImage(receipt.getImage(), receipt.getName());
+        saveImageMetaData(receipt.getImage(), receipt.getName());
+    }
+
+    //Update Receipt
+    @Override
+    public void updateReceipt(Receipt reciept) {
+        DBCollection table = getReceiptCollection();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList<Receipt> findReceipt() {
+        DBCollection table = getReceiptCollection();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Receipt getReceipt(int userID, Date startDate, Date endDate) {
+        DBCollection table = getReceiptCollection();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createUser(User user) {
+        DBCollection table = getUserCollection();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateUser(User user) {
+        DBCollection table = getUserCollection();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList<User> findUser() {
+        DBCollection table = getUserCollection();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public User getUser(String username, String password) {
+        DBCollection table = getUserCollection();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 //    public void list(String collection) {
 //        DBCollection table = db.getCollection(collection);
 //        DBCursor cursor = table.find();
@@ -89,44 +202,4 @@ public class MongoDBHandler implements DBHandler {
 //
 //        return image;
 //    }
-
-    @Override
-    public void createReceipt() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void updateReceipt(Receipt reciept) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ArrayList<Receipt> findReceipt() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Receipt getReceipt(int userID, Date startDate, Date endDate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createUser() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void updateUser(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ArrayList<User> findUser() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public User getUser(String username, String password) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

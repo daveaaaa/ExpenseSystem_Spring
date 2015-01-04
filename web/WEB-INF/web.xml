@@ -32,6 +32,10 @@
         <param-value>127.0.0.1</param-value>
     </context-param>
     <context-param>
+        <param-name>dbName</param-name>
+        <param-value>ExpenseSystem</param-value>
+    </context-param>
+    <context-param>
         <param-name>dbUser</param-name>
         <param-value> </param-value>
     </context-param>

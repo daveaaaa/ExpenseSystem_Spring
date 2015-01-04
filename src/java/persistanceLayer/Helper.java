@@ -13,7 +13,8 @@ public abstract class Helper implements ServletContextListener {
     protected static String dbHost;
     protected static String dbUser;
     protected static String dbPassword;
-
+    protected static String dbName; 
+    
     public static DBHandler getDBHandler() {
         return new NullDBHandler();
     }
@@ -21,6 +22,7 @@ public abstract class Helper implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         dbHost = sce.getServletContext().getInitParameter("db");
+        dbName = sce.getServletContext().getInitParameter("dbName");
         dbUser = sce.getServletContext().getInitParameter("dbUser");
         dbPassword = sce.getServletContext().getInitParameter("dbPassword");
     }

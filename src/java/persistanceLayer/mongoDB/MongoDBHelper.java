@@ -13,7 +13,7 @@ public class MongoDBHelper extends Helper {
 
     public static DBHandler getDBHandler() {
         try {
-            MongoDBHandler handler = new MongoDBHandler(dbHost, dbUser, dbPassword);
+            MongoDBHandler handler = new MongoDBHandler(dbHost, dbUser, dbName, dbPassword);
             return handler;
         } catch (UnknownHostException uhe) {
             System.exit(1);

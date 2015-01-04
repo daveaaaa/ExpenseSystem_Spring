@@ -16,7 +16,7 @@ import model.User;
  */
 public interface DBHandler {
 
-    public void createReceipt();
+    public void createReceipt(Receipt reciept);
 
     public void updateReceipt(Receipt reciept);
 
@@ -24,7 +24,7 @@ public interface DBHandler {
 
     public Receipt getReceipt(int userID, Date startDate, Date endDate);
 
-    public void createUser();
+    public void createUser(User user);
 
     public void updateUser(User user);
 
