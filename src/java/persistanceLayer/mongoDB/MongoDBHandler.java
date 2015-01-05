@@ -33,7 +33,6 @@ public class MongoDBHandler implements DBHandler {
     private static final String USER_COLLECTION = "user";
     private static final String RECIEPT_COLLECTION = "reciept";
     private static final String IMAGE_COLLECTION = "image";
-    private static final String IMAGE_METADATA_COLLECTION = "image_metadata";
 
     private static final String FILENAME = "filename";
     
@@ -57,10 +56,6 @@ public class MongoDBHandler implements DBHandler {
         return db.getCollection(USER_COLLECTION);
     }
 
-    private DBCollection getImageMetaDataCollection() {
-        return db.getCollection(IMAGE_METADATA_COLLECTION);
-    }
-
     private BasicDBObject getDocumentFromReceipt(Receipt receipt) {
         return new BasicDBObject();
     }
@@ -77,6 +72,7 @@ public class MongoDBHandler implements DBHandler {
         BasicDBObject document = getDocumentFromReceipt(reciept);
         
         document.put(FILENAME, reciept.getName());
+        document.put("Image_MetaData", saveImageMetaData(reciept));
         
         table.insert(document);
     }
@@ -94,23 +90,20 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    private void saveImageMetaData(Image image, String filename) {
-        DBCollection table = getImageMetaDataCollection();
+    private BasicDBObject saveImageMetaData(Receipt receipt) {
 
         BasicDBObject metaData = new BasicDBObject();
 
-        metaData.put(FILENAME, filename);
-        metaData.put("format", image.getFormat());
-        metaData.put("height", image.getHeight());
-        metaData.put("width", image.getWidth());
+        metaData.put("format", receipt.getImage().getFormat());
+        metaData.put("height", receipt.getImage().getHeight());
+        metaData.put("width", receipt.getImage().getWidth());
 
-        table.insert(metaData);
+        return metaData;
 
     }
 
     private void saveImage(Receipt receipt) {
         saveImage(receipt.getImage(), receipt.getName());
-        saveImageMetaData(receipt.getImage(), receipt.getName());
     }
 
     //Update Receipt
