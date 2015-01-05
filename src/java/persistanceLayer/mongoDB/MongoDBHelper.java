@@ -13,7 +13,7 @@ public class MongoDBHelper extends DBHelper {
 
     public static DBHandler getDBHandler() throws Exception{
 
-        MongoDBHandler handler = new MongoDBHandler(dbHost, dbUser, dbName, dbPassword);
+        MongoDBHandler handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
         return handler;
 
     }

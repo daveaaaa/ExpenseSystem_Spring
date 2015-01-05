@@ -11,7 +11,7 @@ import javax.servlet.ServletContextListener;
 public abstract class DBHelper implements ServletContextListener {
 
     protected static String dbHost;
-    protected static String dbUser;
+    protected static String dbUsername;
     protected static String dbPassword;
     protected static String dbName;
 
@@ -21,9 +21,9 @@ public abstract class DBHelper implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        dbHost = sce.getServletContext().getInitParameter("db");
+        dbHost = sce.getServletContext().getInitParameter("dbHost");
         dbName = sce.getServletContext().getInitParameter("dbName");
-        dbUser = sce.getServletContext().getInitParameter("dbUser");
+        dbUsername = sce.getServletContext().getInitParameter("dbUser");
         dbPassword = sce.getServletContext().getInitParameter("dbPassword");
     }
 

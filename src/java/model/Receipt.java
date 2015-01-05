@@ -12,6 +12,15 @@ public class Receipt {
     private String name;
     private Image image;
 
+    public Receipt(){
+        name = "";
+        image = null; 
+    }
+    
+    public Receipt(User user){
+        name = user.getUsername() + new java.util.Date().getTime();
+    }
+    
     public String getName() {
         return name;
     }

@@ -17,6 +17,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,13 +49,13 @@ public class RecieptUpload {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public String handleUpload(@RequestParam("file") MultipartFile multipartfile) {
+    public String handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") model.User user ) {
         String view = "";
         try{
-
+            
         File image = createFile(multipartfile);
 
-        business.Reciept.createReciept(image);
+        business.Reciept.createReciept(image, user);
         } catch (Exception ex){
             //TODO: log exception
             System.exit(0);
@@ -63,16 +64,16 @@ public class RecieptUpload {
 
     }
 
-    private File createFile(MultipartFile file) throws Exception {
-        File newFile = null;
+    private File createFile(MultipartFile multiPartFile) throws Exception {
+        File file = null;
         FileOutputStream fos;
 
-        newFile = new File(file.getOriginalFilename());
-        newFile.createNewFile();
-        fos = new FileOutputStream(newFile);
-        fos.write(file.getBytes());
-        fos.close();
         
-        return newFile;
+       
+        
+        file = new File(System.getProperty("java.io.tmpdir") +  System.getProperty("file.separator") + multiPartFile.getOriginalFilename());
+        multiPartFile.transferTo(file);
+        
+        return file;
     }
 }

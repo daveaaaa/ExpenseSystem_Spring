@@ -18,9 +18,9 @@ import persistanceLayer.mongoDB.MongoDBHelper;
  */
 public class Reciept {
 
-    public static void createReciept(File image) throws Exception {
+    public static void createReciept(File image, model.User user) throws Exception {
 
-        model.Receipt receipt = new Receipt();
+        model.Receipt receipt = new Receipt(user);
         receipt.setImage(new Image(image));
 
         DBHandler handler = MongoDBHelper.getDBHandler();

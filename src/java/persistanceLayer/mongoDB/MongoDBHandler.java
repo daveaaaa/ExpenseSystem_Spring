@@ -62,7 +62,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
     private BasicDBObject getDocumentFromReceipt(Receipt receipt) {
-        return null;
+        return new BasicDBObject();
     }
 
     //Create Receipt

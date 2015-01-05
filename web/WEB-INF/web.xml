@@ -9,7 +9,7 @@
     </listener>
     <listener>
         <description>ServletContextListener</description>
-        <listener-class>persistanceLayer.DBHelper</listener-class>
+        <listener-class>persistanceLayer.mongoDB.MongoDBHelper</listener-class>
     </listener>
     <servlet>
         <servlet-name>dispatcher</servlet-name>
@@ -27,7 +27,7 @@
     </session-config>
     <!-- DB Parameters -->
     <context-param>
-        <param-name>db</param-name>
+        <param-name>dbHost</param-name>
         <param-value>127.0.0.1</param-value>
     </context-param>
     <context-param>
@@ -36,11 +36,11 @@
     </context-param>
     <context-param>
         <param-name>dbUser</param-name>
-        <param-value> </param-value>
+        <param-value>app</param-value>
     </context-param>
     <context-param>
         <param-name>dbPassword</param-name>
-        <param-value> </param-value>
+        <param-value>app</param-value>
     </context-param>
     <!-- Spring framework -->
     <welcome-file-list>
