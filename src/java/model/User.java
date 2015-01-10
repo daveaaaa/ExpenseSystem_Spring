@@ -11,16 +11,23 @@ import java.io.Serializable;
  *
  * @author david
  */
-public class User implements Serializable{
-    private int userID;
+public class User implements Serializable {
+
+    private String userID;
     private String username;
     private String password;
 
-    public int getUserID() {
+    public User() {
+        userID = "";
+        username = "";
+        password = "";
+    }
+
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 
@@ -39,6 +46,5 @@ public class User implements Serializable{
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
+
 }

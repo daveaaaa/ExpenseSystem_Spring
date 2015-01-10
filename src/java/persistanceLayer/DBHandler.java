@@ -16,14 +16,16 @@ import model.User;
  */
 public interface DBHandler {
 
-    public void createReceipt(Receipt reciept);
+    public Receipt createReceipt(Receipt reciept);
 
     public void updateReceipt(Receipt reciept);
 
     public ArrayList<Receipt> findReceipt();
 
-    public Receipt getReceipt(int userID, Date startDate, Date endDate);
+    public Receipt getReceipt(String userID, Date startDate, Date endDate);
 
+    public Receipt getReceipt(String receiptID); 
+    
     public void createUser(User user);
 
     public void updateUser(User user);

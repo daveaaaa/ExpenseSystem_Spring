@@ -42,7 +42,7 @@ public class Login {
         } catch (Exception ex) {
             //TODO: Log Exception 
         }
-        return (view);
+        return view;
     }
 
 }

@@ -1,6 +1,7 @@
 package model;
 
 import java.io.File;
+import java.util.Date;
 import model.Image;
 
 /**
@@ -9,22 +10,28 @@ import model.Image;
  */
 public class Receipt {
 
-    private String name;
+    private String receiptID;
     private Image image;
-    private User user;
-    
-    public Receipt(){
-        name = "";
-        image = null; 
+    private String userID;
+    private java.util.Date createdOn;
+
+    public Receipt() {
+        receiptID = "";
+        userID = "";
+        createdOn = new java.util.Date();
+        image = new Image();
     }
-    
-    public Receipt(User user){
-        this.user = user; 
-        name = user.getUsername() + new java.util.Date().getTime();
+
+    public Receipt(String userID) {
+        this.userID = userID;
     }
-    
-    public String getName() {
-        return name;
+
+    public String getReceiptID() {
+        return receiptID;
+    }
+
+    public void setReceiptID(String receiptID) {
+        this.receiptID = receiptID;
     }
 
     public Image getImage() {
@@ -35,15 +42,15 @@ public class Receipt {
         this.image = image;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getUserID() {
+        return userID;
     }
-    
-    public User getUser(){
-        return user;
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
-    
-    public void setUser(User user){
-        this.user = user; 
+
+    public void setCreatedDate(Date createdOn) {
+        this.createdOn = createdOn;
     }
 }

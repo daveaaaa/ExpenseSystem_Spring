@@ -21,15 +21,18 @@ import persistanceLayer.mongoDB.MongoDBHelper;
  */
 public class Reciept {
 
-    public static void createReciept(MultipartFile multiPartFile, model.User user) throws Exception {
+    public static model.Receipt createReciept(MultipartFile multiPartFile, model.User user) throws Exception {
 
-        model.Receipt receipt = new Receipt(user);
+        model.Receipt receipt = new Receipt(user.getUserID());
         model.Image image = createImage(multiPartFile);
         receipt.setImage(image);
 
         DBHandler handler = MongoDBHelper.getDBHandler();
 
         handler.createReceipt(receipt);
+        
+        receipt = handler.getReceipt(receipt.getReceiptID()); 
+        return receipt;
     }
 
     private static model.Image createImage(MultipartFile multiPartFile) throws Exception {

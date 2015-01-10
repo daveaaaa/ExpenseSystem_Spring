@@ -34,7 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Controller
 @RequestMapping("uploadReceipt")
-@SessionAttributes("user")
+@SessionAttributes({"user","receipt"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50)
@@ -51,15 +51,16 @@ public class RecieptUpload {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
-    public String handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") model.User user) {
-        String view = "";
+    public String handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") model.User user, HttpServletRequest request) {
+        String view = "viewReceipt";
         try {
-            business.Reciept.createReciept(multipartfile, user);
+           model.Receipt receipt = business.Reciept.createReciept(multipartfile, user);
+           request.getSession(true).setAttribute("receipt", receipt);
         } catch (Exception ex) {
             //TODO: log exception
-            System.exit(0);
         }
+        
+        
         return view;
 
     }

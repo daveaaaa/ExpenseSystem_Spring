@@ -2,6 +2,7 @@ package persistanceLayer.mongoDB;
 
 import com.mongodb.*;
 import com.mongodb.gridfs.*;
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import model.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,6 +17,7 @@ import javax.imageio.ImageIO;
 import model.Receipt;
 import model.User;
 import org.apache.commons.io.FilenameUtils;
+import org.bson.types.ObjectId;
 import persistanceLayer.DBHandler;
 import utils.Tuplet;
 
@@ -32,11 +34,7 @@ public class MongoDBHandler implements DBHandler {
 
     private static final String USER_COLLECTION = "user";
     private static final String RECIEPT_COLLECTION = "reciept";
-    private static final String IMAGE_COLLECTION = "image";
 
-    private static final String FILENAME = "filename";
-    
-    
     public MongoDBHandler(String dbHost, String dbName, String dbUsername, String dbPassword) throws UnknownHostException {
         client = new MongoClient(dbHost);
         db = client.getDB(dbName);
@@ -46,10 +44,6 @@ public class MongoDBHandler implements DBHandler {
 
     private DBCollection getReceiptCollection() {
         return db.getCollection(RECIEPT_COLLECTION);
-    }
-
-    private GridFS getImageCollection() {
-        return new GridFS(db, IMAGE_COLLECTION);
     }
 
     private DBCollection getUserCollection() {
@@ -62,21 +56,24 @@ public class MongoDBHandler implements DBHandler {
 
     //Create Receipt
     @Override
-    public void createReceipt(Receipt reciept) {
-        saveReceipt(reciept);
-        //saveImage(reciept);
+    public Receipt createReceipt(Receipt reciept) {
+        reciept = saveReceipt(reciept);
+        return reciept; 
     }
 
-    private void saveReceipt(Receipt reciept) {
+    private Receipt saveReceipt(Receipt reciept) {
         DBCollection table = getReceiptCollection();
         BasicDBObject document = getDocumentFromReceipt(reciept);
-        
-        document.put("userID", reciept.getUser().getUserID());
-        document.put("createDate", new java.util.Date().toInstant().toString());
-        document.put(FILENAME, reciept.getName());
-        document.put("Image_MetaData", saveImage(reciept));
-        
+
+        document.put("userID", reciept.getUserID());
+        document.put("createdDate", new java.util.Date().getTime());
+        document.put("image", saveImage(reciept));
+
         table.insert(document);
+        
+        reciept.setReceiptID((String)document.get( "_id" ));
+        
+        return reciept; 
     }
 
     private BasicDBObject saveImage(Receipt receipt) {
@@ -106,9 +103,48 @@ public class MongoDBHandler implements DBHandler {
     }
 
     @Override
-    public Receipt getReceipt(int userID, Date startDate, Date endDate) {
+    public Receipt getReceipt(String userID, Date startDate, Date endDate) {
         DBCollection table = getReceiptCollection();
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public model.Receipt getReceipt(String receiptID) {
+        DBCollection table = getReceiptCollection();
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", new ObjectId(receiptID));
+        DBObject dbObj = table.findOne(query);
+
+        return createReceipt(dbObj);
+    }
+
+    private model.Receipt createReceipt(DBObject dbObj) {
+        Receipt receipt = new Receipt();
+
+        receipt.setReceiptID((String) dbObj.get("_id"));
+        receipt.setUserID((String) dbObj.get("userID"));
+        receipt.setCreatedDate(new java.util.Date((long) dbObj.get("createdDate")));
+
+        receipt.setImage(getImage(dbObj));
+
+        return receipt;
+    }
+
+    private model.Image getImage(DBObject dbObj) {
+        
+        BasicDBObject dbImage = (BasicDBObject) dbObj.get("image");        
+        model.Image image = new model.Image();
+        
+        image.setHeight((int) dbImage.get("height"));
+        image.setWidth((int) dbImage.get("width"));
+        image.setFormat((String) dbImage.get("format"));
+        try {
+            image.setByteArray((String) dbImage.get("64bit"));
+        } catch (Base64DecodingException b64) {
+            //TODO: Logging
+        }
+        
+        return image; 
     }
 
     @Override

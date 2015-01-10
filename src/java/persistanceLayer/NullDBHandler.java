@@ -9,16 +9,16 @@ import model.User;
  *
  * @author david
  */
-public class NullDBHandler implements DBHandler{
+public class NullDBHandler implements DBHandler {
 
     @Override
-    public void createReceipt(Receipt reciept) {
-        // do nothing
+    public Receipt createReceipt(Receipt reciept) {
+        return new Receipt();
     }
 
     @Override
     public void updateReceipt(Receipt reciept) {
-    // do nothing
+        // do nothing
     }
 
     @Override
@@ -27,7 +27,7 @@ public class NullDBHandler implements DBHandler{
     }
 
     @Override
-    public Receipt getReceipt(int userID, Date startDate, Date endDate) {
+    public Receipt getReceipt(String userID, Date startDate, Date endDate) {
         return new Receipt();
     }
 
@@ -38,17 +38,22 @@ public class NullDBHandler implements DBHandler{
 
     @Override
     public void updateUser(User user) {
-    // do nothing
+        // do nothing
     }
 
     @Override
     public ArrayList<User> findUser() {
-        return new ArrayList<>(); 
+        return new ArrayList<>();
     }
 
     @Override
     public User getUser(String username, String password) {
         return new User();
     }
-    
+
+    @Override
+    public Receipt getReceipt(String receiptID) {
+        return new Receipt();
+    }
+
 }

@@ -23,15 +23,21 @@ public class Image {
     private int height;
     private int width;
     private String format;
-//    private File imageFile;
     private byte[] byteArray;
 
-    public Image(byte[] byteArray,String format,int height,int width) throws IOException {
+    public Image() {
+        byteArray = new byte[0];
+        width = 0;
+        height = 0;
+        format = "";
+    }
+
+    public Image(byte[] byteArray, String format, int height, int width) throws IOException {
         this.byteArray = byteArray;
         this.format = format;
         this.height = height;
-        this.width = width; 
-                
+        this.width = width;
+
     }
 
     public int getHeight() {
@@ -73,15 +79,4 @@ public class Image {
     public void setFormat(String format) {
         this.format = format;
     }
-
-//    public void setImageFile(File imageFile) throws IOException {
-//        this.imageFile = imageFile;
-//        setImageMetaData();
-//    }
-//
-//    private void setImageMetaData() throws IOException {
-//        BufferedImage image = ImageIO.read(imageFile);
-//        height = image.getHeight();
-//        width = image.getWidth();
-//    }
 }
