@@ -11,13 +11,15 @@ public class Receipt {
 
     private String name;
     private Image image;
-
+    private User user;
+    
     public Receipt(){
         name = "";
         image = null; 
     }
     
     public Receipt(User user){
+        this.user = user; 
         name = user.getUsername() + new java.util.Date().getTime();
     }
     
@@ -35,5 +37,13 @@ public class Receipt {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public User getUser(){
+        return user;
+    }
+    
+    public void setUser(User user){
+        this.user = user; 
     }
 }

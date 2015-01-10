@@ -71,13 +71,15 @@ public class MongoDBHandler implements DBHandler {
         DBCollection table = getReceiptCollection();
         BasicDBObject document = getDocumentFromReceipt(reciept);
         
+        document.put("userID", reciept.getUser().getUserID());
+        document.put("createDate", new java.util.Date().toInstant().toString());
         document.put(FILENAME, reciept.getName());
-        document.put("Image_MetaData", saveImageMetaData(reciept));
+        document.put("Image_MetaData", saveImage(reciept));
         
         table.insert(document);
     }
 
-    private BasicDBObject saveImageMetaData(Receipt receipt) {
+    private BasicDBObject saveImage(Receipt receipt) {
 
         BasicDBObject metaData = new BasicDBObject();
 
