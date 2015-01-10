@@ -5,9 +5,12 @@
  */
 package model;
 
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import javax.imageio.ImageIO;
 import org.apache.commons.io.FilenameUtils;
 
@@ -20,12 +23,15 @@ public class Image {
     private int height;
     private int width;
     private String format;
-    private File imageFile;
+//    private File imageFile;
+    private byte[] byteArray;
 
-    public Image(File file) throws IOException {
-        format = FilenameUtils.getExtension(file.getPath());
-        this.imageFile = file;
-        setImageMetaData();
+    public Image(byte[] byteArray,String format,int height,int width) throws IOException {
+        this.byteArray = byteArray;
+        this.format = format;
+        this.height = height;
+        this.width = width; 
+                
     }
 
     public int getHeight() {
@@ -40,8 +46,20 @@ public class Image {
         return format;
     }
 
-    public File getImageFile() {
-        return imageFile;
+    public void setByteArray(byte[] byteArray) {
+        this.byteArray = byteArray;
+    }
+
+    public byte[] getByteArray() {
+        return byteArray;
+    }
+
+    public void setByteArray(String string) throws Base64DecodingException {
+        byteArray = Base64.decode(string);
+    }
+
+    public String get64EnCode() {
+        return Base64.encode(byteArray);
     }
 
     public void setHeight(int height) {
@@ -56,14 +74,14 @@ public class Image {
         this.format = format;
     }
 
-    public void setImageFile(File imageFile) throws IOException {
-        this.imageFile = imageFile;
-        setImageMetaData();
-    }
-
-    private void setImageMetaData() throws IOException {
-        BufferedImage image = ImageIO.read(imageFile);
-        height = image.getHeight();
-        width = image.getWidth();
-    }
+//    public void setImageFile(File imageFile) throws IOException {
+//        this.imageFile = imageFile;
+//        setImageMetaData();
+//    }
+//
+//    private void setImageMetaData() throws IOException {
+//        BufferedImage image = ImageIO.read(imageFile);
+//        height = image.getHeight();
+//        width = image.getWidth();
+//    }
 }

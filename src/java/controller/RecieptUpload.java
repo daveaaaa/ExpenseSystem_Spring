@@ -9,10 +9,13 @@ package controller;
  *
  * @author david
  */
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -53,7 +56,7 @@ public class RecieptUpload {
         String view = "";
         try{
             
-        File image = createFile(multipartfile);
+        model.Image image = createFile(multipartfile);
 
         business.Reciept.createReciept(image, user);
         } catch (Exception ex){
@@ -64,16 +67,23 @@ public class RecieptUpload {
 
     }
 
-    private File createFile(MultipartFile multiPartFile) throws Exception {
-        File file = null;
-        FileOutputStream fos;
+    private model.Image createFile(MultipartFile multiPartFile) throws Exception {
+//        File file = null;
+//        FileOutputStream fos;
 
+        byte[] byteArray = multiPartFile.getBytes();
+        BufferedImage image = ImageIO.read(multiPartFile.getInputStream());
+        int height = image.getHeight();
+        int width = image.getWidth(); 
         
-       
-        
-        file = new File(System.getProperty("java.io.tmpdir") +  System.getProperty("file.separator") + multiPartFile.getOriginalFilename());
-        multiPartFile.transferTo(file);
-        
-        return file;
+        return new model.Image(byteArray, multiPartFile.getContentType(), height,width);
+                
+//        String base64 = Base64.encode(byteArray);
+//        multiPartFile.getContentType();
+//        
+//        file = new File(System.getProperty("java.io.tmpdir") +  System.getProperty("file.separator") + multiPartFile.getOriginalFilename());
+//        multiPartFile.transferTo(file);
+//        
+//        return file;
     }
 }

@@ -64,7 +64,7 @@ public class MongoDBHandler implements DBHandler {
     @Override
     public void createReceipt(Receipt reciept) {
         saveReceipt(reciept);
-        saveImage(reciept);
+        //saveImage(reciept);
     }
 
     private void saveReceipt(Receipt reciept) {
@@ -77,23 +77,24 @@ public class MongoDBHandler implements DBHandler {
         table.insert(document);
     }
 
-    private void saveImage(Image image, String filename) {
-        try {
-            GridFS gfsPhoto = getImageCollection();
-            GridFSInputFile gfsFile = gfsPhoto.createFile(image.getImageFile());
-            gfsFile.setFilename(filename);
-            gfsFile.save();
-        } catch (IOException ioE) {
-            //TODO: implement logging
-            System.exit(1);
-            //do nothing
-        }
-    }
+//    private void saveImage(Image image, String filename) {
+//        try {
+//            GridFS gfsPhoto = getImageCollection();
+//            GridFSInputFile gfsFile = gfsPhoto.createFile(image.getImageFile());
+//            gfsFile.setFilename(filename);
+//            gfsFile.save();
+//        } catch (IOException ioE) {
+//            //TODO: implement logging
+//            System.exit(1);
+//            //do nothing
+//        }
+//    }
 
     private BasicDBObject saveImageMetaData(Receipt receipt) {
 
         BasicDBObject metaData = new BasicDBObject();
 
+        metaData.put("64bit", receipt.getImage().get64EnCode());
         metaData.put("format", receipt.getImage().getFormat());
         metaData.put("height", receipt.getImage().getHeight());
         metaData.put("width", receipt.getImage().getWidth());
@@ -102,9 +103,9 @@ public class MongoDBHandler implements DBHandler {
 
     }
 
-    private void saveImage(Receipt receipt) {
-        saveImage(receipt.getImage(), receipt.getName());
-    }
+//    private void saveImage(Receipt receipt) {
+//        saveImage(receipt.getImage(), receipt.getName());
+//    }
 
     //Update Receipt
     @Override
