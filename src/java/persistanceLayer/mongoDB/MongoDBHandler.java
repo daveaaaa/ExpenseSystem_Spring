@@ -77,19 +77,6 @@ public class MongoDBHandler implements DBHandler {
         table.insert(document);
     }
 
-//    private void saveImage(Image image, String filename) {
-//        try {
-//            GridFS gfsPhoto = getImageCollection();
-//            GridFSInputFile gfsFile = gfsPhoto.createFile(image.getImageFile());
-//            gfsFile.setFilename(filename);
-//            gfsFile.save();
-//        } catch (IOException ioE) {
-//            //TODO: implement logging
-//            System.exit(1);
-//            //do nothing
-//        }
-//    }
-
     private BasicDBObject saveImageMetaData(Receipt receipt) {
 
         BasicDBObject metaData = new BasicDBObject();
@@ -102,10 +89,6 @@ public class MongoDBHandler implements DBHandler {
         return metaData;
 
     }
-
-//    private void saveImage(Receipt receipt) {
-//        saveImage(receipt.getImage(), receipt.getName());
-//    }
 
     //Update Receipt
     @Override

@@ -42,9 +42,9 @@ public class RecieptUpload {
 
     @RequestMapping(method = RequestMethod.GET)
     public String doGet() {
-        try{
-            
-        } catch(Exception ex){
+        try {
+
+        } catch (Exception ex) {
             //TODO: Log Exception 
         }
         return "uploadReceipt";
@@ -52,14 +52,11 @@ public class RecieptUpload {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public String handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") model.User user ) {
+    public String handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") model.User user) {
         String view = "";
-        try{
-            
-        model.Image image = createFile(multipartfile);
-
-        business.Reciept.createReciept(image, user);
-        } catch (Exception ex){
+        try {
+            business.Reciept.createReciept(multipartfile, user);
+        } catch (Exception ex) {
             //TODO: log exception
             System.exit(0);
         }
@@ -67,23 +64,4 @@ public class RecieptUpload {
 
     }
 
-    private model.Image createFile(MultipartFile multiPartFile) throws Exception {
-//        File file = null;
-//        FileOutputStream fos;
-
-        byte[] byteArray = multiPartFile.getBytes();
-        BufferedImage image = ImageIO.read(multiPartFile.getInputStream());
-        int height = image.getHeight();
-        int width = image.getWidth(); 
-        
-        return new model.Image(byteArray, multiPartFile.getContentType(), height,width);
-                
-//        String base64 = Base64.encode(byteArray);
-//        multiPartFile.getContentType();
-//        
-//        file = new File(System.getProperty("java.io.tmpdir") +  System.getProperty("file.separator") + multiPartFile.getOriginalFilename());
-//        multiPartFile.transferTo(file);
-//        
-//        return file;
-    }
 }
