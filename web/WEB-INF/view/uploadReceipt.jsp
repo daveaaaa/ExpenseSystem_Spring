@@ -26,4 +26,6 @@
                         });
             });
 </script>
+
+<%@include file="/WEB-INF/templates/logout.jsp" %>
 <%@include file="/WEB-INF/templates/footer.jsp" %>
