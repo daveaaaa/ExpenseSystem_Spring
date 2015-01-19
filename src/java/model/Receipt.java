@@ -15,6 +15,7 @@ public class Receipt {
     private String userID;
     private java.util.Date createdOn;
 
+    
     public Receipt() {
         receiptID = "";
         userID = "";
