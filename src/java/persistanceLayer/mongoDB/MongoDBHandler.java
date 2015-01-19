@@ -70,8 +70,8 @@ public class MongoDBHandler implements DBHandler {
         document.put("image", saveImage(reciept));
 
         table.insert(document);
-        
-        reciept.setReceiptID((String)document.get( "_id" ));
+        String id = document.getString("_id");
+        reciept.setReceiptID(id);
         
         return reciept; 
     }
@@ -80,7 +80,7 @@ public class MongoDBHandler implements DBHandler {
 
         BasicDBObject metaData = new BasicDBObject();
 
-        metaData.put("64bit", receipt.getImage().get64EnCode());
+        metaData.put("64bit", receipt.getImage().getBase64());
         metaData.put("format", receipt.getImage().getFormat());
         metaData.put("height", receipt.getImage().getHeight());
         metaData.put("width", receipt.getImage().getWidth());
@@ -115,15 +115,20 @@ public class MongoDBHandler implements DBHandler {
         query.put("_id", new ObjectId(receiptID));
         DBObject dbObj = table.findOne(query);
 
-        return createReceipt(dbObj);
+        return populateReceipt(dbObj);
     }
 
-    private model.Receipt createReceipt(DBObject dbObj) {
+    private model.Receipt populateReceipt(DBObject dbObject) {
         Receipt receipt = new Receipt();
-
-        receipt.setReceiptID((String) dbObj.get("_id"));
-        receipt.setUserID((String) dbObj.get("userID"));
-        receipt.setCreatedDate(new java.util.Date((long) dbObj.get("createdDate")));
+        
+        BasicDBObject dbObj = (BasicDBObject) dbObject;
+        String id = dbObj.getString("_id");
+        String userID = dbObj.getString("userID");
+        java.util.Date createdOn = new java.util.Date((long) dbObj.get("createdDate"));
+        
+        receipt.setReceiptID(id);
+        receipt.setUserID(userID);
+        receipt.setCreatedDate(createdOn);
 
         receipt.setImage(getImage(dbObj));
 
@@ -135,11 +140,15 @@ public class MongoDBHandler implements DBHandler {
         BasicDBObject dbImage = (BasicDBObject) dbObj.get("image");        
         model.Image image = new model.Image();
         
-        image.setHeight((int) dbImage.get("height"));
-        image.setWidth((int) dbImage.get("width"));
-        image.setFormat((String) dbImage.get("format"));
+        int height = (int) dbImage.get("height");
+        int width = (int) dbImage.get("width");
+        String format = (String) dbImage.get("format");
+        String base64 = (String) dbImage.get("64bit");
+        image.setHeight(height);
+        image.setWidth(width);
+        image.setFormat(format);
         try {
-            image.setByteArray((String) dbImage.get("64bit"));
+            image.setBase64(base64);
         } catch (Base64DecodingException b64) {
             //TODO: Logging
         }

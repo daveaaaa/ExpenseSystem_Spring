@@ -23,9 +23,11 @@ public class Image {
     private int height;
     private int width;
     private String format;
+    private String base64;
     private byte[] byteArray;
 
     public Image() {
+        base64 = "";
         byteArray = new byte[0];
         width = 0;
         height = 0;
@@ -34,10 +36,10 @@ public class Image {
 
     public Image(byte[] byteArray, String format, int height, int width) throws IOException {
         this.byteArray = byteArray;
+        this.base64 = Base64.encode(byteArray); 
         this.format = format;
         this.height = height;
         this.width = width;
-
     }
 
     public int getHeight() {
@@ -54,18 +56,23 @@ public class Image {
 
     public void setByteArray(byte[] byteArray) {
         this.byteArray = byteArray;
+        this.base64 = Base64.encode(byteArray);
     }
 
     public byte[] getByteArray() {
         return byteArray;
     }
 
-    public void setByteArray(String string) throws Base64DecodingException {
+    public void setBase64(String string) throws Base64DecodingException {
+        base64 = string; 
         byteArray = Base64.decode(string);
     }
 
-    public String get64EnCode() {
-        return Base64.encode(byteArray);
+    public String getBase64() {
+        if(base64.isEmpty() & byteArray.length > 0){
+            base64 = Base64.encode(byteArray);
+        }
+        return base64;
     }
 
     public void setHeight(int height) {
