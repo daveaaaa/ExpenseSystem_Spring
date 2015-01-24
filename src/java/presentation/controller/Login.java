@@ -21,7 +21,7 @@ public class Login {
     public String doGet(Map<String, Object> model) {
         String view = "login";
         try {
-            business.model.User user = new business.model.User();
+            business.businessModel.User user = new business.businessModel.User();
             model.put("user", user);
         } catch (Exception ex) {
             //TODO: Log Exception 
@@ -30,10 +30,10 @@ public class Login {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String doLogin(HttpServletRequest request, @ModelAttribute("user") business.model.User user, Map<String, Object> model) {
+    public String doLogin(HttpServletRequest request, @ModelAttribute("user") business.businessModel.User user, Map<String, Object> model) {
         String view = "login";
         try {
-            if (business.User.login(user)) {
+            if (business.businessLogic.User.login(user)) {
                 view = "receiptProviderHomepage";
                 request.getSession(true).setAttribute("user", user);
             } else {

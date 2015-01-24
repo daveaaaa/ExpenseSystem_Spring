@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package business.model;
+package business.businessModel;
 
 import java.util.ArrayList;
 
@@ -11,10 +11,10 @@ import java.util.ArrayList;
  *
  * @author david
  */
-public class ReceiptFramework {
+public class ReceiptItems {
     private ArrayList<Item> items;
     
-    public ReceiptFramework(){
+    public ReceiptItems(){
         items = new ArrayList<>();
     }
     

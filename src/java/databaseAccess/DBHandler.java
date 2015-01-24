@@ -7,8 +7,8 @@ package databaseAccess;
 
 import java.util.ArrayList;
 import java.util.Date;
-import business.model.Receipt;
-import business.model.User;
+import business.businessModel.Receipt;
+import business.businessModel.User;
 
 /**
  *

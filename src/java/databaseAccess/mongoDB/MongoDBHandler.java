@@ -3,7 +3,7 @@ package databaseAccess.mongoDB;
 import com.mongodb.*;
 import com.mongodb.gridfs.*;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-import business.model.Image;
+import business.businessModel.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +14,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import javax.imageio.ImageIO;
-import business.model.Receipt;
-import business.model.User;
+import business.businessModel.Receipt;
+import business.businessModel.User;
 import org.apache.commons.io.FilenameUtils;
 import org.bson.types.ObjectId;
 import databaseAccess.DBHandler;
@@ -108,7 +108,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
     @Override
-    public business.model.Receipt getReceipt(String receiptID) {
+    public business.businessModel.Receipt getReceipt(String receiptID) {
         DBCollection table = getReceiptCollection();
         BasicDBObject query = new BasicDBObject();
         query.put("_id", new ObjectId(receiptID));
@@ -117,7 +117,7 @@ public class MongoDBHandler implements DBHandler {
         return populateReceipt(dbObj);
     }
 
-    private business.model.Receipt populateReceipt(DBObject dbObject) {
+    private business.businessModel.Receipt populateReceipt(DBObject dbObject) {
         Receipt receipt = new Receipt();
         
         BasicDBObject dbObj = (BasicDBObject) dbObject;
@@ -134,10 +134,10 @@ public class MongoDBHandler implements DBHandler {
         return receipt;
     }
 
-    private business.model.Image getImage(DBObject dbObj) {
+    private business.businessModel.Image getImage(DBObject dbObj) {
         
         BasicDBObject dbImage = (BasicDBObject) dbObj.get("image");        
-        business.model.Image image = new business.model.Image();
+        business.businessModel.Image image = new business.businessModel.Image();
         
         int height = (int) dbImage.get("height");
         int width = (int) dbImage.get("width");

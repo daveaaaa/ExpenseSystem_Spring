@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package business;
+package business.businessLogic.parseImage.AORC;
 
 /**
  *
  * @author david
  */
-public interface ParseImage {
-    
-    
+public class ParseImageAORC {
     
 }

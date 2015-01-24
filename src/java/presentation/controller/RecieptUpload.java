@@ -51,10 +51,10 @@ public class RecieptUpload {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") business.model.User user, HttpServletRequest request) {
+    public String handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") business.businessModel.User user, HttpServletRequest request) {
         String view = "viewReceipt";
         try {
-           business.model.Receipt receipt = business.Reciept.createReciept(multipartfile, user);
+           business.businessModel.Receipt receipt = business.businessLogic.Reciept.createReciept(multipartfile, user);
            request.getSession(true).setAttribute("reciept", receipt);
         } catch (Exception ex) {
             //TODO: log exception

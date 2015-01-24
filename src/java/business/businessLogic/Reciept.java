@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package business;
+package business.businessLogic;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
-import business.model.Image;
-import business.model.Receipt;
+import business.businessModel.Image;
+import business.businessModel.Receipt;
 import org.springframework.web.multipart.MultipartFile;
 import databaseAccess.DBHandler;
 import databaseAccess.DBHelper;
@@ -21,10 +21,10 @@ import databaseAccess.mongoDB.MongoDBHelper;
  */
 public class Reciept {
 
-    public static business.model.Receipt createReciept(MultipartFile multiPartFile, business.model.User user) throws Exception {
+    public static business.businessModel.Receipt createReciept(MultipartFile multiPartFile, business.businessModel.User user) throws Exception {
 
-        business.model.Receipt receipt = new Receipt(user.getUserID());
-        business.model.Image image = createImage(multiPartFile);
+        business.businessModel.Receipt receipt = new Receipt(user.getUserID());
+        business.businessModel.Image image = createImage(multiPartFile);
         receipt.setImage(image);
 
         DBHandler handler = MongoDBHelper.getDBHandler();
@@ -35,14 +35,14 @@ public class Reciept {
         return receipt;
     }
 
-    private static business.model.Image createImage(MultipartFile multiPartFile) throws Exception {
+    private static business.businessModel.Image createImage(MultipartFile multiPartFile) throws Exception {
 
         byte[] byteArray = multiPartFile.getBytes();
         BufferedImage image = ImageIO.read(multiPartFile.getInputStream());
         int height = image.getHeight();
         int width = image.getWidth();
 
-        return new business.model.Image(byteArray, multiPartFile.getContentType(), height, width);
+        return new business.businessModel.Image(byteArray, multiPartFile.getContentType(), height, width);
 
     }
 
