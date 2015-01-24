@@ -1,4 +1,4 @@
-package database.mongoDB;
+package databaseAccess.mongoDB;
 
 import com.mongodb.*;
 import com.mongodb.gridfs.*;
@@ -18,7 +18,7 @@ import business.model.Receipt;
 import business.model.User;
 import org.apache.commons.io.FilenameUtils;
 import org.bson.types.ObjectId;
-import database.DBHandler;
+import databaseAccess.DBHandler;
 
 /**
  *

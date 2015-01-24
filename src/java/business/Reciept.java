@@ -11,9 +11,9 @@ import javax.imageio.ImageIO;
 import business.model.Image;
 import business.model.Receipt;
 import org.springframework.web.multipart.MultipartFile;
-import database.DBHandler;
-import database.DBHelper;
-import database.mongoDB.MongoDBHelper;
+import databaseAccess.DBHandler;
+import databaseAccess.DBHelper;
+import databaseAccess.mongoDB.MongoDBHelper;
 
 /**
  *

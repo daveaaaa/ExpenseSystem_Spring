@@ -1,4 +1,4 @@
-package database;
+package databaseAccess;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
