@@ -8,12 +8,12 @@ package business;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
-import model.Image;
-import model.Receipt;
+import business.model.Image;
+import business.model.Receipt;
 import org.springframework.web.multipart.MultipartFile;
-import persistanceLayer.DBHandler;
-import persistanceLayer.DBHelper;
-import persistanceLayer.mongoDB.MongoDBHelper;
+import database.DBHandler;
+import database.DBHelper;
+import database.mongoDB.MongoDBHelper;
 
 /**
  *
@@ -21,10 +21,10 @@ import persistanceLayer.mongoDB.MongoDBHelper;
  */
 public class Reciept {
 
-    public static model.Receipt createReciept(MultipartFile multiPartFile, model.User user) throws Exception {
+    public static business.model.Receipt createReciept(MultipartFile multiPartFile, business.model.User user) throws Exception {
 
-        model.Receipt receipt = new Receipt(user.getUserID());
-        model.Image image = createImage(multiPartFile);
+        business.model.Receipt receipt = new Receipt(user.getUserID());
+        business.model.Image image = createImage(multiPartFile);
         receipt.setImage(image);
 
         DBHandler handler = MongoDBHelper.getDBHandler();
@@ -35,14 +35,14 @@ public class Reciept {
         return receipt;
     }
 
-    private static model.Image createImage(MultipartFile multiPartFile) throws Exception {
+    private static business.model.Image createImage(MultipartFile multiPartFile) throws Exception {
 
         byte[] byteArray = multiPartFile.getBytes();
         BufferedImage image = ImageIO.read(multiPartFile.getInputStream());
         int height = image.getHeight();
         int width = image.getWidth();
 
-        return new model.Image(byteArray, multiPartFile.getContentType(), height, width);
+        return new business.model.Image(byteArray, multiPartFile.getContentType(), height, width);
 
     }
 

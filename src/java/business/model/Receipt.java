@@ -1,8 +1,8 @@
-package model;
+package business.model;
 
 import java.io.File;
 import java.util.Date;
-import model.Image;
+import business.model.Image;
 
 /**
  *

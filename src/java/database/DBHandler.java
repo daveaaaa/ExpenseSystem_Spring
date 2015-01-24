@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package persistanceLayer;
+package database;
 
 import java.util.ArrayList;
 import java.util.Date;
-import model.Receipt;
-import model.User;
+import business.model.Receipt;
+import business.model.User;
 
 /**
  *

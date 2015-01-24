@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package presentation.controller;
 
 /**
  *
@@ -51,10 +51,10 @@ public class RecieptUpload {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") model.User user, HttpServletRequest request) {
+    public String handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") business.model.User user, HttpServletRequest request) {
         String view = "viewReceipt";
         try {
-           model.Receipt receipt = business.Reciept.createReciept(multipartfile, user);
+           business.model.Receipt receipt = business.Reciept.createReciept(multipartfile, user);
            request.getSession(true).setAttribute("reciept", receipt);
         } catch (Exception ex) {
             //TODO: log exception

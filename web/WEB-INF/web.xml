@@ -9,7 +9,7 @@
     </listener>
     <listener>
         <description>ServletContextListener</description>
-        <listener-class>persistanceLayer.mongoDB.MongoDBHelper</listener-class>
+        <listener-class>database.mongoDB.MongoDBHelper</listener-class>
     </listener>
     <servlet>
         <servlet-name>dispatcher</servlet-name>

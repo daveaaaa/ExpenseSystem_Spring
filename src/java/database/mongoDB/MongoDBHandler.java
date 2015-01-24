@@ -1,9 +1,9 @@
-package persistanceLayer.mongoDB;
+package database.mongoDB;
 
 import com.mongodb.*;
 import com.mongodb.gridfs.*;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-import model.Image;
+import business.model.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,12 +14,11 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import javax.imageio.ImageIO;
-import model.Receipt;
-import model.User;
+import business.model.Receipt;
+import business.model.User;
 import org.apache.commons.io.FilenameUtils;
 import org.bson.types.ObjectId;
-import persistanceLayer.DBHandler;
-import utils.Tuplet;
+import database.DBHandler;
 
 /**
  *
@@ -109,7 +108,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
     @Override
-    public model.Receipt getReceipt(String receiptID) {
+    public business.model.Receipt getReceipt(String receiptID) {
         DBCollection table = getReceiptCollection();
         BasicDBObject query = new BasicDBObject();
         query.put("_id", new ObjectId(receiptID));
@@ -118,7 +117,7 @@ public class MongoDBHandler implements DBHandler {
         return populateReceipt(dbObj);
     }
 
-    private model.Receipt populateReceipt(DBObject dbObject) {
+    private business.model.Receipt populateReceipt(DBObject dbObject) {
         Receipt receipt = new Receipt();
         
         BasicDBObject dbObj = (BasicDBObject) dbObject;
@@ -135,10 +134,10 @@ public class MongoDBHandler implements DBHandler {
         return receipt;
     }
 
-    private model.Image getImage(DBObject dbObj) {
+    private business.model.Image getImage(DBObject dbObj) {
         
         BasicDBObject dbImage = (BasicDBObject) dbObj.get("image");        
-        model.Image image = new model.Image();
+        business.model.Image image = new business.model.Image();
         
         int height = (int) dbImage.get("height");
         int width = (int) dbImage.get("width");

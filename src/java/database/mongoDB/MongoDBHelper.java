@@ -1,9 +1,9 @@
-package persistanceLayer.mongoDB;
+package database.mongoDB;
 
 import java.net.UnknownHostException;
-import persistanceLayer.DBHandler;
-import persistanceLayer.DBHelper;
-import persistanceLayer.NullDBHandler;
+import database.DBHandler;
+import database.DBHelper;
+import database.NullDBHandler;
 
 /**
  *

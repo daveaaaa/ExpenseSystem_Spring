@@ -1,4 +1,4 @@
-package persistanceLayer;
+package database;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

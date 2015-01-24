@@ -11,7 +11,7 @@ package business;
  */
 public class User {
     
-    public static boolean login(model.User user){
+    public static boolean login(business.model.User user){
         return true; 
     }
     

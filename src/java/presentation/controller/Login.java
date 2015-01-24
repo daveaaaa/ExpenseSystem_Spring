@@ -1,4 +1,4 @@
-package controller;
+package presentation.controller;
 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ public class Login {
     public String doGet(Map<String, Object> model) {
         String view = "login";
         try {
-            model.User user = new model.User();
+            business.model.User user = new business.model.User();
             model.put("user", user);
         } catch (Exception ex) {
             //TODO: Log Exception 
@@ -30,7 +30,7 @@ public class Login {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String doLogin(HttpServletRequest request, @ModelAttribute("user") model.User user, Map<String, Object> model) {
+    public String doLogin(HttpServletRequest request, @ModelAttribute("user") business.model.User user, Map<String, Object> model) {
         String view = "login";
         try {
             if (business.User.login(user)) {
