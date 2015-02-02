@@ -1,9 +1,7 @@
 package databaseAccess.mongoDB;
-
-import java.net.UnknownHostException;
+ 
 import databaseAccess.DBHandler;
-import databaseAccess.DBHelper;
-import databaseAccess.NullDBHandler;
+import databaseAccess.DBHelper; 
 
 /**
  *

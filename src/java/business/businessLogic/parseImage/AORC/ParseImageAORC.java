@@ -10,6 +10,8 @@ import business.businessModel.Receipt;
 import business.businessModel.ReceiptItem;
 import com.asprise.ocr.Ocr;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,20 +37,33 @@ public class ParseImageAORC implements ParseImage {
             createXML();
             loadXMLFromString();
             receipt.setCurrentReceiptItem(createReceiptItem());
-        } catch (Exception ex) {
+            cleanUp();
+            } catch (Exception ex) {
+            ex.printStackTrace(System.err);
             //Log Error
-        };
+        }
         return receipt;
     }
 
     private void setupOCR() {
+        try{
+        System.loadLibrary("com.aspire.ocr");
         Ocr.setUp();
         ocr = new Ocr();
         ocr.startEngine("eng", Ocr.SPEED_SLOW);
+        } catch (Exception ex){
+            ex.printStackTrace(System.err);
+        }
     }
+    
 
-    private File createFile(Receipt receipt) {
-        file = new File("");
+    private File createFile(Receipt receipt) throws IOException {
+        String format = receipt.getImage().getFormat();
+        file = File.createTempFile(receipt.getReceiptID(), format);
+        
+        try(FileOutputStream out = new FileOutputStream(file)){
+            out.write(receipt.getImage().getByteArray());
+        } 
         return file;
     }
 
@@ -70,5 +85,8 @@ public class ParseImageAORC implements ParseImage {
         
         return receiptItem;
     }
-
+    
+    private void cleanUp(){
+        file.delete();
+    }
 }
