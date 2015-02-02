@@ -45,9 +45,13 @@ public class Reciept {
         return new business.businessModel.ReceiptImage(byteArray, multiPartFile.getContentType(), height, width);
 
     }
-    
-    public static void parseReceipt(){
-        
-    }
 
+    public static Receipt parseReceipt(Receipt receipt) {
+        business.businessLogic.parseImage.ParseImage imageParser = new business.businessLogic.parseImage.AORC.ParseImageAORC(); 
+        
+        receipt = imageParser.parseImage(receipt); 
+        
+        return receipt; 
+    }
+    
 }

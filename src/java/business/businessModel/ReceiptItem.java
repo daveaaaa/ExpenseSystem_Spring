@@ -11,15 +11,19 @@ import java.util.ArrayList;
  *
  * @author david
  */
-public class ReceiptItems {
+public class ReceiptItem {
     private ArrayList<Item> items;
     
-    public ReceiptItems(){
+    public ReceiptItem(){
         items = new ArrayList<>();
     }
     
     public void addItem(Item item){
         items.add(item);
+    }
+    
+    public ArrayList<Item> getItems(){
+        return items; 
     }
     
     public String getItemsAsJSON(){

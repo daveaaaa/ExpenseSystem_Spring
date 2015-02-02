@@ -5,10 +5,57 @@
  */
 package presentation.controller;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  *
  * @author david
  */
+@Controller
+@RequestMapping("parseReceipt")
+@SessionAttributes({"user", "receipt"})
 public class ParseReceipt {
-    
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String doGet() {
+        try {
+
+        } catch (Exception ex) {
+            //TODO: Log Exception 
+        }
+        return "uploadReceipt";
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String parseReceipt(@ModelAttribute("receipt") business.businessModel.Receipt receipt, @ModelAttribute("user") business.businessModel.User user, HttpServletRequest request) {
+        String view = "checkReceipt";
+        try {
+            receipt = business.businessLogic.Reciept.parseReceipt(receipt);
+            request.getSession(true).setAttribute("receipt", receipt);
+
+        } catch (Exception ex) {
+            //TODO: log exception
+        }
+
+        return view;
+
+    }
+
 }

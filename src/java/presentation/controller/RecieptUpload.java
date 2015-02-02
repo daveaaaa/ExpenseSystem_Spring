@@ -55,7 +55,7 @@ public class RecieptUpload {
         String view = "viewReceipt";
         try {
            business.businessModel.Receipt receipt = business.businessLogic.Reciept.createReciept(multipartfile, user);
-           request.getSession(true).setAttribute("reciept", receipt);
+           request.getSession(true).setAttribute("receipt", receipt);
         } catch (Exception ex) {
             //TODO: log exception
         }

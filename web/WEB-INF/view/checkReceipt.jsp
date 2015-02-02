@@ -1,8 +1,7 @@
 <%@page import="java.util.ArrayList"%>
 <%
     business.businessModel.Receipt receipt = (business.businessModel.Receipt) request.getAttribute("receipt");
-    ArrayList<business.businessModel.ReceiptItems> receiptItems = receipt.getReceiptItems();
-    pageContext.setAttribute("receiptItems", receiptItems);
+    pageContext.setAttribute("receiptItems", receipt.getCurrentReceiptItem().getItems());
 %>
 <%@include file="/WEB-INF/templates/header.jsp" %>
 <div class="row">
@@ -15,7 +14,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Quantity</th>
-                    <th>Value</th>
+                    <th>Price</th>
                     <th>Total</th>
                 </tr>
             </thead>

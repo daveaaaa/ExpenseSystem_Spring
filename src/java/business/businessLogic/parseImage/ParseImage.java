@@ -5,12 +5,14 @@
  */
 package business.businessLogic.parseImage;
 
+import business.businessModel.Receipt;
+
 /**
  *
  * @author david
  */
 public interface ParseImage {
     
-    
+    public Receipt parseImage(Receipt receipt);
     
 }

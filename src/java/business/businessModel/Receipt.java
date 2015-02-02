@@ -3,6 +3,7 @@ package business.businessModel;
 import java.io.File;
 import java.util.Date;
 import business.businessModel.ReceiptImage;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,13 +15,15 @@ public class Receipt {
     private ReceiptImage image;
     private String userID;
     private java.util.Date createdOn;
+    private ArrayList<ReceiptItem> receiptItems;
+    private int currentReceiptItem;
 
-    
     public Receipt() {
         receiptID = "";
         userID = "";
         createdOn = new java.util.Date();
         image = new ReceiptImage();
+        receiptItems = new ArrayList<>();
     }
 
     public Receipt(String userID) {
@@ -53,5 +56,20 @@ public class Receipt {
 
     public void setCreatedDate(Date createdOn) {
         this.createdOn = createdOn;
+    }
+
+    public ReceiptItem getCurrentReceiptItem() {
+        return receiptItems.get(currentReceiptItem);
+    }
+
+    public ArrayList<ReceiptItem> getReceiptItems() {
+        return receiptItems;
+    }
+
+    public void setCurrentReceiptItem(ReceiptItem createReceiptItem) {
+        if (!receiptItems.contains(createReceiptItem)) {
+            receiptItems.add(createReceiptItem);
+        }
+        currentReceiptItem = receiptItems.indexOf(createReceiptItem);
     }
 }
