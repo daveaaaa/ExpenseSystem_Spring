@@ -14,7 +14,9 @@
 <script type="text/javascript">
     $(document).ready(
             function () {
-                $('input:submit').attr('disabled', true);
+                if($('input:file').val() == ""){
+                    $('input:submit').attr('disabled', true);
+                }   
                 $('input:file').change(
                         function () {
                             if ($(this).val()) {
