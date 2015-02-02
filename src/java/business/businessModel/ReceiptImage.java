@@ -18,7 +18,7 @@ import org.apache.commons.io.FilenameUtils;
  *
  * @author david
  */
-public class Image {
+public class ReceiptImage {
 
     private int height;
     private int width;
@@ -26,7 +26,7 @@ public class Image {
     private String base64;
     private byte[] byteArray;
 
-    public Image() {
+    public ReceiptImage() {
         base64 = "";
         byteArray = new byte[0];
         width = 0;
@@ -34,7 +34,7 @@ public class Image {
         format = "";
     }
 
-    public Image(byte[] byteArray, String format, int height, int width) throws IOException {
+    public ReceiptImage(byte[] byteArray, String format, int height, int width) throws IOException {
         this.byteArray = byteArray;
         this.base64 = Base64.encode(byteArray); 
         this.format = format;

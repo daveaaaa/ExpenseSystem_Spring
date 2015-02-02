@@ -8,7 +8,7 @@ package business.businessLogic;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
-import business.businessModel.Image;
+import business.businessModel.ReceiptImage;
 import business.businessModel.Receipt;
 import org.springframework.web.multipart.MultipartFile;
 import databaseAccess.DBHandler;
@@ -24,7 +24,7 @@ public class Reciept {
     public static business.businessModel.Receipt createReciept(MultipartFile multiPartFile, business.businessModel.User user) throws Exception {
 
         business.businessModel.Receipt receipt = new Receipt(user.getUserID());
-        business.businessModel.Image image = createImage(multiPartFile);
+        business.businessModel.ReceiptImage image = createImage(multiPartFile);
         receipt.setImage(image);
 
         DBHandler handler = MongoDBHelper.getDBHandler();
@@ -35,15 +35,19 @@ public class Reciept {
         return receipt;
     }
 
-    private static business.businessModel.Image createImage(MultipartFile multiPartFile) throws Exception {
+    private static business.businessModel.ReceiptImage createImage(MultipartFile multiPartFile) throws Exception {
 
         byte[] byteArray = multiPartFile.getBytes();
         BufferedImage image = ImageIO.read(multiPartFile.getInputStream());
         int height = image.getHeight();
         int width = image.getWidth();
 
-        return new business.businessModel.Image(byteArray, multiPartFile.getContentType(), height, width);
+        return new business.businessModel.ReceiptImage(byteArray, multiPartFile.getContentType(), height, width);
 
+    }
+    
+    public static void parseReceipt(){
+        
     }
 
 }

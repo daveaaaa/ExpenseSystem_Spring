@@ -2,7 +2,7 @@ package business.businessModel;
 
 import java.io.File;
 import java.util.Date;
-import business.businessModel.Image;
+import business.businessModel.ReceiptImage;
 
 /**
  *
@@ -11,7 +11,7 @@ import business.businessModel.Image;
 public class Receipt {
 
     private String receiptID;
-    private Image image;
+    private ReceiptImage image;
     private String userID;
     private java.util.Date createdOn;
 
@@ -20,7 +20,7 @@ public class Receipt {
         receiptID = "";
         userID = "";
         createdOn = new java.util.Date();
-        image = new Image();
+        image = new ReceiptImage();
     }
 
     public Receipt(String userID) {
@@ -35,11 +35,11 @@ public class Receipt {
         this.receiptID = receiptID;
     }
 
-    public Image getImage() {
+    public ReceiptImage getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(ReceiptImage image) {
         this.image = image;
     }
 

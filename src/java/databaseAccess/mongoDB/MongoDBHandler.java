@@ -3,7 +3,7 @@ package databaseAccess.mongoDB;
 import com.mongodb.*;
 import com.mongodb.gridfs.*;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-import business.businessModel.Image;
+import business.businessModel.ReceiptImage;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -134,10 +134,10 @@ public class MongoDBHandler implements DBHandler {
         return receipt;
     }
 
-    private business.businessModel.Image getImage(DBObject dbObj) {
+    private business.businessModel.ReceiptImage getImage(DBObject dbObj) {
         
         BasicDBObject dbImage = (BasicDBObject) dbObj.get("image");        
-        business.businessModel.Image image = new business.businessModel.Image();
+        business.businessModel.ReceiptImage image = new business.businessModel.ReceiptImage();
         
         int height = (int) dbImage.get("height");
         int width = (int) dbImage.get("width");
