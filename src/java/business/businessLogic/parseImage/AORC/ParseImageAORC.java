@@ -47,7 +47,6 @@ public class ParseImageAORC implements ParseImage {
 
     private void setupOCR() {
         try{
-        System.loadLibrary("com.aspire.ocr");
         Ocr.setUp();
         ocr = new Ocr();
         ocr.startEngine("eng", Ocr.SPEED_SLOW);
