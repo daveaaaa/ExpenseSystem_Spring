@@ -7,7 +7,7 @@
         </fieldset>
     </div>
     <fieldset>
-        <input class="btn btn-success" type="submit">Upload Receipt</input>
+        <input class="btn btn-success" type="submit" value="Upload Receipt" />
     </fieldset>
 </form>
 <a class="btn btn-danger" href="receiptProviderHomepage">Back</a>

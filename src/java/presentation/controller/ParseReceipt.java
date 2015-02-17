@@ -45,7 +45,7 @@ public class ParseReceipt {
 
     @RequestMapping(method = RequestMethod.POST)
     public String parseReceipt(@ModelAttribute("receipt") business.businessModel.Receipt receipt, @ModelAttribute("user") business.businessModel.User user, HttpServletRequest request) {
-        String view = "checkReceipt";
+        String view = "";
         try {
             receipt = business.businessLogic.Reciept.parseReceipt(receipt);
             request.getSession(true).setAttribute("receipt", receipt);

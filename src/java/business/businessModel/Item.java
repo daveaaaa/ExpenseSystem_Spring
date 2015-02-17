@@ -15,6 +15,28 @@ public class Item {
     private double price;
     private int quantity;
     private double total;
+    private String XML;
+    private boolean isIncluded;
+
+    public Item() {
+        isIncluded = true;
+    }
+
+    public boolean isIsIncluded() {
+        return isIncluded;
+    }
+
+    public void setIsIncluded(boolean isIncluded) {
+        this.isIncluded = isIncluded;
+    }
+
+    public String getXML() {
+        return XML;
+    }
+
+    public void setXML(String XML) {
+        this.XML = XML;
+    }
 
     public String getName() {
         return name;
@@ -55,14 +77,14 @@ public class Item {
     public void setTotal(double total) {
         this.total = total;
     }
-    
-    public void setTotal(String total){
-        this.total = Double.parseDouble(total); 
+
+    public void setTotal(String total) {
+        this.total = Double.parseDouble(total);
     }
 
-    public String getJSON(){
+    public String getJSON() {
         StringBuilder sb = new StringBuilder();
-        
+
         sb.append("{");
         sb.append("\"name\":");
         sb.append("\"");
@@ -83,8 +105,8 @@ public class Item {
         sb.append(total);
         sb.append("\"");
         sb.append("}");
-        
+
         return sb.toString();
     }
-    
+
 }

@@ -25,21 +25,24 @@ public class ReceiptImage {
     private String format;
     private String base64;
     private byte[] byteArray;
-
+    private String fileFormat;
+    
     public ReceiptImage() {
         base64 = "";
         byteArray = new byte[0];
         width = 0;
         height = 0;
         format = "";
+        fileFormat = "";
     }
 
     public ReceiptImage(byte[] byteArray, String format, int height, int width) throws IOException {
         this.byteArray = byteArray;
-        this.base64 = Base64.encode(byteArray); 
+        this.base64 = Base64.encode(byteArray);
         this.format = format;
         this.height = height;
         this.width = width;
+        parseFileFormat();
     }
 
     public int getHeight() {
@@ -54,6 +57,10 @@ public class ReceiptImage {
         return format;
     }
 
+    public String getFileFormat() {
+        return fileFormat;
+    }
+
     public void setByteArray(byte[] byteArray) {
         this.byteArray = byteArray;
         this.base64 = Base64.encode(byteArray);
@@ -64,12 +71,12 @@ public class ReceiptImage {
     }
 
     public void setBase64(String string) throws Base64DecodingException {
-        base64 = string; 
+        base64 = string;
         byteArray = Base64.decode(string);
     }
 
     public String getBase64() {
-        if(base64.isEmpty() & byteArray.length > 0){
+        if (base64.isEmpty() & byteArray.length > 0) {
             base64 = Base64.encode(byteArray);
         }
         return base64;
@@ -85,5 +92,14 @@ public class ReceiptImage {
 
     public void setFormat(String format) {
         this.format = format;
+        parseFileFormat();
     }
+
+    private void parseFileFormat() {
+        if (!format.equals("")) {
+            fileFormat = format.replace("image/", "");
+        }
+    }
+    
+    
 }

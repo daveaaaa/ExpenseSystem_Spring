@@ -6,6 +6,7 @@
 package business.businessLogic.parseImage.AORC;
 
 import business.businessLogic.parseImage.ParseImage;
+import business.businessModel.Item;
 import business.businessModel.Receipt;
 import business.businessModel.ReceiptItem;
 import com.asprise.ocr.Ocr;
@@ -13,9 +14,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
@@ -27,6 +33,7 @@ public class ParseImageAORC implements ParseImage {
     private Ocr ocr;
     private File file;
     private String xml;
+    private Document doc;
 
     @Override
     public Receipt parseImage(Receipt receipt) {
@@ -36,9 +43,9 @@ public class ParseImageAORC implements ParseImage {
             createFile(receipt);
             createXML();
             loadXMLFromString();
-            receipt.setCurrentReceiptItem(createReceiptItem());
+            createReceiptItem();
             cleanUp();
-            } catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace(System.err);
             //Log Error
         }
@@ -46,23 +53,26 @@ public class ParseImageAORC implements ParseImage {
     }
 
     private void setupOCR() {
-        try{
-        Ocr.setUp();
-        ocr = new Ocr();
-        ocr.startEngine("eng", Ocr.SPEED_SLOW);
-        } catch (Exception ex){
+        try {
+            if (Ocr.isSetupRequired()) {
+                Ocr.setUp();
+            }
+            ocr = new Ocr();
+            if (!ocr.isEngineRunning()) {
+                ocr.startEngine("eng", Ocr.SPEED_SLOW);
+            }
+        } catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
     }
-    
 
     private File createFile(Receipt receipt) throws IOException {
-        String format = receipt.getImage().getFormat();
+        String format = receipt.getImage().getFileFormat();
         file = File.createTempFile(receipt.getReceiptID(), format);
-        
-        try(FileOutputStream out = new FileOutputStream(file)){
+
+        try (FileOutputStream out = new FileOutputStream(file)) {
             out.write(receipt.getImage().getByteArray());
-        } 
+        }
         return file;
     }
 
@@ -70,22 +80,42 @@ public class ParseImageAORC implements ParseImage {
         xml = ocr.recognize(new File[]{file}, Ocr.RECOGNIZE_TYPE_TEXT, Ocr.OUTPUT_FORMAT_XML);
     }
 
-    private Document loadXMLFromString() throws Exception {
+    private void loadXMLFromString() throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         InputSource is = new InputSource(new StringReader(xml));
-        return builder.parse(is);
+        doc = builder.parse(is);
     }
-    
-    private ReceiptItem createReceiptItem(){
-        ReceiptItem receiptItem = new ReceiptItem(); 
-        
-        
-        
+
+    private ReceiptItem createReceiptItem() throws Exception {
+        ReceiptItem receiptItem = new ReceiptItem();
+
+        Element docElem = doc.getDocumentElement();
+
+        NodeList nl = docElem.getElementsByTagName("block");
+
+        for (int i = 0; i != nl.getLength(); i++) {
+            Node node = nl.item(i);
+            String text = node.getNodeName();
+
+            Attr attr = (Attr) node.getAttributes().getNamedItem("type");
+            if ((attr != null) & (attr.getNodeValue().equals("text"))) {
+                Node child = node.getChildNodes().item(0);
+
+                if (!child.getNodeValue().contains("CDATA")) {
+                    Item item = new Item();
+                    item.setXML(child.getNodeValue());
+                    receiptItem.addItem(item);
+                }
+
+            }
+        }
+
         return receiptItem;
     }
-    
-    private void cleanUp(){
+
+    private void cleanUp() {
         file.delete();
+        ocr.stopEngine();
     }
 }
