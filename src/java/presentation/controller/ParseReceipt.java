@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -30,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Controller
 @RequestMapping("parseReceipt")
-@SessionAttributes({"user", "receipt"})
+@SessionAttributes({"currentUser", "receipt"})
 public class ParseReceipt {
 
     @RequestMapping(method = RequestMethod.GET)
@@ -44,17 +45,19 @@ public class ParseReceipt {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String parseReceipt(@ModelAttribute("receipt") business.businessModel.Receipt receipt, @ModelAttribute("user") business.businessModel.User user, HttpServletRequest request) {
+    public ModelAndView parseReceipt(@ModelAttribute("receipt") business.businessModel.Receipt receipt, @ModelAttribute("user") business.businessModel.User user) {
         String view = "";
+        ModelAndView mav = new ModelAndView();
         try {
             receipt = business.businessLogic.Reciept.parseReceipt(receipt);
-            request.getSession(true).setAttribute("receipt", receipt);
+            mav.addObject("receipt", receipt);
 
         } catch (Exception ex) {
             //TODO: log exception
         }
 
-        return view;
+        mav.setViewName(view);
+        return mav;
 
     }
 

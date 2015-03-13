@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -34,7 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Controller
 @RequestMapping("uploadReceipt")
-@SessionAttributes({"user","receipt"})
+@SessionAttributes({"currentUser","receipt"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50)
@@ -51,17 +52,19 @@ public class RecieptUpload {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") business.businessModel.User user, HttpServletRequest request) {
+    public ModelAndView handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") business.businessModel.User user) {
         String view = "viewReceipt";
+        ModelAndView mav = new ModelAndView();
         try {
            business.businessModel.Receipt receipt = business.businessLogic.Reciept.createReciept(multipartfile, user);
-           request.getSession(true).setAttribute("receipt", receipt);
+         mav.addObject("receipt", receipt);
         } catch (Exception ex) {
             //TODO: log exception
         }
         
         
-        return view;
+        mav.setViewName(view);
+        return mav;
 
     }
 

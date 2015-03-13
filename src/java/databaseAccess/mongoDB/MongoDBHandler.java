@@ -57,7 +57,7 @@ public class MongoDBHandler implements DBHandler {
     @Override
     public Receipt createReceipt(Receipt reciept) {
         reciept = saveReceipt(reciept);
-        return reciept; 
+        return reciept;
     }
 
     private Receipt saveReceipt(Receipt reciept) {
@@ -71,8 +71,8 @@ public class MongoDBHandler implements DBHandler {
         table.insert(document);
         String id = document.getString("_id");
         reciept.setReceiptID(id);
-        
-        return reciept; 
+
+        return reciept;
     }
 
     private BasicDBObject saveImage(Receipt receipt) {
@@ -119,12 +119,12 @@ public class MongoDBHandler implements DBHandler {
 
     private business.businessModel.Receipt populateReceipt(DBObject dbObject) {
         Receipt receipt = new Receipt();
-        
+
         BasicDBObject dbObj = (BasicDBObject) dbObject;
         String id = dbObj.getString("_id");
         String userID = dbObj.getString("userID");
         java.util.Date createdOn = new java.util.Date((long) dbObj.get("createdDate"));
-        
+
         receipt.setReceiptID(id);
         receipt.setUserID(userID);
         receipt.setCreatedDate(createdOn);
@@ -135,10 +135,10 @@ public class MongoDBHandler implements DBHandler {
     }
 
     private business.businessModel.ReceiptImage getImage(DBObject dbObj) {
-        
-        BasicDBObject dbImage = (BasicDBObject) dbObj.get("image");        
+
+        BasicDBObject dbImage = (BasicDBObject) dbObj.get("image");
         business.businessModel.ReceiptImage image = new business.businessModel.ReceiptImage();
-        
+
         int height = (int) dbImage.get("height");
         int width = (int) dbImage.get("width");
         String format = (String) dbImage.get("format");
@@ -151,14 +151,20 @@ public class MongoDBHandler implements DBHandler {
         } catch (Base64DecodingException b64) {
             //TODO: Logging
         }
-        
-        return image; 
+
+        return image;
     }
 
     @Override
     public void createUser(User user) {
         DBCollection table = getUserCollection();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BasicDBObject document = new BasicDBObject();
+
+        document.put("username", user.getUsername());
+        document.put("password", user.getPassword());
+
+        table.insert(document);
+
     }
 
     @Override

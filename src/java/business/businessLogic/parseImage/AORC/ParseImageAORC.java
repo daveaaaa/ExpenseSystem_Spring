@@ -83,8 +83,8 @@ public class ParseImageAORC implements ParseImage {
     private void loadXMLFromString() throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xml));
-        doc = builder.parse(is);
+        InputSource inputSource = new InputSource(new StringReader(xml));
+        doc = builder.parse(inputSource);
     }
 
     private ReceiptItem createReceiptItem() throws Exception {
@@ -96,8 +96,7 @@ public class ParseImageAORC implements ParseImage {
 
         for (int i = 0; i != nl.getLength(); i++) {
             Node node = nl.item(i);
-            String text = node.getNodeName();
-
+      
             Attr attr = (Attr) node.getAttributes().getNamedItem("type");
             if ((attr != null) & (attr.getNodeValue().equals("text"))) {
                 Node child = node.getChildNodes().item(0);
