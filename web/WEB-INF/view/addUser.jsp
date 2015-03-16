@@ -1,6 +1,6 @@
 <%@include file="/WEB-INF/templates/header.jsp" %>
 <div class="row">
-    <form:form  method="post" modelAttribute="user">
+    <form:form  method="post" modelAttribute="newUser">
         <div class="form-group form-inline">            
             <label for="txtUsername">Username</label>
             <form:input class="form-control" path="username" placeholder="Username" id="txtUsername"/>

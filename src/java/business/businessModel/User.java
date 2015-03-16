@@ -27,6 +27,16 @@ public class User implements Serializable {
     public void setSecurityGroup(SecurityGroup securityGroup) {
         this.securityGroup = securityGroup;
     }
+    
+    public void setSecurityGroup(String securityGroupValue){
+        for(SecurityGroup securityGroupItem : SecurityGroup.values()){
+            if(securityGroupItem.getValue().equals(securityGroupValue)){
+                this.securityGroup = securityGroupItem; 
+                break;
+            }
+        }
+        
+    }
 
     public String getUserID() {
         return userID;

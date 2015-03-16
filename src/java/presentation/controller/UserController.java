@@ -40,12 +40,16 @@ public class UserController {
         String view = "login";
         ModelAndView mav = new ModelAndView();
         try {
-            if (business.businessLogic.User.login(user)) {
-                view = business.businessLogic.User.getHomepage(user);
-                mav.addObject("currentUser", user);
-            } else {
+            user = business.businessLogic.User.login(user);
+
+            view = business.businessLogic.User.getHomepage(user);
+            
+            if (user.getSecurityGroup() == business.businessModel.SecurityGroup.None) {
                 mav.addObject("message", "Username or password invalid");
+            } else {
+                mav.addObject("currentUser", user);
             }
+
         } catch (Exception ex) {
             //TODO: Log Exception 
         }
@@ -58,7 +62,7 @@ public class UserController {
         String view = "addUser";
         ModelAndView mav = new ModelAndView();
         try {
-            mav.addObject("user", new business.businessModel.User());
+            mav.addObject("newUser", new business.businessModel.User());
             HashMap securityGroup = getSecurityGroup();
             mav.addObject("securityGroup", securityGroup);
         } catch (Exception ex) {
@@ -74,14 +78,19 @@ public class UserController {
         for (business.businessModel.SecurityGroup securityGroupItem : business.businessModel.SecurityGroup.values()) {
             securityGroup.put(securityGroupItem.getValue(), securityGroupItem.getName());
         }
+        securityGroup.remove(business.businessModel.SecurityGroup.None.getValue());
         return securityGroup;
     }
 
     @RequestMapping(value = "addUser", method = RequestMethod.POST)
-    public ModelAndView addUser(@ModelAttribute("user") business.businessModel.User newUser) {
+    public ModelAndView addUser(String password, String username, String securityGroup) {
         String view = "";
         ModelAndView mav = new ModelAndView();
 
+        business.businessModel.User newUser = new business.businessModel.User();
+        newUser.setUsername(username);
+        newUser.setPassword(password);
+        newUser.setSecurityGroup(securityGroup);
         try {
             business.businessLogic.User.addUser(newUser);
         } catch (Exception ex) {

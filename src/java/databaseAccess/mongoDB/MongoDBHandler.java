@@ -162,7 +162,7 @@ public class MongoDBHandler implements DBHandler {
 
         document.put("username", user.getUsername());
         document.put("password", user.getPassword());
-
+        document.put("securitygroup", user.getSecurityGroup().getValue());
         table.insert(document);
 
     }
@@ -180,9 +180,31 @@ public class MongoDBHandler implements DBHandler {
     }
 
     @Override
-    public User getUser(String username, String password) {
+    public User getUser(String searchUsername, String searchPassword) {
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("username", searchUsername);
+        query.put("password", searchPassword);
+
         DBCollection table = getUserCollection();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BasicDBObject dbObj = (BasicDBObject) table.findOne(query);
+
+        User user = new User();
+        try{
+        String id = (String) dbObj.getString("_id");
+        String username = (String) dbObj.getString("username");
+        String password = (String) dbObj.getString("password");
+        String securityGroup = (String) dbObj.getString("securitygroup");
+
+        user.setUserID(id);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setSecurityGroup(securityGroup);
+        } catch(NullPointerException npe){
+            //TODO: Log
+        }
+        return user;
+
     }
 
 //    public void list(String collection) {

@@ -6,6 +6,7 @@
 package databaseAccess.mongoDB;
 
 import business.businessModel.Receipt;
+import business.businessModel.SecurityGroup;
 import business.businessModel.User;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,10 +55,9 @@ public class MongoDBHandlerTest {
         business.businessModel.User user = new business.businessModel.User();
         user.setUsername("test1");
         user.setPassword("password");
-                
+        user.setSecurityGroup(SecurityGroup.ReceiptProvider);
         try {
             handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
-
         } catch (Exception ex) {
             fail("DB Connection Exception");
         }
@@ -65,4 +65,58 @@ public class MongoDBHandlerTest {
         handler.createUser(user);
     }
 
+    @Test
+    public void testFindUser() {
+        String dbHost = "127.0.0.1";
+        String dbName = "ExpenseSystem";
+        String dbUsername = "app";
+        String dbPassword = "app";
+        MongoDBHandler handler = null;
+
+        business.businessModel.User oldUser = new business.businessModel.User();
+        oldUser.setUsername("test1");
+        oldUser.setPassword("password");
+        oldUser.setSecurityGroup(SecurityGroup.ReceiptProvider);
+        try {
+            handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
+        } catch (Exception ex) {
+            fail("DB Connection Exception");
+        }
+
+        //Write to db
+        handler.createUser(oldUser);
+
+        //Pull from db
+        User foundUser = handler.getUser(oldUser.getUsername(), oldUser.getPassword());
+
+        System.out.print(foundUser.toString());
+
+    }
+
+    @Test
+    public void testFindNoneUser() {
+        String dbHost = "127.0.0.1";
+        String dbName = "ExpenseSystem";
+        String dbUsername = "app";
+        String dbPassword = "app";
+        MongoDBHandler handler = null;
+
+        business.businessModel.User oldUser = new business.businessModel.User();
+        oldUser.setUsername("admin");
+        oldUser.setPassword("password");
+        oldUser.setSecurityGroup(SecurityGroup.ReceiptProvider);
+        try {
+            handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
+        } catch (Exception ex) {
+            fail("DB Connection Exception");
+        }
+
+        //Write to db
+        handler.createUser(oldUser);
+
+        //Pull from db
+        User foundUser = handler.getUser("failingTest", "");
+
+        System.out.print(foundUser.toString());
+    }
 }

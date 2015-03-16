@@ -16,8 +16,17 @@ import java.util.logging.Logger;
  */
 public class User {
 
-    public static boolean login(business.businessModel.User user) {
-        return true;
+    public static business.businessModel.User login(business.businessModel.User user) {
+        business.businessModel.User foundUser = null;
+        try {
+
+            DBHandler handler = MongoDBHelper.getDBHandler();
+            foundUser = handler.getUser(user.getUsername(), user.getPassword());
+
+        } catch (Exception ex) {
+
+        }
+        return foundUser;
     }
 
     public static boolean addUser(business.businessModel.User user) {
@@ -32,18 +41,30 @@ public class User {
     }
 
     public static String getHomepage(business.businessModel.User user) {
-        String view = ""; 
+        String view = "";
         try {
-           //TODO: provide real logic
-            if(user.getUsername().equals("admin")){
-                view = "adminHomepage";
-            } else {
-                view = "receiptProviderHomepage"; 
+
+            switch (user.getSecurityGroup()) {
+                case Admin:
+                    view = "adminHomepage";
+                    break;
+                case DataAnalysis:
+                    view = "";
+                    break;
+                case ReceiptProvider:
+                    view = "receiptProviderHomepage";
+                    break;
+                case ReceiptManager:
+                    view = "receiptManagerHomepage";
+                    break;
+                default:
+                    view = "login";
             }
+
         } catch (Exception ex) {
 
         }
-        return view; 
+        return view;
     }
 
 }
