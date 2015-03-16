@@ -1,5 +1,5 @@
 <%@include file="/WEB-INF/templates/header.jsp" %>
-<form action="uploadReceipt" method="post" enctype="multipart/form-data">
+<form action="receiptUpload" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <fieldset>
             <label>Receipt Location</label>

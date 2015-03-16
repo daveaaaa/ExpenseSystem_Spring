@@ -1,22 +1,12 @@
 package databaseAccess.mongoDB;
 
 import com.mongodb.*;
-import com.mongodb.gridfs.*;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-import business.businessModel.ReceiptImage;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
-import java.util.Set;
-import javax.imageio.ImageIO;
 import business.businessModel.Receipt;
 import business.businessModel.User;
-import org.apache.commons.io.FilenameUtils;
 import org.bson.types.ObjectId;
 import databaseAccess.DBHandler;
 
@@ -41,6 +31,12 @@ public class MongoDBHandler implements DBHandler {
         this.dbPassword = dbPassword;
     }
 
+    /**
+     * **********************
+     *
+     * helper methods
+     *
+     */
     private DBCollection getReceiptCollection() {
         return db.getCollection(RECIEPT_COLLECTION);
     }
@@ -53,7 +49,12 @@ public class MongoDBHandler implements DBHandler {
         return new BasicDBObject();
     }
 
-    //Create Receipt
+    /**
+     * **********************
+     *
+     * receipt methods
+     *
+     */
     @Override
     public Receipt createReceipt(Receipt reciept) {
         reciept = saveReceipt(reciept);
@@ -88,7 +89,39 @@ public class MongoDBHandler implements DBHandler {
 
     }
 
-    //Update Receipt
+    @Override
+    public ArrayList<Receipt> listAllReceipts() {
+        ArrayList<business.businessModel.Receipt> reciepts = new ArrayList<>();
+
+        DBCollection table = getReceiptCollection();
+        DBCursor cursor = table.find();
+        while (cursor.hasNext()) {
+            BasicDBObject dbObj = (BasicDBObject) cursor.next();
+            business.businessModel.Receipt receipt = populateReceipt(dbObj);
+            reciepts.add(receipt);
+        }
+
+        return reciepts;
+    }
+
+    @Override
+    public ArrayList<Receipt> listReceipts(String userID) {
+        ArrayList<business.businessModel.Receipt> reciepts = new ArrayList<>();
+        BasicDBObject query = new BasicDBObject();
+        query.put("userID", userID);
+
+        DBCollection table = getReceiptCollection();
+        DBCursor cursor = table.find(query);
+        while (cursor.hasNext()) {
+            BasicDBObject dbObj = (BasicDBObject) cursor.next();
+            business.businessModel.Receipt receipt = populateReceipt(dbObj);
+            reciepts.add(receipt);
+        }
+
+        return reciepts;
+
+    }
+
     @Override
     public void updateReceipt(Receipt reciept) {
         DBCollection table = getReceiptCollection();
@@ -155,6 +188,12 @@ public class MongoDBHandler implements DBHandler {
         return image;
     }
 
+    /**
+     * **********************
+     *
+     * user methods
+     *
+     */
     @Override
     public void createUser(User user) {
         DBCollection table = getUserCollection();

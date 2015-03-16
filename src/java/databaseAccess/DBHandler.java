@@ -37,4 +37,8 @@ public interface DBHandler {
     public void deleteUser(String userID);
  
     public business.businessModel.User findUser(String userID);
+
+    public ArrayList<Receipt> listAllReceipts();
+
+    public ArrayList<Receipt> listReceipts(String userID);
 }

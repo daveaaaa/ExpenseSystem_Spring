@@ -5,12 +5,13 @@
  */
 package business.businessLogic;
 
-import java.awt.image.BufferedImage; 
-import javax.imageio.ImageIO; 
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 import business.businessModel.Receipt;
 import org.springframework.web.multipart.MultipartFile;
-import databaseAccess.DBHandler; 
+import databaseAccess.DBHandler;
 import databaseAccess.mongoDB.MongoDBHelper;
+import java.util.ArrayList;
 
 /**
  *
@@ -27,8 +28,8 @@ public class Reciept {
         DBHandler handler = MongoDBHelper.getDBHandler();
 
         handler.createReceipt(receipt);
-        
-        receipt = handler.getReceipt(receipt.getReceiptID()); 
+
+        receipt = handler.getReceipt(receipt.getReceiptID());
         return receipt;
     }
 
@@ -44,11 +45,27 @@ public class Reciept {
     }
 
     public static Receipt parseReceipt(Receipt receipt) {
-        business.businessLogic.parseImage.ParseImage imageParser = new business.businessLogic.parseImage.AORC.ParseImageAORC(); 
-        
-        receipt = imageParser.parseImage(receipt); 
-        
-        return receipt; 
+        business.businessLogic.parseImage.ParseImage imageParser = new business.businessLogic.parseImage.AORC.ParseImageAORC();
+
+        receipt = imageParser.parseImage(receipt);
+
+        return receipt;
     }
-    
+
+    public static ArrayList<business.businessModel.Receipt> listReceipts(business.businessModel.User user) {
+        ArrayList<business.businessModel.Receipt> receiptList = new ArrayList<>();
+        try {
+            DBHandler handler = MongoDBHelper.getDBHandler();
+
+            if (user.getSecurityGroup() != business.businessModel.SecurityGroup.ReceiptProvider) {
+                receiptList = handler.listAllReceipts();
+            } else {
+                receiptList = handler.listReceipts(user.getUserID());
+            }
+        } catch (Exception ex) {
+            //TODO: log exceptions
+        }
+        return receiptList;
+    }
+
 }

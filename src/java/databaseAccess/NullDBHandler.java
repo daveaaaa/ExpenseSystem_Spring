@@ -15,9 +15,9 @@ public class NullDBHandler implements DBHandler {
     public void deleteUser(String userID) {
 
     }
-    
+
     @Override
-    public business.businessModel.User findUser(String userID){
+    public business.businessModel.User findUser(String userID) {
         return new business.businessModel.User();
     }
 
@@ -64,6 +64,16 @@ public class NullDBHandler implements DBHandler {
     @Override
     public Receipt getReceipt(String receiptID) {
         return new Receipt();
+    }
+
+    @Override
+    public ArrayList<Receipt> listAllReceipts() {
+        return new ArrayList();
+    }
+
+    @Override
+    public ArrayList<Receipt> listReceipts(String userID) {
+        return new ArrayList();
     }
 
 }

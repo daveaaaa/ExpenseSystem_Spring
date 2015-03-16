@@ -45,7 +45,7 @@ public class MongoDBHandlerTest {
     /**
      * Test of createReceipt method, of class MongoDBHandler.
      */
-    @Test
+    //  @Test
     public void createUser() {
         String dbHost = "127.0.0.1";
         String dbName = "ExpenseSystem";
@@ -65,7 +65,7 @@ public class MongoDBHandlerTest {
         handler.createUser(user);
     }
 
-    @Test
+//    @Test
     public void testFindUser() {
         String dbHost = "127.0.0.1";
         String dbName = "ExpenseSystem";
@@ -93,7 +93,7 @@ public class MongoDBHandlerTest {
 
     }
 
-    @Test
+    //   @Test
     public void testFindNoneUser() {
         String dbHost = "127.0.0.1";
         String dbName = "ExpenseSystem";
@@ -119,8 +119,8 @@ public class MongoDBHandlerTest {
 
         System.out.print(foundUser.toString());
     }
-    
-     @Test
+
+    // @Test
     public void deleteTest() {
         String dbHost = "127.0.0.1";
         String dbName = "ExpenseSystem";
@@ -142,9 +142,51 @@ public class MongoDBHandlerTest {
         handler.createUser(oldUser);
 
         oldUser = handler.getUser(oldUser.getUsername(), oldUser.getPassword());
-        
+
         //Delete from db
         handler.deleteUser(oldUser.getUserID());
 
+    }
+
+ //   @Test
+    public void listAllReceipts() {
+        String dbHost = "127.0.0.1";
+        String dbName = "ExpenseSystem";
+        String dbUsername = "app";
+        String dbPassword = "app";
+        MongoDBHandler handler = null;
+        try {
+            handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
+        } catch (Exception ex) {
+            fail("DB Connection Exception");
+        }
+        
+        ArrayList<business.businessModel.Receipt> reciepts = handler.listAllReceipts();
+
+        for(business.businessModel.Receipt receipt : reciepts){
+            System.out.println(receipt.toString());
+        }
+        
+    }
+    
+     @Test
+    public void listAllReceiptsOfUser() {
+        String dbHost = "127.0.0.1";
+        String dbName = "ExpenseSystem";
+        String dbUsername = "app";
+        String dbPassword = "app";
+        MongoDBHandler handler = null;
+        String userID = "5506f89587f28395aef5f1af";
+        try {
+            handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
+        } catch (Exception ex) {
+            fail("DB Connection Exception");
+        }
+        
+        ArrayList<business.businessModel.Receipt> reciepts = handler.listReceipts(userID);
+
+        for(business.businessModel.Receipt receipt : reciepts){
+            System.out.println(receipt.toString());
+        }
     }
 }

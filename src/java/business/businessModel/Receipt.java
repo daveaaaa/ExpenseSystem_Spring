@@ -15,8 +15,10 @@ public class Receipt {
     private ReceiptImage image;
     private String userID;
     private java.util.Date createdOn;
+    private java.util.Date receiptDate;
     private ArrayList<ReceiptItem> receiptItems;
     private int currentReceiptItem;
+    private double total;
 
     public Receipt() {
         receiptID = "";
@@ -24,6 +26,31 @@ public class Receipt {
         createdOn = new java.util.Date();
         image = new ReceiptImage();
         receiptItems = new ArrayList<>();
+        receiptDate = new java.util.Date();
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public Date getReceiptDate() {
+        return receiptDate;
+    }
+
+    public void setReceiptDate(Date receiptDate) {
+        this.receiptDate = receiptDate;
+    }
+
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
     }
 
     public Receipt(String userID) {
