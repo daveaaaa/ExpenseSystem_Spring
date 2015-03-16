@@ -9,8 +9,14 @@
             <label for="txtPassword">Password</label>
             <form:input class="form-control" path="password" id="txtPassword"/>
         </div>
+        <div  class="form-group form-inline">
+             <label for="ddSecurityGroup">Security Group</label>
+            <form:select path="securityGroup" items="${securityGroup}" class="form-control" id="ddSecruityGroup"> 
+            </form:select>
+        </div>
         <div class="form-group">
             <button type="submit" class="btn btn-default">Create User</button>
+            <a href="adminHomepage.html" class="btn btn-danger">Cancel</a>
         </div>
     </form:form>
 </div>

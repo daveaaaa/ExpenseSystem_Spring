@@ -15,20 +15,35 @@ import java.util.logging.Logger;
  * @author david
  */
 public class User {
-    
-    public static boolean login(business.businessModel.User user){
-        return true; 
+
+    public static boolean login(business.businessModel.User user) {
+        return true;
     }
-    
-    public static boolean addUser(business.businessModel.User user){
+
+    public static boolean addUser(business.businessModel.User user) {
         try {
             DBHandler handler = MongoDBHelper.getDBHandler();
             handler.createUser(user);
-        
+
         } catch (Exception ex) {
-          //TODO: logging
+            //TODO: logging
         }
-        return true; 
+        return true;
     }
-    
+
+    public static String getHomepage(business.businessModel.User user) {
+        String view = ""; 
+        try {
+           //TODO: provide real logic
+            if(user.getUsername().equals("admin")){
+                view = "adminHomepage";
+            } else {
+                view = "receiptProviderHomepage"; 
+            }
+        } catch (Exception ex) {
+
+        }
+        return view; 
+    }
+
 }

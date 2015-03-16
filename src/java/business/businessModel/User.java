@@ -8,6 +8,7 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
 
+    private SecurityGroup securityGroup;
     private String userID;
     private String username;
     private String password;
@@ -16,6 +17,15 @@ public class User implements Serializable {
         userID = "";
         username = "";
         password = "";
+        securityGroup = SecurityGroup.None; 
+    }
+
+    public SecurityGroup getSecurityGroup() {
+        return securityGroup;
+    }
+
+    public void setSecurityGroup(SecurityGroup securityGroup) {
+        this.securityGroup = securityGroup;
     }
 
     public String getUserID() {
