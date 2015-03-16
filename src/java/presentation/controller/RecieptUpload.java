@@ -52,7 +52,7 @@ public class RecieptUpload {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("user") business.businessModel.User user) {
+    public ModelAndView handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("currentUser") business.businessModel.User user) {
         String view = "viewReceipt";
         ModelAndView mav = new ModelAndView();
         try {

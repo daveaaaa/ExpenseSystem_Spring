@@ -5,14 +5,11 @@
  */
 package business.businessLogic;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
-import business.businessModel.ReceiptImage;
+import java.awt.image.BufferedImage; 
+import javax.imageio.ImageIO; 
 import business.businessModel.Receipt;
 import org.springframework.web.multipart.MultipartFile;
-import databaseAccess.DBHandler;
-import databaseAccess.DBHelper;
+import databaseAccess.DBHandler; 
 import databaseAccess.mongoDB.MongoDBHelper;
 
 /**

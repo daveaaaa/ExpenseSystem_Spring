@@ -45,8 +45,8 @@ public class ParseReceipt {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView parseReceipt(@ModelAttribute("receipt") business.businessModel.Receipt receipt, @ModelAttribute("user") business.businessModel.User user) {
-        String view = "";
+    public ModelAndView parseReceipt(@ModelAttribute("receipt") business.businessModel.Receipt receipt, @ModelAttribute("currentUser") business.businessModel.User user) {
+        String view = "receiptCorrection";
         ModelAndView mav = new ModelAndView();
         try {
             receipt = business.businessLogic.Reciept.parseReceipt(receipt);
