@@ -30,7 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50)
 
-public class RecieptController {
+public class ReceiptController {
 
     @RequestMapping(value = "receiptUpload", method = RequestMethod.GET)
     public String preReceiptUpload() {
@@ -85,7 +85,7 @@ public class RecieptController {
 
     }
 
-    @RequestMapping(value = "parseReceipt", method = RequestMethod.GET)
+    @RequestMapping(value = "receiptList", method = RequestMethod.GET)
     public ModelAndView receiptList(@ModelAttribute("currentUser") business.businessModel.User user) {
         String view = "receiptList";
         ModelAndView mav = new ModelAndView();
@@ -95,7 +95,7 @@ public class RecieptController {
         return mav;
     }
     
-    @RequestMapping(value = "parseReceipt", method = RequestMethod.POST)
+    @RequestMapping(value = "receiptList", method = RequestMethod.POST)
     public ModelAndView selectReceipt(@ModelAttribute("currentUser") business.businessModel.User user) {
         return new ModelAndView();
     }

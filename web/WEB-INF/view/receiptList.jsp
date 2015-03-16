@@ -1,4 +1,5 @@
 <%@include file="/WEB-INF/templates/header.jsp" %>
+
 <div class="row">
     <table class="table table-hover">
         <thead>
@@ -14,14 +15,20 @@
             <c:forEach var="receipt" items="${receipts}">
                 <tr>
                     <td>   
-                        <img alt="receipt" height="500" width="300" src="data:${receipt.image.format};base64,${receipt.image.base64}">
+                        <img alt="receipt" height="150" width="100" src="data:${receipt.image.format};base64,${receipt.image.base64}">
                     </td>
-                    <td>${receipt.receiptdate}</td>
+                    <td>
+                        <c:set value="${receipt.receiptDate}" var="dateUploaded" />
+                        <fmt:formatDate pattern="dd/MM/yyyy" value="${dateUploaded}"/>
+                    </td>
                     <td>${receipt.total}</td>
-                    <td>${receipt.createdon}</td>
-            <form method="get" action="editreceipt">
+                    <td>
+                        <c:set value="${receipt.createdOn}" var="dateCreated" />
+                        <fmt:formatDate pattern="dd/MM/yyyy" value="${dateCreated}"/>
+                    </td>
+            <form method="get" action="editReceipt">
                 <input type="hidden" value="${receipt.receiptID}" name="receiptID"/>
-                <td><input type="submit" class="btn btn-default" value="Edit User" name="edit"/></td>
+                <td><input type="submit" class="btn btn-default" value="Edit Receipt" name="edit"/></td>
             </form> 
             </tr>
         </c:forEach>
@@ -29,6 +36,6 @@
     </table>
 </div>
 <div>
-    <a href="adminHomepage.html" class="btn btn-default">Back</a>
+    <a href="receiptProviderHomepage.html" class="btn btn-default">Back</a>
 </div>
 <%@include file="/WEB-INF/templates/footer.jsp" %>
