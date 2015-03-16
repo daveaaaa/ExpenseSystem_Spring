@@ -175,36 +175,75 @@ public class MongoDBHandler implements DBHandler {
 
     @Override
     public ArrayList<User> findUser() {
+        BasicDBObject query = new BasicDBObject();
+        ArrayList<User> userList = new ArrayList<>();
+
         DBCollection table = getUserCollection();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DBCursor cursor = table.find(query);
+
+        while (cursor.hasNext()) {
+            BasicDBObject dbObj = (BasicDBObject) cursor.next();
+            User newUser = populateUser(dbObj);
+            userList.add(newUser);
+        }
+
+        return userList;
+    }
+
+    @Override
+    public void deleteUser(String userID) {
+        BasicDBObject query = new BasicDBObject();
+
+        query.put("_id", new ObjectId(userID));
+
+        DBCollection table = getUserCollection();
+        DBObject user = (DBObject) table.findOne(query);
+        table.remove(user);
     }
 
     @Override
     public User getUser(String searchUsername, String searchPassword) {
-
+        business.businessModel.User user;
         BasicDBObject query = new BasicDBObject();
         query.put("username", searchUsername);
         query.put("password", searchPassword);
 
         DBCollection table = getUserCollection();
         BasicDBObject dbObj = (BasicDBObject) table.findOne(query);
+        user = populateUser(dbObj);
 
+        return user;
+
+    }
+
+    @Override
+    public business.businessModel.User findUser(String userID) {
+        BasicDBObject query = new BasicDBObject();
+
+        query.put("_id", new ObjectId(userID));
+        DBCollection table = getUserCollection();
+        BasicDBObject dbObj = (BasicDBObject) table.findOne(query);
+        business.businessModel.User user = populateUser(dbObj);
+
+        return user;
+    }
+
+    private business.businessModel.User populateUser(BasicDBObject dbObj) {
         User user = new User();
-        try{
-        String id = (String) dbObj.getString("_id");
-        String username = (String) dbObj.getString("username");
-        String password = (String) dbObj.getString("password");
-        String securityGroup = (String) dbObj.getString("securitygroup");
+        try {
+            String id = (String) dbObj.getString("_id");
+            String username = (String) dbObj.getString("username");
+            String password = (String) dbObj.getString("password");
+            String securityGroup = (String) dbObj.getString("securitygroup");
 
-        user.setUserID(id);
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setSecurityGroup(securityGroup);
-        } catch(NullPointerException npe){
+            user.setUserID(id);
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setSecurityGroup(securityGroup);
+        } catch (NullPointerException npe) {
             //TODO: Log
         }
         return user;
-
     }
 
 //    public void list(String collection) {

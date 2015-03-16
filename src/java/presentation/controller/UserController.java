@@ -3,12 +3,14 @@ package presentation.controller;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -19,6 +21,29 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes("currentUser")
 
 public class UserController {
+
+    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    public ModelAndView logout(HttpSession session, SessionStatus status){
+        ModelAndView mav = new ModelAndView(); 
+        
+        session.removeAttribute("currentUser");
+        status.isComplete();
+        
+        mav.setViewName("redirect:/login");
+        return mav;
+    }
+    
+    @RequestMapping(value = "adminHomepage", method = RequestMethod.GET)
+    public ModelAndView preAdminHomepage() {
+        String view = "adminHomepage";
+        return new ModelAndView(view);
+    }
+
+    @RequestMapping(value = "receiptProviderHomepage", method = RequestMethod.GET)
+    public ModelAndView preReceiptProviderHomepage() {
+        String view = "receiptProviderHomepage";
+        return new ModelAndView(view);
+    }
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String preLoginUser(Model mod) {
@@ -43,7 +68,7 @@ public class UserController {
             user = business.businessLogic.User.login(user);
 
             view = business.businessLogic.User.getHomepage(user);
-            
+
             if (user.getSecurityGroup() == business.businessModel.SecurityGroup.None) {
                 mav.addObject("message", "Username or password invalid");
             } else {
@@ -57,9 +82,9 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "addUser", method = RequestMethod.GET)
+    @RequestMapping(value = "userAdd", method = RequestMethod.GET)
     public ModelAndView preAddUser() {
-        String view = "addUser";
+        String view = "userAdd";
         ModelAndView mav = new ModelAndView();
         try {
             mav.addObject("newUser", new business.businessModel.User());
@@ -82,7 +107,7 @@ public class UserController {
         return securityGroup;
     }
 
-    @RequestMapping(value = "addUser", method = RequestMethod.POST)
+    @RequestMapping(value = "userAdd", method = RequestMethod.POST)
     public ModelAndView addUser(String password, String username, String securityGroup) {
         String view = "";
         ModelAndView mav = new ModelAndView();
@@ -93,6 +118,65 @@ public class UserController {
         newUser.setSecurityGroup(securityGroup);
         try {
             business.businessLogic.User.addUser(newUser);
+            view = "adminHomepage";
+        } catch (Exception ex) {
+            //TODO: Log Exception
+        }
+
+        mav.setViewName(view);
+        return mav;
+    }
+
+    @RequestMapping(value = "userList", method = RequestMethod.GET)
+    public ModelAndView preUserList() {
+        String view = "userList";
+        ModelAndView mav = new ModelAndView();
+        try {
+            mav.addObject("users", business.businessLogic.User.getUsers());
+        } catch (Exception ex) {
+            //TODO: Log Exception
+        }
+
+        mav.setViewName(view);
+        return mav;
+    }
+
+    @RequestMapping(value = "userList", method = RequestMethod.POST)
+    public ModelAndView deleteUser(String userID) {
+        String view = "redirect:/userList";
+        ModelAndView mav = new ModelAndView();
+        try {
+
+            business.businessLogic.User.deleteUser(userID);
+        } catch (Exception ex) {
+            //TODO: Log Exception
+        }
+
+        mav.setViewName(view);
+        return mav;
+    }
+    
+    @RequestMapping(value = "editUser", method = RequestMethod.GET)
+    public ModelAndView preEditUser(String userID) {
+        String view = "editUser";
+        ModelAndView mav = new ModelAndView();
+        try {
+            mav.addObject("users", business.businessLogic.User.findUser(userID));
+        } catch (Exception ex) {
+            //TODO: Log Exception
+        }
+
+        mav.setViewName(view);
+        return mav;
+    }
+
+    @RequestMapping(value = "editUser", method = RequestMethod.POST)
+    public ModelAndView updateUser(@ModelAttribute business.businessModel.User user) {
+        String view = "redirect:/userList";
+        ModelAndView mav = new ModelAndView();
+        try {
+
+            business.businessLogic.User.deleteUser(userID);
         } catch (Exception ex) {
             //TODO: Log Exception
         }

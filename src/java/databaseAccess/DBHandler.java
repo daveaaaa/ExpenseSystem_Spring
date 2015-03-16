@@ -34,4 +34,7 @@ public interface DBHandler {
 
     public User getUser(String username, String password);
 
+    public void deleteUser(String userID);
+ 
+    public business.businessModel.User findUser(String userID);
 }

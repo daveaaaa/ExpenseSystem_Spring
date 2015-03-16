@@ -12,6 +12,16 @@ import business.businessModel.User;
 public class NullDBHandler implements DBHandler {
 
     @Override
+    public void deleteUser(String userID) {
+
+    }
+    
+    @Override
+    public business.businessModel.User findUser(String userID){
+        return new business.businessModel.User();
+    }
+
+    @Override
     public Receipt createReceipt(Receipt reciept) {
         return new Receipt();
     }

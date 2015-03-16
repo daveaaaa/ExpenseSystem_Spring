@@ -7,6 +7,7 @@ package business.businessLogic;
 
 import databaseAccess.DBHandler;
 import databaseAccess.mongoDB.MongoDBHelper;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +17,30 @@ import java.util.logging.Logger;
  */
 public class User {
 
+    public static business.businessModel.User findUser(String userID){
+        business.businessModel.User user = new business.businessModel.User(); 
+        try{
+           DBHandler handler = MongoDBHelper.getDBHandler();
+            user = handler.findUser(userID);
+        } catch(Exception ex){
+            //TODO: log exception
+        }
+        return user;
+    }
+    
+    public static ArrayList<business.businessModel.User> getUsers() {
+        ArrayList<business.businessModel.User> userList = new ArrayList<>();
+        try {
+
+            DBHandler handler = MongoDBHelper.getDBHandler();
+            userList = handler.findUser();
+
+        } catch (Exception ex) {
+            //TODO: log exception 
+        }
+        return userList;
+    }
+
     public static business.businessModel.User login(business.businessModel.User user) {
         business.businessModel.User foundUser = null;
         try {
@@ -24,7 +49,7 @@ public class User {
             foundUser = handler.getUser(user.getUsername(), user.getPassword());
 
         } catch (Exception ex) {
-
+            //TODO: log exception
         }
         return foundUser;
     }
@@ -65,6 +90,17 @@ public class User {
 
         }
         return view;
+    }
+
+    public static void deleteUser(String userID) {
+        try{
+            
+            DBHandler handler = MongoDBHelper.getDBHandler();
+            handler.deleteUser(userID);
+
+        }catch (Exception ex){
+            System.out.printf(ex.getMessage());
+        }
     }
 
 }

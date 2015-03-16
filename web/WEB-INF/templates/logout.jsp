@@ -1,5 +1,5 @@
 <div class="row">
-    <form action="" method="post">
+    <form action="logout" method="post">
         <button type="submit" class="btn btn-danger pull-right">Logout</button>
     </form>
 </div>

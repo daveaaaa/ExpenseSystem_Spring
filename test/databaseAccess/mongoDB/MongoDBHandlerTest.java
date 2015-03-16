@@ -119,4 +119,32 @@ public class MongoDBHandlerTest {
 
         System.out.print(foundUser.toString());
     }
+    
+     @Test
+    public void deleteTest() {
+        String dbHost = "127.0.0.1";
+        String dbName = "ExpenseSystem";
+        String dbUsername = "app";
+        String dbPassword = "app";
+        MongoDBHandler handler = null;
+
+        business.businessModel.User oldUser = new business.businessModel.User();
+        oldUser.setUsername("admin");
+        oldUser.setPassword("password");
+        oldUser.setSecurityGroup(SecurityGroup.ReceiptProvider);
+        try {
+            handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
+        } catch (Exception ex) {
+            fail("DB Connection Exception");
+        }
+
+        //Write to db
+        handler.createUser(oldUser);
+
+        oldUser = handler.getUser(oldUser.getUsername(), oldUser.getPassword());
+        
+        //Delete from db
+        handler.deleteUser(oldUser.getUserID());
+
+    }
 }
