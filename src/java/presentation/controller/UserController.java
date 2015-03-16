@@ -23,16 +23,16 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 
     @RequestMapping(value = "logout", method = RequestMethod.POST)
-    public ModelAndView logout(HttpSession session, SessionStatus status){
-        ModelAndView mav = new ModelAndView(); 
-        
+    public ModelAndView logout(HttpSession session, SessionStatus status) {
+        ModelAndView mav = new ModelAndView();
+
         session.removeAttribute("currentUser");
         status.isComplete();
-        
+
         mav.setViewName("redirect:/login");
         return mav;
     }
-    
+
     @RequestMapping(value = "adminHomepage", method = RequestMethod.GET)
     public ModelAndView preAdminHomepage() {
         String view = "adminHomepage";
@@ -155,13 +155,15 @@ public class UserController {
         mav.setViewName(view);
         return mav;
     }
-    
+
     @RequestMapping(value = "editUser", method = RequestMethod.GET)
     public ModelAndView preEditUser(String userID) {
-        String view = "editUser";
+        String view = "userEdit";
         ModelAndView mav = new ModelAndView();
         try {
-            mav.addObject("users", business.businessLogic.User.findUser(userID));
+            mav.addObject("newUser", business.businessLogic.User.findUser(userID));
+            HashMap securityGroup = getSecurityGroup();
+            mav.addObject("securityGroup", securityGroup);
         } catch (Exception ex) {
             //TODO: Log Exception
         }
@@ -171,12 +173,16 @@ public class UserController {
     }
 
     @RequestMapping(value = "editUser", method = RequestMethod.POST)
-    public ModelAndView updateUser(@ModelAttribute business.businessModel.User user) {
-        String view = "redirect:/userList";
+    public ModelAndView updateUser(String userID, String password, String username, String securityGroup) {
+        String view = "adminHomepage";
         ModelAndView mav = new ModelAndView();
         try {
-
-            business.businessLogic.User.deleteUser(userID);
+            business.businessModel.User user = new business.businessModel.User();
+            user.setUserID(userID);
+            user.setPassword(password);
+            user.setUsername(username);
+            user.setSecurityGroup(securityGroup);
+            business.businessLogic.User.updateUser(user);
         } catch (Exception ex) {
             //TODO: Log Exception
         }

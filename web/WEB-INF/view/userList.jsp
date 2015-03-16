@@ -16,9 +16,9 @@
                     <td>${user.username}</td>
                     <td>${user.password}</td>
                     <td>${user.securityGroup}</td>
-            <form method="post">
+            <form method="get" action="editUser">
                 <input type="hidden" value="${user.userID}" name="userID"/>
-                <td><input type="dubmit" class="btn btn-default" value="Edit User" name="edit"/></td>
+                <td><input type="submit" class="btn btn-default" value="Edit User" name="edit"/></td>
             </form>
             <form method="post">
                 <input type="hidden" value="${user.userID}" name="userID"/>

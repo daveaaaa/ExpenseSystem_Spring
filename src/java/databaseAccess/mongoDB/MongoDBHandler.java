@@ -169,8 +169,18 @@ public class MongoDBHandler implements DBHandler {
 
     @Override
     public void updateUser(User user) {
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", new ObjectId(user.getUserID()));
+
         DBCollection table = getUserCollection();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BasicDBObject userDocument = new BasicDBObject();
+
+        userDocument.append("$set", new BasicDBObject().append("username", user.getUsername()));
+        userDocument.append("$set", new BasicDBObject().append("password", user.getPassword()));
+        userDocument.append("$set", new BasicDBObject().append("securitygroup", user.getSecurityGroup().getValue()));
+
+        table.update(query, userDocument);
     }
 
     @Override

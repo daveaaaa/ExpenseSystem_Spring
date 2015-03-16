@@ -10,7 +10,7 @@
             <form:input class="form-control" path="password" id="txtPassword"/>
         </div>
         <div  class="form-group form-inline">
-             <label for="ddSecurityGroup">Security Group</label>
+            <label for="ddSecurityGroup">Security Group</label>
             <form:select path="securityGroup" items="${securityGroup}" class="form-control" id="ddSecruityGroup"> 
             </form:select>
         </div>

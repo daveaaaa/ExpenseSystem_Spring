@@ -17,17 +17,17 @@ import java.util.logging.Logger;
  */
 public class User {
 
-    public static business.businessModel.User findUser(String userID){
-        business.businessModel.User user = new business.businessModel.User(); 
-        try{
-           DBHandler handler = MongoDBHelper.getDBHandler();
+    public static business.businessModel.User findUser(String userID) {
+        business.businessModel.User user = new business.businessModel.User();
+        try {
+            DBHandler handler = MongoDBHelper.getDBHandler();
             user = handler.findUser(userID);
-        } catch(Exception ex){
+        } catch (Exception ex) {
             //TODO: log exception
         }
         return user;
     }
-    
+
     public static ArrayList<business.businessModel.User> getUsers() {
         ArrayList<business.businessModel.User> userList = new ArrayList<>();
         try {
@@ -93,13 +93,22 @@ public class User {
     }
 
     public static void deleteUser(String userID) {
-        try{
-            
+        try {
+
             DBHandler handler = MongoDBHelper.getDBHandler();
             handler.deleteUser(userID);
 
-        }catch (Exception ex){
-            System.out.printf(ex.getMessage());
+        } catch (Exception ex) {
+            //TODO: Logging
+        }
+    }
+
+    public static void updateUser(business.businessModel.User user) {
+        try {
+            DBHandler handler = MongoDBHelper.getDBHandler();
+            handler.updateUser(user);
+        } catch (Exception ex) {
+            //TODO: Logging
         }
     }
 
