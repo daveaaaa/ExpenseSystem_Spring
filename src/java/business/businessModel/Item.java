@@ -17,9 +17,18 @@ public class Item {
     private double total;
     private String XML;
     private boolean isIncluded;
+    private ItemType type;
 
     public Item() {
         isIncluded = true;
+    }
+
+    public ItemType getType() {
+        return type;
+    }
+
+    public void setType(ItemType type) {
+        this.type = type;
     }
 
     public boolean isIsIncluded() {

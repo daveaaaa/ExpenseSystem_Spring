@@ -5,23 +5,16 @@
  */
 package business.businessLogic.parseImage.AORC;
 
-import business.businessLogic.parseImage.ParseImage;
-import business.businessModel.Item;
-import business.businessModel.Receipt;
-import business.businessModel.ReceiptItem;
+import business.businessLogic.parseImage.ParseImage; 
+import business.businessModel.Receipt; 
 import com.asprise.ocr.Ocr;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
+import java.io.StringReader; 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Attr;
+import javax.xml.parsers.DocumentBuilderFactory; 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
@@ -36,20 +29,19 @@ public class ParseImageAORC implements ParseImage {
     private Document doc;
 
     @Override
-    public Receipt parseImage(Receipt receipt) {
+    public Document parseImage(Receipt receipt) {
 
         try {
             setupOCR();
             createFile(receipt);
             createXML();
             loadXMLFromString();
-            createReceiptItem();
             cleanUp();
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
             //Log Error
         }
-        return receipt;
+        return doc;
     }
 
     private void setupOCR() {
@@ -87,31 +79,7 @@ public class ParseImageAORC implements ParseImage {
         doc = builder.parse(inputSource);
     }
 
-    private ReceiptItem createReceiptItem() throws Exception {
-        ReceiptItem receiptItem = new ReceiptItem();
-
-        Element docElem = doc.getDocumentElement();
-
-        NodeList nl = docElem.getElementsByTagName("block");
-
-        for (int i = 0; i != nl.getLength(); i++) {
-            Node node = nl.item(i);
-      
-            Attr attr = (Attr) node.getAttributes().getNamedItem("type");
-            if ((attr != null) & (attr.getNodeValue().equals("text"))) {
-                Node child = node.getChildNodes().item(0);
-
-                if (!child.getNodeValue().contains("CDATA")) {
-                    Item item = new Item();
-                    item.setXML(child.getNodeValue());
-                    receiptItem.addItem(item);
-                }
-
-            }
-        }
-
-        return receiptItem;
-    }
+   
 
     private void cleanUp() {
         file.delete();

@@ -5,6 +5,7 @@
  */
 package business.businessLogic;
 
+import business.businessLogic.parseImage.ParseXML;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import business.businessModel.Receipt;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import databaseAccess.DBHandler;
 import databaseAccess.mongoDB.MongoDBHelper;
 import java.util.ArrayList;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -45,9 +47,12 @@ public class Reciept {
     }
 
     public static Receipt parseReceipt(Receipt receipt) {
+
         business.businessLogic.parseImage.ParseImage imageParser = new business.businessLogic.parseImage.AORC.ParseImageAORC();
 
-        receipt = imageParser.parseImage(receipt);
+        Document document = imageParser.parseImage(receipt);
+
+        receipt = ParseXML.parseXML(document, receipt);
 
         return receipt;
     }

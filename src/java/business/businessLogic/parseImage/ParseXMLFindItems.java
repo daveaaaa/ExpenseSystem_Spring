@@ -5,15 +5,16 @@
  */
 package business.businessLogic.parseImage;
 
-import business.businessModel.Receipt;
-import org.w3c.dom.Document;
+import business.businessModel.Item;
+import java.util.ArrayList;
+import org.w3c.dom.Node;
 
 /**
  *
  * @author david
  */
-public interface ParseImage {
-    
-    public Document parseImage(Receipt receipt);
-    
+public class ParseXMLFindItems {
+     public static ArrayList<Item> getItems(ArrayList<Node> validNodes){
+         return new ArrayList<Item>();
+     }
 }
