@@ -30,7 +30,7 @@ public class ParseXMLFindTotal {
                 Node child = node.getChildNodes().item(0);
 
                 if (!child.getNodeValue().contains("CDATA")) {
-                    
+
                     Item item = new Item();
                     item.setType(ItemType.Total);
                     item.setXML(child.getNodeValue());
@@ -50,7 +50,9 @@ public class ParseXMLFindTotal {
 
         for (String value : xml.split(" ")) {
             try {
-                value = value.replace("£", ""); 
+                value = value.replace("£", "");
+                value = StringReplace.makeZeros(value);
+                value = StringReplace.makeOnes(value);
                 total = Double.parseDouble(value);
             } catch (NumberFormatException nfe) {
                 //DO NOTHING
@@ -66,7 +68,6 @@ public class ParseXMLFindTotal {
             if (total_heuristic1(node)) {
                 potentialTotals.add(node);
             }
-
         }
 
         return potentialTotals;
@@ -78,9 +79,14 @@ public class ParseXMLFindTotal {
      */
     private static boolean total_heuristic1(Node node) {
         boolean result = false;
-        String searchPhrase = "total";
-        if (node.getChildNodes().item(0).getNodeValue().toLowerCase().contains(searchPhrase.toLowerCase())) {
+        String searchPhrase = "total".toLowerCase();
+        String notWanted = "sub".toLowerCase();
+        String value = node.getChildNodes().item(0).getNodeValue().toLowerCase();
+        if (value.contains(searchPhrase)) {
             result = true;
+        }
+        if ((value.contains(notWanted)) && (result == true)) {
+            result = false;
         }
         return result;
     }
