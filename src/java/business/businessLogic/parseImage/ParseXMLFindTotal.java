@@ -18,10 +18,12 @@ import org.w3c.dom.Node;
 public class ParseXMLFindTotal {
 
     public static ArrayList<Item> getTotal(ArrayList<Node> validNodes) {
-
-        ArrayList<Item> totalItems = new ArrayList<>();
-
         ArrayList<Node> totalNodes = findTotal(validNodes);
+        return convertToItem(totalNodes);
+    }
+
+    private static ArrayList<Item> convertToItem(ArrayList<Node> totalNodes) {
+        ArrayList<Item> totalItems = new ArrayList<>();
 
         for (Node node : totalNodes) {
 
@@ -36,12 +38,9 @@ public class ParseXMLFindTotal {
                     item.setXML(child.getNodeValue());
                     item.setPrice(getTotal(child.getNodeValue()));
                     totalItems.add(item);
-
                 }
             }
-
         }
-
         return totalItems;
     }
 

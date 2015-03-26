@@ -28,8 +28,12 @@ public class ParseXMLFindMerchant {
     private static int smallestCount = 0;
 
     public static ArrayList<Item> getMerchantName(ArrayList<Node> validNodes, Receipt receipt) {
-        ArrayList<Item> merchants = new ArrayList<>();
         ArrayList<Node> potentialMerchants = findPotentialMerchants(validNodes, receipt);
+        return convertToItem(potentialMerchants);
+    }
+
+    private static ArrayList<Item> convertToItem(ArrayList<Node> potentialMerchants) {
+        ArrayList<Item> merchants = new ArrayList<>();
         for (Node node : potentialMerchants) {
 
             Attr attr = (Attr) node.getAttributes().getNamedItem("type");
@@ -47,9 +51,7 @@ public class ParseXMLFindMerchant {
                 }
             }
         }
-
         return merchants;
-
     }
 
     private static ArrayList<Node> findPotentialMerchants(ArrayList<Node> validNodes, Receipt receipt) {
