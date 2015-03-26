@@ -50,8 +50,8 @@ public class ParseXMLFindTotal {
         for (String value : xml.split(" ")) {
             try {
                 value = value.replace("£", "");
-                value = StringReplace.makeZeros(value);
-                value = StringReplace.makeOnes(value);
+                value = ParseXMLStringReplace.makeZeros(value);
+                value = ParseXMLStringReplace.makeOnes(value);
                 total = Double.parseDouble(value);
             } catch (NumberFormatException nfe) {
                 //DO NOTHING

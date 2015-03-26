@@ -9,7 +9,7 @@ package business.businessLogic.parseImage;
  *
  * @author david
  */
-public class StringReplace {
+public class ParseXMLStringReplace {
      public static String makeZeros(String value) {
         value = value.replaceAll("D", "0");
         value = value.replaceAll("O", "0");
