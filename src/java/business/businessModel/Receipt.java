@@ -16,7 +16,7 @@ public class Receipt {
     private String userID;
     private java.util.Date createdOn;
     private java.util.Date receiptDate;
-    private ArrayList<ReceiptItem> receiptItems;
+    private ReceiptItem receiptItems;
     private int currentReceiptItem;
     private double total;
 
@@ -25,7 +25,7 @@ public class Receipt {
         userID = "";
         createdOn = new java.util.Date();
         image = new ReceiptImage();
-        receiptItems = new ArrayList<>();
+        receiptItems = new ReceiptItem();
         receiptDate = new java.util.Date();
     }
 
@@ -85,18 +85,22 @@ public class Receipt {
         this.createdOn = createdOn;
     }
 
-    public ReceiptItem getCurrentReceiptItem() {
-        return receiptItems.get(currentReceiptItem);
+//    public ReceiptItem getCurrentReceiptItem() {
+//        return receiptItems.get(currentReceiptItem);
+//    }
+    
+    public void setReceiptItems(ReceiptItem receiptItems) {
+        this.receiptItems = receiptItems;
     }
 
-    public ArrayList<ReceiptItem> getReceiptItems() {
+    public ReceiptItem getReceiptItems() {
         return receiptItems;
     }
 
-    public void setCurrentReceiptItem(ReceiptItem createReceiptItem) {
-        if (!receiptItems.contains(createReceiptItem)) {
-            receiptItems.add(createReceiptItem);
-        }
-        currentReceiptItem = receiptItems.indexOf(createReceiptItem);
-    }
+//    public void setCurrentReceiptItem(ReceiptItem createReceiptItem) {
+//        if (!receiptItems.contains(createReceiptItem)) {
+//            receiptItems.add(createReceiptItem);
+//        }
+//        currentReceiptItem = receiptItems.indexOf(createReceiptItem);
+//    }
 }

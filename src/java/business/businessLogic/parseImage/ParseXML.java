@@ -29,10 +29,19 @@ public class ParseXML {
 
         ArrayList<Node> validNodes = getValidNodes(nl);
 
-        ArrayList<Item> potentialMerchants = ParseXMLFindMerchant.getMerchantName(validNodes, receipt);
-        ArrayList<Item> potentialTotals = ParseXMLFindTotal.getTotal(validNodes);
-        
+        receiptItem = addToReceiptList(ParseXMLFindMerchant.getMerchantName(validNodes, receipt), receiptItem);
+        receiptItem = addToReceiptList(ParseXMLFindTotal.getTotal(validNodes), receiptItem);
+        receiptItem = addToReceiptList(ParseXMLFindItems.getItems(validNodes), receiptItem);
+
+        receipt.setReceiptItems(receiptItem);
         return receipt;
+    }
+
+    private static ReceiptItem addToReceiptList(ArrayList<Item> items, ReceiptItem receiptItem) {
+        for (Item item : items) {
+            receiptItem.addItem(item);
+        }
+        return receiptItem;
     }
 
     private static ArrayList<Node> getValidNodes(NodeList nl) {

@@ -12,31 +12,57 @@ import java.util.ArrayList;
  * @author david
  */
 public class ReceiptItem {
+
     private ArrayList<Item> items;
-    
-    public ReceiptItem(){
+
+    public ReceiptItem() {
         items = new ArrayList<>();
     }
-    
-    public void addItem(Item item){
+
+    public void addItem(Item item) {
         items.add(item);
     }
-    
-    public ArrayList<Item> getItems(){
-        return items; 
+
+    public ArrayList<Item> getAllItems() {
+        return items;
     }
-    
-    public String getItemsAsJSON(){
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append("[");
-        for(Item item : items){
-            sb.append(item.getJSON());
-            sb.append(","); 
+
+    public ArrayList<Item> getMerchants() {
+        ArrayList<Item> merchants = findType(ItemType.Merchant);
+        return merchants;
+    }
+
+    public ArrayList<Item> getItems() {
+        ArrayList<Item> itemList = findType(ItemType.Item);
+        return itemList;
+    }
+
+    public ArrayList<Item> getTotal() {
+        ArrayList<Item> itemList = findType(ItemType.Total);
+        return itemList;
+    }
+
+    private ArrayList<Item> findType(ItemType type) {
+        ArrayList<Item> typeList = new ArrayList<>();
+        for (Item item : items) {
+            if (item.getType() == type) {
+                typeList.add(item);
+            }
         }
-        sb.delete((sb.length() - 1), sb.length()); 
+        return typeList;
+    }
+
+    public String getItemsAsJSON() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("[");
+        for (Item item : items) {
+            sb.append(item.getJSON());
+            sb.append(",");
+        }
+        sb.delete((sb.length() - 1), sb.length());
         sb.append("]");
-        
-        return sb.toString(); 
+
+        return sb.toString();
     }
 }
