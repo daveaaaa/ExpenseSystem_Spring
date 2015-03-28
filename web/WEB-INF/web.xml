@@ -11,12 +11,13 @@
         <description>ServletContextListener</description>
         <listener-class>databaseAccess.mongoDB.MongoDBHelper</listener-class>
     </listener>
-    
     <Context>
-        <Resource name="business/businessLogic/parseImage/AORC" auth="Container"
-                  type="business.businessLogic.parseImage.AORC.ParseImageAORC"
-                  factory="business.businessLogic.parseImage.AORC.ParseFactoryAORC"/>
+        <Resource auth="Container" factory="business.businessLogic.parseImage.AORC.ParseFactoryAORC" name="business/businessLogic/parseImage/AORC" type="business.businessLogic.parseImage.AORC.ParseImageAORC"/>
     </Context>
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>business.businessLogic.parseImage.AORC.AORCListener</listener-class>
+    </listener>
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -29,7 +30,7 @@
     <session-config>
         <session-timeout>
             5
-        </session-timeout> 
+        </session-timeout>
     </session-config>
     <!-- Database context parameters -->
     <context-param>
@@ -48,7 +49,6 @@
         <param-name>dbPassword</param-name>
         <param-value>app</param-value>
     </context-param>
-   
     <!-- Spring framework -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
@@ -76,6 +76,4 @@
         <artifactId>commons-io</artifactId>
         <version>2.4.0</version>
     </dependency>
-    
-
 </web-app>

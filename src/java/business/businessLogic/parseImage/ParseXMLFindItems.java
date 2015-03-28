@@ -43,23 +43,21 @@ public class ParseXMLFindItems {
     }
 
     private static Item setValue(String value, Item item) {
-        String[] values = value.split(" ");
-
-        try {
-            Double.parseDouble(values[0]);
-            item.setPrice(values[0]);
-        } catch (NumberFormatException nfe) {
-            //
-            item.setName(values[0]);
+        String name = "";
+        for(String potential : value.split(" ")){
+            if(potential.contains("£")){
+                potential = potential.replace("£", ""); 
+                potential = ParseXMLStringReplace.makeZeros(potential);
+                potential = ParseXMLStringReplace.makeOnes(potential);
+                
+                item.setPrice(potential);
+            } else {
+                name += potential + " ";
+            }
+            
+            
         }
-        
-        try {
-            Double.parseDouble(values[1]);
-            item.setPrice(values[1]);
-        } catch (NumberFormatException nfe) {
-            //
-            item.setName(values[1]);
-        }
+        item.setName(name);
 
         return item;
     }

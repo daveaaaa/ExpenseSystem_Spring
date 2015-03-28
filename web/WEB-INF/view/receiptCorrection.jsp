@@ -6,13 +6,27 @@
         <div class="row">
             <table>
                 <thead>
-                <th>Merchant</th>
+                    <tr>
+                        <th>Merchant</th>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
                     <c:forEach  var="item"  items="${merchantList}">
                         <tr>
-                            <td>${item.name}</td>
-                        </tr>
+                            <td><input type="text" value="${item.name}" class="form-control"/></td>
+                            <td><div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Action <span class="caret"></span></button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <li><a href="#">Action</a></li>
+                                        <li><a href="#">Another action</a></li>
+                                        <li><a href="#">Something else here</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">Separated link</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>          
                     </c:forEach>
                 </tbody>
             </table>
@@ -30,10 +44,10 @@
                 <tbody>
                     <c:forEach  var="item" items="${itemList}" >
                         <tr>
-                            <td><input type="text" value="${item.name}" class="input-group input-group-sm"/></td>
-                            <td><input type="text" value="${item.quantity}" class="input-group input-group-sm"/></td>
-                            <td><input type="text" value="${item.price}" class="input-group input-group-sm"/></td>
-                            <td><input type="text" value="${item.total}" class="input-group input-group-sm"/></td>
+                            <td><input type="text" value="${item.name}" class="form-control"/></td>
+                            <td><input type="text" value="${item.quantity}" class="form-control"/></td>
+                            <td><input type="text" value="${item.price}" class="form-control"/></td>
+                            <td><input type="text" value="${item.total}" class="form-control"/></td>
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -42,7 +56,9 @@
         <div class="row">
             <table>
                 <thead>
-                <th>Total</th>
+                    <tr>
+                        <th>Total</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <c:forEach  var="item" items="${totalList}">

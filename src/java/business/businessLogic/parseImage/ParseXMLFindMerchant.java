@@ -44,6 +44,7 @@ public class ParseXMLFindMerchant {
                     //Get rid of blank spaced nodes 
                     if (child.getNodeValue().replace(" ", "").length() > 0) {
                         Item item = new Item();
+                        item.setName(child.getNodeValue().trim()); 
                         item.setXML(child.getNodeValue());
                         item.setType(ItemType.Merchant);
                         merchants.add(item);

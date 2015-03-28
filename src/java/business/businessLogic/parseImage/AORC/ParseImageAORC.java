@@ -95,7 +95,7 @@ public class ParseImageAORC implements ParseImage {
         doc = builder.parse(inputSource);
     }
 
-    private void cleanUp() {
+    public void cleanUp() {
         ocr.stopEngine();
     }
 
