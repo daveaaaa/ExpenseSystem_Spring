@@ -16,16 +16,16 @@
                     <td>${user.username}</td>
                     <td>${user.password}</td>
                     <td>${user.securityGroup}</td>
-            <form method="get" action="editUser">
-                <input type="hidden" value="${user.userID}" name="userID"/>
-                <td><input type="submit" class="btn btn-default" value="Edit User" name="edit"/></td>
-            </form>
-            <form method="post">
-                <input type="hidden" value="${user.userID}" name="userID"/>
-                <td><input type="submit" class="btn btn-danger" value="Delete" name="delete"/></td>
-            </form>    
-            </tr>
-        </c:forEach>
+                    <form method="get" action="editUser">
+                        <input type="hidden" value="${user.userID}" name="userID"/>
+                        <td><input type="submit" class="btn btn-default" value="Edit User" name="edit"/></td>
+                    </form>
+                    <form method="post">
+                        <input type="hidden" value="${user.userID}" name="userID"/>
+                        <td><input type="submit" class="btn btn-danger" value="Delete" name="delete"/></td>
+                    </form>    
+                </tr>
+            </c:forEach>
         </tbody>
     </table>
 </div>

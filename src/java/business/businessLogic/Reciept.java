@@ -48,12 +48,14 @@ public class Reciept {
 
     public static Receipt parseReceipt(Receipt receipt) {
 
-        business.businessLogic.parseImage.ParseImage imageParser = new business.businessLogic.parseImage.AORC.ParseImageAORC();
-
-        Document document = imageParser.parseImage(receipt);
-
-        receipt = ParseXML.parseXML(document, receipt);
-
+        try {
+            
+             Document document = business.businessLogic.parseImage.AORC.ParseImageAORC.getInstance().parseImage(receipt);
+          
+            receipt = ParseXML.parseXML(document, receipt);
+        } catch (Exception ex) {
+            // TODO logging
+        }
         return receipt;
     }
 

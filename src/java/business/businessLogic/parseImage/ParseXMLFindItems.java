@@ -27,16 +27,41 @@ public class ParseXMLFindItems {
 
                 if (!child.getNodeValue().contains("CDATA")) {
 
+                    String value = child.getNodeValue();
+
                     Item item = new Item();
                     item.setType(ItemType.Item);
+                    item = setValue(value, item);
                     item.setXML(child.getNodeValue());
                     //item.setPrice(getTotal(child.getNodeValue()));
                     itemList.add(item);
                 }
             }
         }
-        
+
         return itemList;
+    }
+
+    private static Item setValue(String value, Item item) {
+        String[] values = value.split(" ");
+
+        try {
+            Double.parseDouble(values[0]);
+            item.setPrice(values[0]);
+        } catch (NumberFormatException nfe) {
+            //
+            item.setName(values[0]);
+        }
+        
+        try {
+            Double.parseDouble(values[1]);
+            item.setPrice(values[1]);
+        } catch (NumberFormatException nfe) {
+            //
+            item.setName(values[1]);
+        }
+
+        return item;
     }
 
     private static ArrayList<Node> findItems(ArrayList<Node> validNodes) {
@@ -50,7 +75,7 @@ public class ParseXMLFindItems {
     }
 
     /**
-     *  look for a £ sign within the node
+     * look for a £ sign within the node
      *
      *
      */

@@ -13,7 +13,7 @@ import org.w3c.dom.Document;
  * @author david
  */
 public interface ParseImage {
-    
+
     public Document parseImage(Receipt receipt);
-    
+
 }

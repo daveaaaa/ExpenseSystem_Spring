@@ -66,7 +66,10 @@ public class ParseXMLFindTotal {
         for (Node node : validNodes) {
             if (total_heuristic1(node)) {
                 potentialTotals.add(node);
+            } else if (total_heuristic2(node)) {
+                potentialTotals.add(node);
             }
+
         }
 
         return potentialTotals;
@@ -86,6 +89,16 @@ public class ParseXMLFindTotal {
         }
         if ((value.contains(notWanted)) && (result == true)) {
             result = false;
+        }
+        return result;
+    }
+
+    private static boolean total_heuristic2(Node node) {
+        boolean result = false;
+        String searchPhrase = "balance due".toLowerCase();
+        String value = node.getChildNodes().item(0).getNodeValue().toLowerCase();
+        if (value.contains(searchPhrase)) {
+            result = true;
         }
         return result;
     }

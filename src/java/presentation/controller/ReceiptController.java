@@ -9,7 +9,9 @@ package presentation.controller;
  *
  * @author david
  */
+import business.businessModel.Item;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.servlet.annotation.MultipartConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -72,10 +74,13 @@ public class ReceiptController {
     public ModelAndView parseReceipt(@ModelAttribute("receipt") business.businessModel.Receipt receipt, @ModelAttribute("currentUser") business.businessModel.User user) {
         String view = "receiptCorrection";
         ModelAndView mav = new ModelAndView();
+
         try {
             receipt = business.businessLogic.Reciept.parseReceipt(receipt);
-            mav.addObject("receipt", receipt);
 
+            mav.addObject("totalList", receipt.getReceiptItems().getTotal());
+            mav.addObject("itemList", receipt.getReceiptItems().getItems());
+            mav.addObject("merchantList", receipt.getReceiptItems().getMerchants());
         } catch (Exception ex) {
             //TODO: log exception
         }
@@ -90,11 +95,11 @@ public class ReceiptController {
         String view = "receiptList";
         ModelAndView mav = new ModelAndView();
         ArrayList<business.businessModel.Receipt> receipts = business.businessLogic.Reciept.listReceipts(user);
-        mav.addObject("receipts", receipts);        
+        mav.addObject("receipts", receipts);
         mav.setViewName(view);
         return mav;
     }
-    
+
     @RequestMapping(value = "receiptList", method = RequestMethod.POST)
     public ModelAndView selectReceipt(@ModelAttribute("currentUser") business.businessModel.User user) {
         return new ModelAndView();
