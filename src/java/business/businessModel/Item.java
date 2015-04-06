@@ -11,6 +11,7 @@ package business.businessModel;
  */
 public class Item {
 
+    private int ID;
     private String name;
     private double price;
     private int quantity;
@@ -21,6 +22,27 @@ public class Item {
 
     public Item() {
         isIncluded = true;
+        ID = -1; 
+    }
+    
+    public Item(String json){
+        
+    }
+
+    public int isIncluded() {
+        int included = 0;
+        if (isIncluded) {
+            included = 1;
+        }
+        return included;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int id) {
+        this.ID = id;
     }
 
     public ItemType getType() {
@@ -30,6 +52,15 @@ public class Item {
     public void setType(ItemType type) {
         this.type = type;
     }
+    
+    public void setType(int type){
+        for(ItemType iType : ItemType.values()){
+            if(iType.getValue() == type){
+                this.type = iType;
+                break;
+            }
+        }
+    }
 
     public boolean isIsIncluded() {
         return isIncluded;
@@ -37,6 +68,14 @@ public class Item {
 
     public void setIsIncluded(boolean isIncluded) {
         this.isIncluded = isIncluded;
+    }
+
+    public void setIsIncluded(int included)  {
+        if (included == 1) {
+            isIncluded = true;
+        } else if (included == 0) {
+            isIncluded = false;
+        } 
     }
 
     public String getXML() {

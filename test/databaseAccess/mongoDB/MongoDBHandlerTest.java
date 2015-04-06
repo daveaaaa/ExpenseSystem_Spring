@@ -5,6 +5,8 @@
  */
 package databaseAccess.mongoDB;
 
+import business.businessModel.Item;
+import business.businessModel.ItemType;
 import business.businessModel.Receipt;
 import business.businessModel.SecurityGroup;
 import business.businessModel.User;
@@ -148,7 +150,7 @@ public class MongoDBHandlerTest {
 
     }
 
- //   @Test
+    //   @Test
     public void listAllReceipts() {
         String dbHost = "127.0.0.1";
         String dbName = "ExpenseSystem";
@@ -160,16 +162,16 @@ public class MongoDBHandlerTest {
         } catch (Exception ex) {
             fail("DB Connection Exception");
         }
-        
+
         ArrayList<business.businessModel.Receipt> reciepts = handler.listAllReceipts();
 
-        for(business.businessModel.Receipt receipt : reciepts){
+        for (business.businessModel.Receipt receipt : reciepts) {
             System.out.println(receipt.toString());
         }
-        
+
     }
-    
-     @Test
+
+    @Test
     public void listAllReceiptsOfUser() {
         String dbHost = "127.0.0.1";
         String dbName = "ExpenseSystem";
@@ -182,11 +184,69 @@ public class MongoDBHandlerTest {
         } catch (Exception ex) {
             fail("DB Connection Exception");
         }
-        
+
         ArrayList<business.businessModel.Receipt> reciepts = handler.listReceipts(userID);
 
-        for(business.businessModel.Receipt receipt : reciepts){
+        for (business.businessModel.Receipt receipt : reciepts) {
             System.out.println(receipt.toString());
         }
+    }
+
+    @Test
+    public void updateReceipt() {
+        String dbHost = "127.0.0.1";
+        String dbName = "ExpenseSystem";
+        String dbUsername = "app";
+        String dbPassword = "app";
+        MongoDBHandler handler = null;
+
+        try {
+            handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
+        } catch (Exception ex) {
+            fail("DB Connection Exception");
+        }
+
+        Receipt receipt = new Receipt();
+        receipt.setUserID("UPDATE_TEST1234");
+
+        receipt = handler.createReceipt(receipt);
+
+        ArrayList<Item> items = new ArrayList<>();
+
+        for (int i = 0; i != 3; i++) {
+            Item item = new Item();
+            item.setName("Merchant" + i);
+            item.setType(ItemType.Merchant);
+            items.add(item);
+        }
+
+        for (int i = 0; i != 3; i++) {
+            Item item = new Item();
+            item.setName("Item" + i);
+            item.setPrice(10 * i);
+            item.setQuantity(1);
+            item.setType(ItemType.Item);
+            items.add(item);
+        }
+
+        receipt.getReceiptItems().setItems(items);
+
+        handler.updateReceipt(receipt);
+        
+        
+        for(Item item : receipt.getReceiptItems().getItems()){
+            item.setPrice(item.getPrice() + 15);
+        }
+        
+         for (int i = 0; i != 3; i++) {
+            Item item = new Item();
+            item.setName("Item" + i);
+            item.setPrice(10 * i);
+            item.setQuantity(1);
+            item.setType(ItemType.Item);
+            receipt.getReceiptItems().addItem(item);
+        }
+        
+        handler.updateReceipt(receipt);
     }
 }

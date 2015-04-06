@@ -13,8 +13,10 @@ import business.businessModel.Item;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,6 +83,7 @@ public class ReceiptController {
             mav.addObject("totalList", receipt.getReceiptItems().getTotal());
             mav.addObject("itemList", receipt.getReceiptItems().getItems());
             mav.addObject("merchantList", receipt.getReceiptItems().getMerchants());
+            mav.addObject("receiptID", receipt.getReceiptID());
         } catch (Exception ex) {
             //TODO: log exception
         }
@@ -104,4 +107,12 @@ public class ReceiptController {
     public ModelAndView selectReceipt(@ModelAttribute("currentUser") business.businessModel.User user) {
         return new ModelAndView();
     }
+
+    @RequestMapping(value = "receiptCorrection/create", method = RequestMethod.POST)
+    public void updateItem(@RequestBody String json) {
+
+        business.businessLogic.Reciept.parseReceiptUpdateJSON(json);
+
+    }
+
 }

@@ -1,5 +1,6 @@
 package databaseAccess.mongoDB;
 
+import business.businessModel.Item;
 import com.mongodb.*;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import java.net.UnknownHostException;
@@ -61,19 +62,19 @@ public class MongoDBHandler implements DBHandler {
         return reciept;
     }
 
-    private Receipt saveReceipt(Receipt reciept) {
+    private Receipt saveReceipt(Receipt receipt) {
         DBCollection table = getReceiptCollection();
-        BasicDBObject document = getDocumentFromReceipt(reciept);
+        BasicDBObject document = getDocumentFromReceipt(receipt);
 
-        document.put("userID", reciept.getUserID());
+        document.put("userID", receipt.getUserID());
         document.put("createdDate", new java.util.Date().getTime());
-        document.put("image", saveImage(reciept));
+        document.put("image", saveImage(receipt));
 
         table.insert(document);
         String id = document.getString("_id");
-        reciept.setReceiptID(id);
+        receipt.setReceiptID(id);
 
-        return reciept;
+        return receipt;
     }
 
     private BasicDBObject saveImage(Receipt receipt) {
@@ -124,8 +125,37 @@ public class MongoDBHandler implements DBHandler {
 
     @Override
     public void updateReceipt(Receipt reciept) {
+        BasicDBObject query = new BasicDBObject();
         DBCollection table = getReceiptCollection();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        query.put("_id", new ObjectId(reciept.getReceiptID()));
+
+        BasicDBObject receipt = new BasicDBObject();
+
+        receipt.append("$set", new BasicDBObject().append("userID", reciept.getUserID()));
+        receipt.append("$set", new BasicDBObject().append("receiptDate", reciept.getReceiptDate()));
+        receipt.append("$set", new BasicDBObject().append("total", reciept.getTotal()));
+        receipt.append("$set", new BasicDBObject().append("receiptItems", setItems(reciept.getReceiptItems().getAllItems())));
+        table.update(query, receipt);
+
+    }
+
+    private DBObject setItems(ArrayList<Item> items) {
+        BasicDBList receiptItems = new BasicDBList();
+        for (Item item : items) {
+            BasicDBObject itemDocument = new BasicDBObject();
+            itemDocument.append("id", item.getID());
+            itemDocument.append("name", item.getName());
+            itemDocument.append("type", item.getType().getValue());
+            itemDocument.append("price", item.getPrice());
+            itemDocument.append("total", item.getTotal());
+            itemDocument.append("quantity", item.getQuantity());
+            itemDocument.append("isIncluded".toLowerCase(), item.isIncluded());
+            itemDocument.append("xml", item.getXML());
+            receiptItems.add(itemDocument);
+        }
+
+        return receiptItems;
     }
 
     @Override
@@ -161,10 +191,44 @@ public class MongoDBHandler implements DBHandler {
         receipt.setReceiptID(id);
         receipt.setUserID(userID);
         receipt.setCreatedDate(createdOn);
-
+        if (dbObj.containsField("receiptItems")) {
+            receipt.setReceiptItems(getReceiptItems(dbObj));
+        }
         receipt.setImage(getImage(dbObj));
 
         return receipt;
+    }
+
+    private business.businessModel.ReceiptItem getReceiptItems(DBObject dbObj) {
+        business.businessModel.ReceiptItem receiptItem = new business.businessModel.ReceiptItem();
+
+        BasicDBList receiptItems = (BasicDBList) dbObj.get("receiptItems");
+
+        for (int i = 0; i != receiptItems.size(); i++) {
+            business.businessModel.Item item = new business.businessModel.Item();
+            BasicDBObject obj = (BasicDBObject) receiptItems.get(i);
+
+            int id = obj.getInt("id");
+            double price = obj.getDouble("price");
+            double total = obj.getDouble("total");
+            int quantity = obj.getInt("quantity");
+            String name = obj.getString("name");
+            int type = obj.getInt("type");
+            String xml = obj.getString("xml");
+            int isIncluded = obj.getInt("isIncluded");
+
+            item.setID(id);
+            item.setPrice(price);
+            item.setQuantity(quantity);
+            item.setName(name);
+            item.setType(type);
+            item.setXML(xml);
+            item.setIsIncluded(isIncluded);
+
+            receiptItem.addItem(item);
+        }
+
+        return receiptItem;
     }
 
     private business.businessModel.ReceiptImage getImage(DBObject dbObj) {
