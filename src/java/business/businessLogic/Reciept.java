@@ -87,31 +87,42 @@ public class Reciept {
     public static boolean parseReceiptUpdateJSON(String json) {
         String receiptJSON = json.split(",\"item\":")[0];
         String itemJSON = json.split(",\"item\":")[1];
-        
+
         business.businessModel.Receipt receipt = parseReceipt(receiptJSON);
         Item item = parseRecieptItem(itemJSON);
-        
+
         makeAdujstments(receipt, item);
-        
+
         return true;
     }
 
-    private static void  makeAdujstments(business.businessModel.Receipt receipt, Item item){
-        
+    private static void makeAdujstments(business.businessModel.Receipt receipt, Item item) {
+        if (item.getID() == -1) {
+            receipt.getReceiptItems().addItem(item);
+        } else {
+            receipt.getReceiptItems().replaceItem(item);
+        }
+
+        try {
+            DBHandler handler = MongoDBHelper.getDBHandler();
+            handler.updateReceipt(receipt);
+        } catch (Exception ex) {
+            // TODO logging
+        }
+
     }
-    
-    
+
     private static business.businessModel.Receipt parseReceipt(String recieptJSON) {
         business.businessModel.Receipt receipt = null;
-        
+
         recieptJSON = recieptJSON.replace("receipt", "");
         recieptJSON = recieptJSON.replace("\"", "");
         recieptJSON = recieptJSON.replace(":", "");
         recieptJSON = recieptJSON.replace("{", "");
-        
-        try{
-        DBHandler handler = MongoDBHelper.getDBHandler();
-        receipt = handler.getReceipt(recieptJSON);
+
+        try {
+            DBHandler handler = MongoDBHelper.getDBHandler();
+            receipt = handler.getReceipt(recieptJSON);
         } catch (Exception ex) {
             // TODO logging
         }
@@ -139,7 +150,7 @@ public class Reciept {
                     if (field.getType() == Integer.TYPE) {
                         value[0] = Integer.parseInt(valueStr);
                     } else if (field.getType() == Double.TYPE) {
-                        value[0] = Integer.parseInt(valueStr);
+                        value[0] = Double.parseDouble(valueStr);
                     } else if (field.getType() == Boolean.TYPE) {
                         value[0] = Boolean.parseBoolean(valueStr);
                     } else if (field.getType() == ItemType.class) {

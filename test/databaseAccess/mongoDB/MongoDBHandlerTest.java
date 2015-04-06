@@ -47,7 +47,7 @@ public class MongoDBHandlerTest {
     /**
      * Test of createReceipt method, of class MongoDBHandler.
      */
-    //  @Test
+    @Test
     public void createUser() {
         String dbHost = "127.0.0.1";
         String dbName = "ExpenseSystem";
@@ -55,16 +55,23 @@ public class MongoDBHandlerTest {
         String dbPassword = "app";
         MongoDBHandler handler = null;
         business.businessModel.User user = new business.businessModel.User();
-        user.setUsername("test1");
+
         user.setPassword("password");
-        user.setSecurityGroup(SecurityGroup.ReceiptProvider);
         try {
             handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
         } catch (Exception ex) {
             fail("DB Connection Exception");
         }
-
+        
+        user.setUsername("adder");
+        user.setSecurityGroup(SecurityGroup.ReceiptProvider);
         handler.createUser(user);
+        
+        user.setUsername("admin");
+        user.setSecurityGroup(SecurityGroup.Admin);
+        
+        handler.createUser(user);
+        
     }
 
 //    @Test

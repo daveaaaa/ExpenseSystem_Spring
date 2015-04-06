@@ -150,7 +150,7 @@ public class MongoDBHandler implements DBHandler {
             itemDocument.append("price", item.getPrice());
             itemDocument.append("total", item.getTotal());
             itemDocument.append("quantity", item.getQuantity());
-            itemDocument.append("isIncluded".toLowerCase(), item.isIncluded());
+            itemDocument.append("isincluded".toLowerCase(), item.isIncluded());
             itemDocument.append("xml", item.getXML());
             receiptItems.add(itemDocument);
         }
@@ -215,11 +215,12 @@ public class MongoDBHandler implements DBHandler {
             String name = obj.getString("name");
             int type = obj.getInt("type");
             String xml = obj.getString("xml");
-            int isIncluded = obj.getInt("isIncluded");
+            int isIncluded = obj.getInt("isincluded");
 
             item.setID(id);
             item.setPrice(price);
             item.setQuantity(quantity);
+            item.setTotal(total);
             item.setName(name);
             item.setType(type);
             item.setXML(xml);

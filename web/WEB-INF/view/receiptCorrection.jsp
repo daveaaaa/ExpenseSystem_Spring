@@ -2,7 +2,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@include file="/WEB-INF/templates/header.jsp" %> 
 
-<form:form  method="post">
+<form:form  method="get" action="receiptProviderHomepage.htm">
     <div class="col-lg-6 col-md-6 col-sm-6">
         <div class="row">
             <table class="col-lg-6 col-md-6 col-sm-6">
@@ -194,12 +194,12 @@
 
         function createTable(name, quantity, price, total) {
             //Create new input boxes
-            var price = "<td><input type='text' disabled='true' value='" + name + "' name='newItemName" + NEW_ITEM_COUNT + "'</td>";
-            var quantity = "<td><input type='text' disabled='true' value='" + quantity + "' name='newItemQuantity" + NEW_ITEM_COUNT + "'</td>";
-            var value = "<td><input type='text' disabled='true' value='" + price + "' name='newItemPrice" + NEW_ITEM_COUNT + "'</td>";
-            var total = "<td><input type='text' disabled='true' value='" + total + "' name='newItemTotal" + NEW_ITEM_COUNT + "'</td>";
+            var txtName = "<td><input type='text' disabled='true' value='" + name + "' name='newItemName" + NEW_ITEM_COUNT + "'/></td>";
+            var txtQuantity = "<td><input type='text' disabled='true' value='" + quantity + "' name='newItemQuantity" + NEW_ITEM_COUNT + "'/></td>";
+            var txtValue = "<td><input type='text' disabled='true' value='" + price + "' name='newItemPrice" + NEW_ITEM_COUNT + "'/></td>";
+            var txtTotal = "<td><input type='text' disabled='true' value='" + total + "' name='newItemTotal" + NEW_ITEM_COUNT + "'/></td>";
 
-            var html = "<tr>" + price + quantity + value + total + "</tr>";
+            var html = "<tr>" + txtName + txtQuantity + txtValue + txtTotal + "</tr>";
             $("#itemRow").append(html);
         }
 

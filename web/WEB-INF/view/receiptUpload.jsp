@@ -10,7 +10,7 @@
         <input class="btn btn-success" type="submit" value="Upload Receipt" />
     </fieldset>
 </form>
-<a class="btn btn-danger" href="receiptProviderHomepage">Back</a>
+<a class="btn" href="receiptProviderHomepage">Back</a>
 <script type="text/javascript">
     $(document).ready(
             function () {
