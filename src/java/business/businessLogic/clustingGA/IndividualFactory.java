@@ -15,55 +15,60 @@ import java.util.Random;
  * @author david
  */
 public class IndividualFactory {
-    
-    public static ArrayList<Individual> populateTrainingData(ArrayList<Receipt> receipts){
+
+    public static ArrayList<Individual> populateTrainingData(ArrayList<Receipt> receipts) {
         ArrayList<Individual> indivs = new ArrayList<>();
-        
-        for(Receipt receipt : receipts){
+
+        for (Receipt receipt : receipts) {
             Individual individual = new Individual();
-            
+
             individual.setNumberOfItems(receipt.getReceiptItems().validItemCount());
             individual.setTotal(receipt.getTotal());
             individual.setReceiptType(receipt.getType());
             individual.setChangable(false);
             indivs.add(individual);
         }
-        
+
         return indivs;
-        
+
     }
-    
-    public static ArrayList<Individual> generateInitialPopulation(int size, int maxItems, int maxTotal){
-        ArrayList<Individual> indivs = new ArrayList<>();
+
+    public static ArrayList<Population> generateInitialPopulation(int size, int populationSize, int maxItems, int maxTotal) {
+        ArrayList<Population> populations = new ArrayList<>();
         Random rand = new Random(System.currentTimeMillis());
-        
-        
-        for(int i = 0; i != size; i ++){
-            Individual individual = new Individual();
-            
-            individual.setNumberOfItems(rand.nextInt(maxItems));
-            individual.setTotal(rand.nextInt(maxTotal));
-            individual.setReceiptType(randomReceiptType(rand));
-            individual.setChangable(true);
-            indivs.add(individual);
+
+        for (int i = 0; i != size; i++) {
+            Population population = new Population();
+            for (int p = 0; p != populationSize; p++) {
+                Individual individual = new Individual();
+
+                individual.setNumberOfItems(rand.nextInt(maxItems));
+                individual.setTotal(rand.nextInt(maxTotal));
+                individual.setReceiptType(randomReceiptType(rand));
+                individual.setChangable(true);
+                population.addIndividual(individual);
+            }
+
+            populations.add(population);
+
         }
-        
-        return indivs;
+
+        return populations;
     }
-    
-    private static ReceiptType randomReceiptType(Random rand){
+
+    private static ReceiptType randomReceiptType(Random rand) {
         int typeID = rand.nextInt(ReceiptType.values().length);
         ReceiptType receiptType = null;
-        
-        for(ReceiptType type : ReceiptType.values()){
-            if(typeID == type.getValue()){
+
+        for (ReceiptType type : ReceiptType.values()) {
+            if (typeID == type.getValue()) {
                 receiptType = type;
                 break;
             }
         }
-        
+
         return receiptType;
-        
+
     }
-    
+
 }

@@ -21,12 +21,13 @@ public class GA {
     public final static int MIN_TOTAL = 1;      //£ 0.01
     public final static int MAX_TOTAL = 500000; //£ 5000.00
     public final static int MAX_POPULATION = 1000;
+    public final static int MAX_POPULATION_SIZE = 3;
     public final static int MAX_GENERATIONS = 10000; 
     public final static double MUTATION_RATE = 0.01;  //1%
     public final static double CROSSOVER_RATE = 0.60; //60%
     
     private ArrayList<Individual> trainingData;
-    private ArrayList<Individual> population; 
+    private ArrayList<Population> population; 
     
     
     public GA(){
@@ -52,7 +53,7 @@ public class GA {
     }
     
     private void generatePopulationSet(){
-        population = IndividualFactory.generateInitialPopulation(MAX_POPULATION,MAX_ITEMS, MAX_TOTAL);
+        population = IndividualFactory.generateInitialPopulation(MAX_POPULATION,MAX_POPULATION_SIZE,MAX_ITEMS, MAX_TOTAL);
     }
     
     private int doGA(){
