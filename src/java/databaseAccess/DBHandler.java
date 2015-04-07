@@ -20,9 +20,7 @@ public interface DBHandler {
 
     public void updateReceipt(Receipt reciept);
 
-    public ArrayList<Receipt> findReceipt();
-
-    public Receipt getReceipt(String userID, Date startDate, Date endDate);
+  
 
     public Receipt getReceipt(String receiptID); 
     

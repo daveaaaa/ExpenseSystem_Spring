@@ -32,16 +32,6 @@ public class NullDBHandler implements DBHandler {
     }
 
     @Override
-    public ArrayList<Receipt> findReceipt() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public Receipt getReceipt(String userID, Date startDate, Date endDate) {
-        return new Receipt();
-    }
-
-    @Override
     public void createUser(User user) {
         // do nothing
     }

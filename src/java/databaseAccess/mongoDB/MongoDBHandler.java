@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import business.businessModel.Receipt;
+import business.businessModel.ReceiptType;
 import business.businessModel.User;
 import org.bson.types.ObjectId;
 import databaseAccess.DBHandler;
@@ -68,6 +69,7 @@ public class MongoDBHandler implements DBHandler {
 
         document.put("userID", receipt.getUserID());
         document.put("createdDate", new java.util.Date().getTime());
+        document.put("receiptType", receipt.getType().getValue());
         document.put("image", saveImage(receipt));
 
         table.insert(document);
@@ -135,6 +137,7 @@ public class MongoDBHandler implements DBHandler {
         receipt.append("$set", new BasicDBObject().append("userID", reciept.getUserID()));
         receipt.append("$set", new BasicDBObject().append("receiptDate", reciept.getReceiptDate()));
         receipt.append("$set", new BasicDBObject().append("total", reciept.getTotal()));
+        receipt.append("$set", new BasicDBObject().append("receiptType", reciept.getType().getValue()));
         receipt.append("$set", new BasicDBObject().append("receiptItems", setItems(reciept.getReceiptItems().getAllItems())));
         table.update(query, receipt);
 
@@ -158,17 +161,6 @@ public class MongoDBHandler implements DBHandler {
         return receiptItems;
     }
 
-    @Override
-    public ArrayList<Receipt> findReceipt() {
-        DBCollection table = getReceiptCollection();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Receipt getReceipt(String userID, Date startDate, Date endDate) {
-        DBCollection table = getReceiptCollection();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public business.businessModel.Receipt getReceipt(String receiptID) {
@@ -187,12 +179,14 @@ public class MongoDBHandler implements DBHandler {
         String id = dbObj.getString("_id");
         String userID = dbObj.getString("userID");
         java.util.Date createdOn = new java.util.Date((long) dbObj.get("createdDate"));
-
+        int receiptTypeID = dbObj.getInt("receiptType",0);
+        
+        //SET FIELDS
         receipt.setReceiptID(id);
         receipt.setUserID(userID);
-        
+        receipt.setType(getReceiptType(receiptTypeID));
         receipt.setUser(findUser(userID));
-        
+        receipt.setType(ReceiptType.NONE);
         receipt.setCreatedDate(createdOn);
         if (dbObj.containsField("receiptItems")) {
             receipt.setReceiptItems(getReceiptItems(dbObj));
@@ -202,6 +196,19 @@ public class MongoDBHandler implements DBHandler {
         return receipt;
     }
 
+    private ReceiptType getReceiptType(int receiptTypeID){
+        ReceiptType type = ReceiptType.NONE;
+        
+        for(ReceiptType thisType : ReceiptType.values()){
+            if (thisType.getValue() == receiptTypeID){
+                type = thisType;
+                break;
+            }
+        }
+        
+        return type;
+    }
+    
     private business.businessModel.ReceiptItem getReceiptItems(DBObject dbObj) {
         business.businessModel.ReceiptItem receiptItem = new business.businessModel.ReceiptItem();
 

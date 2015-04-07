@@ -16,14 +16,14 @@ import javax.servlet.ServletContextListener;
  */
 public class Solution implements ServletContextListener {
 
-    private ArrayList<Individual> solution;
+    private Population solution;
     private boolean solutionSet;
 
-    public ArrayList<Individual> getSolution() {
+    public Population getSolution() {
         return solution;
     }
 
-    public void setSolution(ArrayList<Individual> solution) {
+    public void setSolution(Population solution) {
         this.solution = solution;
         solutionSet = true;
     }
@@ -36,7 +36,7 @@ public class Solution implements ServletContextListener {
     
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-       solution = new ArrayList<>();
+       solution = new Population();
        solutionSet = false;
     }
 

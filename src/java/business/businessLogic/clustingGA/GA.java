@@ -45,7 +45,7 @@ public class GA {
         ArrayList<Receipt> receipts = new ArrayList<>();
         try{
             DBHandler handler = MongoDBHelper.getDBHandler();
-            receipts = handler.findReceipt();
+            receipts = handler.listAllReceipts();
         } catch (Exception ex){
             //TODO: logging
         }
