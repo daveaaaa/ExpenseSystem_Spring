@@ -5,7 +5,7 @@
         <thead>
             <tr>
                 <th></th>
-                    <c:if test="${user.Type == ItemType.Manager}">
+                    <c:if test="${user.type.getValue == ItemType.Manager.getValue}">
                     <th>User</th>
                     </c:if>
                 <th>Receipt Date</th>
@@ -20,7 +20,7 @@
                     <td>   
                         <img alt="receipt" height="150" width="100" src="data:${receipt.image.format};base64,${receipt.image.base64}">
                     </td>
-                    <c:if test="${user.Type == ItemType.Manager}">
+                    <c:if test="${user.type.getValue == ItemType.Manager.getValue}">
                         <td>${receipt.user.username}</td>
                     </c:if>
                     <td>

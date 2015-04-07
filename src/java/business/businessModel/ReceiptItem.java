@@ -37,6 +37,15 @@ public class ReceiptItem {
         items.add(item);
     }
 
+    public int validItemCount(){
+        int validItemCount = 0;
+        ArrayList<Item> validItems = getItems();
+        
+        validItemCount = validItems.size();
+        
+        return validItemCount;
+    }
+    
     public ArrayList<Item> getAllItems() {
         return items;
     }

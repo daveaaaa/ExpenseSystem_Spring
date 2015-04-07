@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public class Receipt {
 
+    private ReceiptType type;
     private String receiptID;
     private ReceiptImage image;
     private String userID;
@@ -23,12 +24,21 @@ public class Receipt {
     private double total;
 
     public Receipt() {
+        type = ReceiptType.NONE;
         receiptID = "";
         userID = "";
         createdOn = new java.util.Date();
         image = new ReceiptImage();
         receiptItems = new ReceiptItem();
         receiptDate = new java.util.Date();
+    }
+
+    public ReceiptType getType() {
+        return type;
+    }
+
+    public void setType(ReceiptType type) {
+        this.type = type;
     }
 
     public User getUser() {

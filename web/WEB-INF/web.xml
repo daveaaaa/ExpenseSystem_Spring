@@ -18,6 +18,10 @@
         <description>ServletContextListener</description>
         <listener-class>business.businessLogic.parseImage.AORC.AORCListener</listener-class>
     </listener>
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>business.businessLogic.clustingGA.Solution</listener-class>
+    </listener>
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
