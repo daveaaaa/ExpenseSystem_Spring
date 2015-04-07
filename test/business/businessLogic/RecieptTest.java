@@ -59,11 +59,23 @@ public class RecieptTest {
 //        }
 //
 //    }
-    
     @Test
-    public void testJSON(){
+    public void testJSON() {
         String json = "{\"receipt\":\"5522ae6d87f22d692189aa1f\",\"item\":{\"ID\":22,\"name\":\"\",\"quantity\":\"\",\"price\":\"\",\"total\":\"\",\"type\":\"\",\"isIncluded\":\"false\"}}";
-        business.businessLogic.Reciept.parseReceiptUpdateJSON(json);
+
+        String dbHost = "127.0.0.1";
+        String dbName = "ExpenseSystem";
+        String dbUsername = "app";
+        String dbPassword = "app";
+        MongoDBHandler handler = null;
+
+        try {
+            handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
+        } catch (Exception ex) {
+            fail("DB Connection Exception");
+        }
+
+        business.businessLogic.Reciept.parseReceiptUpdateJSON(json, handler);
     }
 
 }

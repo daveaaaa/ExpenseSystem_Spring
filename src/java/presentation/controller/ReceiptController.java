@@ -10,6 +10,7 @@ package presentation.controller;
  * @author david
  */
 import business.businessModel.Item;
+import databaseAccess.mongoDB.MongoDBHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.annotation.MultipartConfig;
@@ -53,7 +54,7 @@ public class ReceiptController {
         String view = "receiptView";
         ModelAndView mav = new ModelAndView();
         try {
-            business.businessModel.Receipt receipt = business.businessLogic.Reciept.createReciept(multipartfile, user);
+            business.businessModel.Receipt receipt = business.businessLogic.Reciept.createReciept(multipartfile, user, MongoDBHelper.getDBHandler());
             mav.addObject("receipt", receipt);
         } catch (Exception ex) {
             //TODO: log exception
@@ -94,12 +95,12 @@ public class ReceiptController {
     private ModelAndView correctReceipt(business.businessModel.Receipt receipt) {
         String view = "receiptCorrection";
         ModelAndView mav = new ModelAndView();
-         
-            mav.addObject("totalList", receipt.getReceiptItems().getTotal());
-            mav.addObject("itemList", receipt.getReceiptItems().getItems());
-            mav.addObject("merchantList", receipt.getReceiptItems().getMerchants());
-            mav.addObject("receiptID", receipt.getReceiptID());
-            mav.addObject("receipt", receipt);
+
+        mav.addObject("totalList", receipt.getReceiptItems().getTotal());
+        mav.addObject("itemList", receipt.getReceiptItems().getItems());
+        mav.addObject("merchantList", receipt.getReceiptItems().getMerchants());
+        mav.addObject("receiptID", receipt.getReceiptID());
+        mav.addObject("receipt", receipt);
 
         mav.setViewName(view);
         return mav;
@@ -107,8 +108,11 @@ public class ReceiptController {
 
     @RequestMapping(value = "parseReceipt", method = RequestMethod.POST)
     public ModelAndView parseReceipt(@ModelAttribute("receipt") business.businessModel.Receipt receipt, @ModelAttribute("currentUser") business.businessModel.User user) {
-        receipt = business.businessLogic.Reciept.parseReceipt(receipt);
-
+        try {
+            receipt = business.businessLogic.Reciept.parseReceipt(receipt, MongoDBHelper.getDBHandler());
+        } catch (Exception ex) {
+            //TODO: logging
+        }
         return correctReceipt(receipt);
     }
 
@@ -116,8 +120,13 @@ public class ReceiptController {
     public ModelAndView receiptList(@ModelAttribute("currentUser") business.businessModel.User user) {
         String view = "receiptList";
         ModelAndView mav = new ModelAndView();
-        ArrayList<business.businessModel.Receipt> receipts = business.businessLogic.Reciept.listReceipts(user);
-        mav.addObject("receipts", receipts);
+        try {
+            ArrayList<business.businessModel.Receipt> receipts = business.businessLogic.Reciept.listReceipts(user, MongoDBHelper.getDBHandler());
+
+            mav.addObject("receipts", receipts);
+        } catch (Exception ex) {
+            //TODO: logging
+        }
         mav.setViewName(view);
         return mav;
     }
@@ -130,9 +139,11 @@ public class ReceiptController {
     @RequestMapping(value = "receiptCorrection/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void updateItem(@RequestBody String json) {
-
-        business.businessLogic.Reciept.parseReceiptUpdateJSON(json);
-
+        try {
+            business.businessLogic.Reciept.parseReceiptUpdateJSON(json, MongoDBHelper.getDBHandler());
+        } catch (Exception ex) {
+            //TODO: Error Handling
+        }
     }
 
 }

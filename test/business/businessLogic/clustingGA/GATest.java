@@ -5,6 +5,9 @@
  */
 package business.businessLogic.clustingGA;
 
+import business.businessModel.Receipt;
+import databaseAccess.mongoDB.MongoDBHandler;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,31 +20,42 @@ import static org.junit.Assert.*;
  * @author david
  */
 public class GATest {
-    
+
     public GATest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
 
     @Test
     public void generateModel() {
-        GA ga = new GA();
-        
-        ga.generateModel();
+
+        GA ga = new GA(); 
+        String dbHost = "127.0.0.1";
+        String dbName = "ExpenseSystem";
+        String dbUsername = "app";
+        String dbPassword = "app";
+        MongoDBHandler handler = null;
+
+        try {
+            handler = new MongoDBHandler(dbHost, dbName, dbUsername, dbPassword);
+            ga.generateModel(handler);
+        } catch (Exception ex) {
+
+        }
     }
-    
+
 }

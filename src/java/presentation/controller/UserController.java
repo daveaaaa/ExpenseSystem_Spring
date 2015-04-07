@@ -1,5 +1,6 @@
 package presentation.controller;
 
+import databaseAccess.mongoDB.MongoDBHelper;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -67,7 +68,7 @@ public class UserController {
         String view = "login";
         ModelAndView mav = new ModelAndView();
         try {
-            user = business.businessLogic.User.login(user);
+            user = business.businessLogic.User.login(user, MongoDBHelper.getDBHandler());
 
             view = business.businessLogic.User.getHomepage(user);
 
@@ -119,7 +120,7 @@ public class UserController {
         newUser.setPassword(password);
         newUser.setSecurityGroup(securityGroup);
         try {
-            business.businessLogic.User.addUser(newUser);
+            business.businessLogic.User.addUser(newUser, MongoDBHelper.getDBHandler());
             view = "adminHomepage";
         } catch (Exception ex) {
             //TODO: Log Exception
@@ -134,7 +135,7 @@ public class UserController {
         String view = "userList";
         ModelAndView mav = new ModelAndView();
         try {
-            mav.addObject("users", business.businessLogic.User.getUsers());
+            mav.addObject("users", business.businessLogic.User.getUsers(MongoDBHelper.getDBHandler()));
         } catch (Exception ex) {
             //TODO: Log Exception
         }
@@ -149,7 +150,7 @@ public class UserController {
         ModelAndView mav = new ModelAndView();
         try {
 
-            business.businessLogic.User.deleteUser(userID);
+            business.businessLogic.User.deleteUser(userID, MongoDBHelper.getDBHandler());
         } catch (Exception ex) {
             //TODO: Log Exception
         }
@@ -163,7 +164,7 @@ public class UserController {
         String view = "userEdit";
         ModelAndView mav = new ModelAndView();
         try {
-            mav.addObject("newUser", business.businessLogic.User.findUser(userID));
+            mav.addObject("newUser", business.businessLogic.User.findUser(userID, MongoDBHelper.getDBHandler()));
             HashMap securityGroup = getSecurityGroup();
             mav.addObject("securityGroup", securityGroup);
         } catch (Exception ex) {
@@ -184,7 +185,7 @@ public class UserController {
             user.setPassword(password);
             user.setUsername(username);
             user.setSecurityGroup(securityGroup);
-            business.businessLogic.User.updateUser(user);
+            business.businessLogic.User.updateUser(user,MongoDBHelper.getDBHandler());
         } catch (Exception ex) {
             //TODO: Log Exception
         }

@@ -33,18 +33,17 @@ public class GA {
     public GA(){
     }
 
-    public int generateModel(){
-        getTrainingData();
+    public int generateModel(DBHandler handler){
+        getTrainingData(handler);
         generatePopulationSet();
         int fitness = doGA();
         
         return fitness;
     }
     
-    private void getTrainingData(){
+    private void getTrainingData(DBHandler handler){
         ArrayList<Receipt> receipts = new ArrayList<>();
-        try{
-            DBHandler handler = MongoDBHelper.getDBHandler();
+        try{ 
             receipts = handler.listAllReceipts();
         } catch (Exception ex){
             //TODO: logging

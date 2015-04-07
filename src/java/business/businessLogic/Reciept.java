@@ -25,14 +25,13 @@ import org.w3c.dom.Document;
  */
 public class Reciept {
 
-    public static business.businessModel.Receipt createReciept(MultipartFile multiPartFile, business.businessModel.User user) throws Exception {
+    public static business.businessModel.Receipt createReciept(MultipartFile multiPartFile, business.businessModel.User user,   DBHandler handler) throws Exception {
 
         business.businessModel.Receipt receipt = new Receipt(user.getUserID());
         business.businessModel.ReceiptImage image = createImage(multiPartFile);
         receipt.setImage(image);
 
-        //add receipt to db
-        DBHandler handler = MongoDBHelper.getDBHandler();
+        //add receipt to db 
         handler.createReceipt(receipt);
 
         receipt = handler.getReceipt(receipt.getReceiptID());
@@ -50,7 +49,7 @@ public class Reciept {
 
     }
 
-    public static Receipt parseReceipt(Receipt receipt) {
+    public static Receipt parseReceipt(Receipt receipt, DBHandler handler) {
 
         try {
 
@@ -58,8 +57,7 @@ public class Reciept {
 
             receipt = ParseXML.parseXML(document, receipt);
 
-            //Push items to db
-            DBHandler handler = MongoDBHelper.getDBHandler();
+            //Push items to db 
             handler.updateReceipt(receipt);
 
         } catch (Exception ex) {
@@ -68,10 +66,9 @@ public class Reciept {
         return receipt;
     }
 
-    public static ArrayList<business.businessModel.Receipt> listReceipts(business.businessModel.User user) {
+    public static ArrayList<business.businessModel.Receipt> listReceipts(business.businessModel.User user, DBHandler handler) {
         ArrayList<business.businessModel.Receipt> receiptList = new ArrayList<>();
         try {
-            DBHandler handler = MongoDBHelper.getDBHandler();
 
             if (user.getSecurityGroup() != business.businessModel.SecurityGroup.ReceiptProvider) {
                 receiptList = handler.listAllReceipts();
@@ -84,19 +81,19 @@ public class Reciept {
         return receiptList;
     }
 
-    public static boolean parseReceiptUpdateJSON(String json) {
+    public static boolean parseReceiptUpdateJSON(String json, DBHandler handler) {
         String receiptJSON = json.split(",\"item\":")[0];
         String itemJSON = json.split(",\"item\":")[1];
 
         business.businessModel.Receipt receipt = parseReceipt(receiptJSON);
         Item item = parseRecieptItem(itemJSON);
 
-        makeAdujstments(receipt, item);
+        makeAdujstments(receipt, item, handler);
 
         return true;
     }
 
-    private static void makeAdujstments(business.businessModel.Receipt receipt, Item item) {
+    private static void makeAdujstments(business.businessModel.Receipt receipt, Item item, DBHandler handler) {
         if (item.getID() == -1) {
             receipt.getReceiptItems().addItem(item);
         } else {
@@ -104,7 +101,6 @@ public class Reciept {
         }
 
         try {
-            DBHandler handler = MongoDBHelper.getDBHandler();
             handler.updateReceipt(receipt);
         } catch (Exception ex) {
             // TODO logging

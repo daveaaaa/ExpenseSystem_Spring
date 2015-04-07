@@ -17,10 +17,9 @@ import java.util.logging.Logger;
  */
 public class User {
 
-    public static business.businessModel.User findUser(String userID) {
+    public static business.businessModel.User findUser(String userID, DBHandler handler) {
         business.businessModel.User user = new business.businessModel.User();
         try {
-            DBHandler handler = MongoDBHelper.getDBHandler();
             user = handler.findUser(userID);
         } catch (Exception ex) {
             //TODO: log exception
@@ -28,11 +27,10 @@ public class User {
         return user;
     }
 
-    public static ArrayList<business.businessModel.User> getUsers() {
+    public static ArrayList<business.businessModel.User> getUsers(DBHandler handler) {
         ArrayList<business.businessModel.User> userList = new ArrayList<>();
         try {
 
-            DBHandler handler = MongoDBHelper.getDBHandler();
             userList = handler.findUser();
 
         } catch (Exception ex) {
@@ -41,11 +39,10 @@ public class User {
         return userList;
     }
 
-    public static business.businessModel.User login(business.businessModel.User user) {
+    public static business.businessModel.User login(business.businessModel.User user, DBHandler handler) {
         business.businessModel.User foundUser = null;
         try {
 
-            DBHandler handler = MongoDBHelper.getDBHandler();
             foundUser = handler.getUser(user.getUsername(), user.getPassword());
 
         } catch (Exception ex) {
@@ -54,9 +51,8 @@ public class User {
         return foundUser;
     }
 
-    public static boolean addUser(business.businessModel.User user) {
+    public static boolean addUser(business.businessModel.User user, DBHandler handler) {
         try {
-            DBHandler handler = MongoDBHelper.getDBHandler();
             handler.createUser(user);
 
         } catch (Exception ex) {
@@ -92,10 +88,9 @@ public class User {
         return view;
     }
 
-    public static void deleteUser(String userID) {
+    public static void deleteUser(String userID, DBHandler handler) {
         try {
 
-            DBHandler handler = MongoDBHelper.getDBHandler();
             handler.deleteUser(userID);
 
         } catch (Exception ex) {
@@ -103,9 +98,8 @@ public class User {
         }
     }
 
-    public static void updateUser(business.businessModel.User user) {
+    public static void updateUser(business.businessModel.User user, DBHandler handler) {
         try {
-            DBHandler handler = MongoDBHelper.getDBHandler();
             handler.updateUser(user);
         } catch (Exception ex) {
             //TODO: Logging
