@@ -13,25 +13,37 @@
                     </tr>
                 </thead>
                 <tbody id="merchantRow">
-                    <c:forEach  var="item"  items="${merchantList}">
-                        <tr class="" id="tr${item.ID}">
-                            <td>
-                                <input type="text" id="name${item.ID}" value="${item.name}" class="form-control" disabled="true"/>
-                            </td>
-                            <td>
-                                <input type="hidden" value="" name="included" id="hid${item.ID}"/>
-                                <button type="button"  class="btn btn-success" onclick="includeRow(${item.ID})">
-                                    <span class="glyphicon glyphicon glyphicon-ok-circle"></span>
-                                </button>
-                                <button type="button" class="btn btn-danger" onclick="hideRow(${item.ID})">
-                                    <span class="glyphicon glyphicon glyphicon-remove-circle"></span>
-                                </button>
-                            </td>
-                        </tr>          
-                    </c:forEach>
+                    <c:choose>
+                        <c:when test="${merchantList.size() > 0}">
+                            <c:forEach  var="item"  items="${merchantList}">
+
+                                <tr class="" id="tr${item.ID}">
+                                    <td>
+                                        <input type="text" id="name${item.ID}" value="${item.name}" class="form-control" disabled="true"/>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" value="" name="included" id="hid${item.ID}"/>
+                                        <button type="button"  class="btn btn-success" onclick="includeRow(${item.ID})">
+                                            <span class="glyphicon glyphicon glyphicon-ok-circle"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-danger" onclick="hideRow(${item.ID})">
+                                            <span class="glyphicon glyphicon glyphicon-remove-circle"></span>
+                                        </button>
+                                    </td>
+                                </tr>          
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <tr></tr>
+                        </c:otherwise>
+                    </c:choose>
                 </tbody>
                 <tfoot>
-                    <tr id="trAddRow" class="hidden">
+                    <tr id="trAddRow" 
+                        <c:if test="${merchantList.size() > 0}">
+                            class="hidden"
+                        </c:if>
+                        >
                         <td><input type="text" value="" class="form-control" name="newMerchantName" id="newMerchantName"></td>
                         <td>
                             <button type="button"  class="btn btn-success" onclick="disable('newMerchantName', 1)">
@@ -56,10 +68,10 @@
                 <tbody id="itemRow">
                     <c:forEach  var="item" items="${itemList}" >
                         <tr class="" id="tr${item.ID}">
-                            <td><input type="text" id="name${item.ID}" value="${item.name}" class="form-control" disabled="true"/></td>
-                            <td><input type="text" id="quantity${item.ID}" value="${item.quantity}" class="form-control" disabled="true"/></td>
-                            <td><input type="text" id="price${item.ID}" value="${item.price}" class="form-control" disabled="true"/></td>
-                            <td><input type="text" id="total${item.ID}" value="${item.total}" class="form-control" disabled="true"/></td>
+                            <td><input type="text" id="name${item.ID}" value="${item.name}" class="form-control col-xs-2" disabled="true"/></td>
+                            <td><input type="text" id="quantity${item.ID}" value="${item.quantity}" class="form-control col-xs-2" disabled="true"/></td>
+                            <td><input type="text" id="price${item.ID}" value="${item.price}" class="form-control col-xs-2" disabled="true"/></td>
+                            <td><input type="text" id="total${item.ID}" value="${item.total}" class="form-control col-xs-2" disabled="true"/></td>
                             <td><input type="hidden" value="" name="included" id="hid${item.ID}"/>
                                 <button type="button"  class="btn btn-success" onclick="includeRow(${item.ID})">
                                     <span class="glyphicon glyphicon glyphicon-ok-circle"></span>
@@ -74,10 +86,10 @@
                 </tbody>
                 <tfoot>
                     <tr id="trAddRow">
-                        <td><input type="text" class="form-control" id="addItemName" /></td>
-                        <td><input type="text" class="form-control" id="addItemQuantity" onblur="guessTotal()"/></td>
-                        <td><input type="text" class="form-control" id="addItemPrice" onblur="guessTotal()"/></td>
-                        <td><input type="text" class="form-control" id="addItemTotal"/></td>
+                        <td><input type="text" class="form-control col-xs-2" id="addItemName" /></td>
+                        <td><input type="text" class="form-control col-xs-2" id="addItemQuantity" onblur="guessTotal()"/></td>
+                        <td><input type="text" class="form-control col-xs-2" id="addItemPrice" onblur="guessTotal()"/></td>
+                        <td><input type="text" class="form-control col-xs-2" id="addItemTotal"/></td>
                         <td> 
                             <button type="button"  class="btn btn-success" onclick="addRow()">
                                 <span class="glyphicon glyphicon glyphicon-ok-circle"></span>
@@ -95,22 +107,33 @@
                     </tr>
                 </thead>
                 <tbody id="totalRow">
-                    <c:forEach  var="item" items="${totalList}">
-                        <tr class="" id="tr${item.ID}">
-                            <td><input type="text" id="price${item.ID} value="${item.price}"  class="form-control" disabled="true"/></td>
-                            <td><input type="hidden" value="" name="included" id="hid${item.ID}"/>
-                                <button type="button"  class="btn btn-success" onclick="includeRow(${item.ID})">
-                                    <span class="glyphicon glyphicon glyphicon-ok-circle"></span>
-                                </button>
-                                <button type="button" class="btn btn-danger" onclick="hideRow(${item.ID})">
-                                    <span class="glyphicon glyphicon glyphicon-remove-circle"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    </c:forEach>  
+                    <c:choose>
+                        <c:when test="${totalList.size() > 0}">
+                            <c:forEach  var="item" items="${totalList}">
+                                <tr class="" id="tr${item.ID}">
+                                    <td><input type="text" id="price${item.ID}" value="${item.price}"  class="form-control" disabled="true"/></td>
+                                    <td><input type="hidden" value="" name="included" id="hid${item.ID}"/>
+                                        <button type="button"  class="btn btn-success" onclick="includeRow(${item.ID})">
+                                            <span class="glyphicon glyphicon glyphicon-ok-circle"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-danger" onclick="hideRow(${item.ID})">
+                                            <span class="glyphicon glyphicon glyphicon-remove-circle"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </c:forEach>  
+                        </c:when>
+                        <c:otherwise>
+                            <tr></tr>
+                        </c:otherwise>
+                    </c:choose>
                 </tbody>
                 <tfoot>
-                    <tr id="trAddRow" class="hidden">
+                    <tr id="trAddRow" 
+                        <c:if test="${totalList.size() > 0}">
+                            class="hidden"
+                        </c:if>
+                        >
                         <td><input type="text" value="" class="form-control" name="newTotal" id="newTotal"></td>
                         <td> 
                             <button type="button"  class="btn btn-success" onclick="disable('newTotal', 3)">
@@ -137,13 +160,13 @@
 
     function itemFactory() {
         return item = {
-            ID: "-1",           //Int
-            name: "",           //String
-            quantity: "",       //ideally int
-            price: "",          //ideally double
-            total: "",          //Ideally double
-            type: "",           //String
-            isIncluded:"false"  //Idealy boolean
+            ID: "-1", //Int
+            name: "", //String
+            quantity: "", //ideally int
+            price: "", //ideally double
+            total: "", //Ideally double
+            type: "", //String
+            isIncluded: "false"  //Idealy boolean
         };
     }
 
@@ -194,10 +217,10 @@
 
         function createTable(name, quantity, price, total) {
             //Create new input boxes
-            var txtName = "<td><input type='text' disabled='true' value='" + name + "' name='newItemName" + NEW_ITEM_COUNT + "'/></td>";
-            var txtQuantity = "<td><input type='text' disabled='true' value='" + quantity + "' name='newItemQuantity" + NEW_ITEM_COUNT + "'/></td>";
-            var txtValue = "<td><input type='text' disabled='true' value='" + price + "' name='newItemPrice" + NEW_ITEM_COUNT + "'/></td>";
-            var txtTotal = "<td><input type='text' disabled='true' value='" + total + "' name='newItemTotal" + NEW_ITEM_COUNT + "'/></td>";
+            var txtName = "<td><input type='text' disabled='true' value='" + name + "' name='newItemName" + NEW_ITEM_COUNT + "' class='form-control col-xs-2'/></td>";
+            var txtQuantity = "<td><input type='text' disabled='true' value='" + quantity + "' name='newItemQuantity" + NEW_ITEM_COUNT + "' class='form-control col-xs-2'/></td>";
+            var txtValue = "<td><input type='text' disabled='true' value='" + price + "' name='newItemPrice" + NEW_ITEM_COUNT + "' class='form-control col-xs-2'/></td>";
+            var txtTotal = "<td><input type='text' disabled='true' value='" + total + "' name='newItemTotal" + NEW_ITEM_COUNT + "' class='form-control col-xs-2'/></td>";
 
             var html = "<tr>" + txtName + txtQuantity + txtValue + txtTotal + "</tr>";
             $("#itemRow").append(html);

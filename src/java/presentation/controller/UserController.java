@@ -27,8 +27,10 @@ public class UserController {
         ModelAndView mav = new ModelAndView();
 
         session.removeAttribute("currentUser");
+        session.invalidate();
         status.isComplete();
 
+        mav.clear();
         mav.setViewName("redirect:/login");
         return mav;
     }

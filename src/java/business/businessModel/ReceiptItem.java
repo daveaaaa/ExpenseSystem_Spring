@@ -15,7 +15,17 @@ public class ReceiptItem {
 
     private ArrayList<Item> items;
     private int lastItemID;
-
+    
+    public double getTotalValue(){
+        double totalValue = 0.0;
+        ArrayList<Item> totals = getTotal();
+        for(Item item : totals){
+            totalValue += item.getPrice();
+        }
+        
+        return totalValue; 
+    }
+    
     public ReceiptItem() {
         items = new ArrayList<>();
         lastItemID = -1;    // allows for 0 indexing

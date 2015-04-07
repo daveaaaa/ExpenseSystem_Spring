@@ -99,7 +99,7 @@ public class ReceiptController {
             mav.addObject("itemList", receipt.getReceiptItems().getItems());
             mav.addObject("merchantList", receipt.getReceiptItems().getMerchants());
             mav.addObject("receiptID", receipt.getReceiptID());
-        
+            mav.addObject("receipt", receipt);
 
         mav.setViewName(view);
         return mav;

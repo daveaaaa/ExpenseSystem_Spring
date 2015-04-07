@@ -190,6 +190,9 @@ public class MongoDBHandler implements DBHandler {
 
         receipt.setReceiptID(id);
         receipt.setUserID(userID);
+        
+        receipt.setUser(findUser(userID));
+        
         receipt.setCreatedDate(createdOn);
         if (dbObj.containsField("receiptItems")) {
             receipt.setReceiptItems(getReceiptItems(dbObj));

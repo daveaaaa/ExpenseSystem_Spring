@@ -3,6 +3,7 @@ package business.businessModel;
 import java.io.File;
 import java.util.Date;
 import business.businessModel.ReceiptImage;
+import business.businessModel.User; 
 import java.util.ArrayList;
 
 /**
@@ -14,6 +15,7 @@ public class Receipt {
     private String receiptID;
     private ReceiptImage image;
     private String userID;
+    private User user;
     private java.util.Date createdOn;
     private java.util.Date receiptDate;
     private ReceiptItem receiptItems;
@@ -28,6 +30,23 @@ public class Receipt {
         receiptItems = new ReceiptItem();
         receiptDate = new java.util.Date();
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public int getCurrentReceiptItem() {
+        return currentReceiptItem;
+    }
+
+    public void setCurrentReceiptItem(int currentReceiptItem) {
+        this.currentReceiptItem = currentReceiptItem;
+    }
+    
 
     public double getTotal() {
         return total;
