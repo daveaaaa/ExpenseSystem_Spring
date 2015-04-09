@@ -58,7 +58,7 @@ public class IndividualFactoryTest {
             fail("DB Connection Exception");
         } 
         
-        ArrayList<Individual> indivi = IndividualFactory.populateTrainingData(receipts);
+        ArrayList<Individual> indivi = GAFactory.populateTrainingData(receipts);
     }
     
 }

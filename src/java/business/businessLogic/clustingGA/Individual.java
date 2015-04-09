@@ -13,10 +13,21 @@ import business.businessModel.ReceiptType;
  */
 public class Individual {
 
+    public static final int MIN_ITEMS = 0;
+    public static final int MAX_ITEMS = 1;
+    public static final int MIN_TOTAL = 2;
+    public static final int MAX_TOTAL = 3;
+    public static final int TYPE = 5;
+
     private double total;
     private int numberOfItems;
-    private ReceiptType receiptType;
-    private boolean changable;
+    private ReceiptType receiptType = ReceiptType.NONE;
+    private boolean changable = true;
+    private int[] individual;
+
+    public Individual() {
+        individual = new int[5];
+    }
 
     public boolean isChangable() {
         return changable;
@@ -26,14 +37,14 @@ public class Individual {
         this.changable = changable;
     }
 
-    
-    
     public double getTotal() {
         return total;
     }
 
     public void setTotal(double total) {
         this.total = total;
+        individual[MIN_TOTAL] = (int) this.total * 100; //44.33 == 4433
+        individual[MAX_TOTAL] = (int) this.total * 100;
     }
 
     public int getNumberOfItems() {
@@ -42,36 +53,61 @@ public class Individual {
 
     public void setNumberOfItems(int numberOfItems) {
         this.numberOfItems = numberOfItems;
+        individual[MIN_ITEMS] = this.numberOfItems;
+        individual[MAX_ITEMS] = this.numberOfItems;
+
     }
 
     public ReceiptType getReceiptType() {
         return receiptType;
+
     }
 
     public void setReceiptType(ReceiptType receiptType) {
         this.receiptType = receiptType;
+        individual[TYPE] = this.receiptType.getValue();
     }
 
-    public int[] getIndividual(){
-        int[] indiv = new int[5];
-        
-        indiv[0] = numberOfItems;
-        indiv[1] = numberOfItems;
-        indiv[2] = (int) total * 100; //44.33 == 4433
-        indiv[3] = (int) total * 100;
-        indiv[4] = receiptType.getValue(); 
-        return indiv;
+    public int[] getIndividual() {
+        return individual;
     }
-    
-    
-    
-    
-    
+
     public String toJson() {
         String json = "{\"total\":\"%d\", \"items\":\"%i\", \"type\":\"%i\"}";
         json = String.format(json, total, numberOfItems, receiptType.getValue());
 
         return json;
 
+    }
+
+    public int getSize() {
+        return individual.length;
+    }
+
+    public void mutate(int position) {
+        switch (position) {
+            case MIN_ITEMS:
+                break;
+            case MAX_ITEMS:
+                break;
+            case MIN_TOTAL:
+                break;
+            case MAX_TOTAL:
+                break;
+            case TYPE:
+                break;
+        }
+    }
+
+    private int creepPositive(int maxValue) {
+        return 0;
+    }
+
+    private int creepNegitive(int minValue) {
+        return 1;
+    }
+
+    public void setIndividual(int[] individual) {
+        this.individual = individual;
     }
 }

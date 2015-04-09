@@ -16,15 +16,16 @@ import javax.servlet.ServletContextListener;
  */
 public class Solution implements ServletContextListener {
 
-    private Population solution;
-    private boolean solutionSet;
+    private static Population  solution = new Population();
+    private static boolean solutionSet;
 
-    public Population getSolution() {
+    public static Population getSolution() {
         return solution;
     }
 
-    public void setSolution(Population solution) {
-        this.solution = solution;
+    public static void setSolution(Population solution) {
+        //TODO: way around setting static reference
+   //     this.solution = solution; 
         solutionSet = true;
     }
 
@@ -36,7 +37,6 @@ public class Solution implements ServletContextListener {
     
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-       solution = new Population();
        solutionSet = false;
     }
 

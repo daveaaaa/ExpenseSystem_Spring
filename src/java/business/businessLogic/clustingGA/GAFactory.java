@@ -14,7 +14,7 @@ import java.util.Random;
  *
  * @author david
  */
-public class IndividualFactory {
+public class GAFactory {
 
     public static ArrayList<Individual> populateTrainingData(ArrayList<Receipt> receipts) {
         ArrayList<Individual> indivs = new ArrayList<>();
@@ -33,20 +33,28 @@ public class IndividualFactory {
 
     }
 
-    public static ArrayList<Population> generateInitialPopulation(int size, int populationSize, int maxItems, int maxTotal) {
+    public static ArrayList<Population> generateInitialPopulation(int size, int populationSize) {
         ArrayList<Population> populations = new ArrayList<>();
         Random rand = new Random(System.currentTimeMillis());
 
-        for (int i = 0; i != size; i++) {
+        for (int p = 0; p != size; p++) {
             Population population = new Population();
-            for (int p = 0; p != populationSize; p++) {
+            for (int i = 0; i != populationSize; i++) {
                 Individual individual = new Individual();
 
-                individual.setNumberOfItems(rand.nextInt(maxItems));
-                individual.setTotal(rand.nextInt(maxTotal));
-                individual.setReceiptType(randomReceiptType(rand));
+                int[] indiv = individual.getIndividual();
+                
+                int maxItems = rand.nextInt(GA.MIN_ITEMS);
+                int maxTotal = rand.nextInt(GA.MAX_TOTAL);
+                
+                indiv[Individual.MIN_ITEMS] = rand.nextInt(maxItems);
+                indiv[Individual.MAX_ITEMS] = maxItems;
+                indiv[Individual.MIN_TOTAL] = rand.nextInt(maxTotal);
+                indiv[Individual.MAX_TOTAL] = maxTotal;
+                indiv[Individual.TYPE] = randomReceiptType(rand).getValue();
+                
                 individual.setChangable(true);
-                population.addIndividual(individual);
+                individual.setIndividual(indiv);
             }
 
             populations.add(population);
