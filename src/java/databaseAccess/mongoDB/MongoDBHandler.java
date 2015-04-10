@@ -139,6 +139,7 @@ public class MongoDBHandler implements DBHandler {
         receipt.append("$set", new BasicDBObject().append("total", reciept.getTotal()));
         receipt.append("$set", new BasicDBObject().append("receiptType", reciept.getType().getValue()));
         receipt.append("$set", new BasicDBObject().append("receiptItems", setItems(reciept.getReceiptItems().getAllItems())));
+        receipt.append("$set", new BasicDBObject().append("finalized", reciept.isFinalized()));
         table.update(query, receipt);
 
     }
@@ -161,7 +162,6 @@ public class MongoDBHandler implements DBHandler {
         return receiptItems;
     }
 
-
     @Override
     public business.businessModel.Receipt getReceipt(String receiptID) {
         DBCollection table = getReceiptCollection();
@@ -179,7 +179,8 @@ public class MongoDBHandler implements DBHandler {
         String id = dbObj.getString("_id");
         String userID = dbObj.getString("userID");
         java.util.Date createdOn = new java.util.Date((long) dbObj.get("createdDate"));
-        int receiptTypeID = dbObj.getInt("receiptType",0);
+        int receiptTypeID = dbObj.getInt("receiptType", 0);
+        boolean finalized = dbObj.getBoolean("finalized", false);
         
         //SET FIELDS
         receipt.setReceiptID(id);
@@ -188,6 +189,7 @@ public class MongoDBHandler implements DBHandler {
         receipt.setUser(findUser(userID));
         receipt.setType(ReceiptType.NONE);
         receipt.setCreatedDate(createdOn);
+        receipt.setFinalized(finalized);
         if (dbObj.containsField("receiptItems")) {
             receipt.setReceiptItems(getReceiptItems(dbObj));
         }
@@ -196,19 +198,19 @@ public class MongoDBHandler implements DBHandler {
         return receipt;
     }
 
-    private ReceiptType getReceiptType(int receiptTypeID){
+    private ReceiptType getReceiptType(int receiptTypeID) {
         ReceiptType type = ReceiptType.NONE;
-        
-        for(ReceiptType thisType : ReceiptType.values()){
-            if (thisType.getValue() == receiptTypeID){
+
+        for (ReceiptType thisType : ReceiptType.values()) {
+            if (thisType.getValue() == receiptTypeID) {
                 type = thisType;
                 break;
             }
         }
-        
+
         return type;
     }
-    
+
     private business.businessModel.ReceiptItem getReceiptItems(DBObject dbObj) {
         business.businessModel.ReceiptItem receiptItem = new business.businessModel.ReceiptItem();
 

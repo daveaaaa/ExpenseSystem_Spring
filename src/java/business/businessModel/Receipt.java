@@ -22,7 +22,18 @@ public class Receipt {
     private ReceiptItem receiptItems;
     private int currentReceiptItem;
     private double total;
+    private boolean finalized; 
 
+    public boolean isFinalized() {
+        return finalized;
+    }
+
+    public void setFinalized(boolean finalized) {
+        this.finalized = finalized;
+    }
+    
+    
+    
     public Receipt() {
         type = ReceiptType.NONE;
         receiptID = "";
@@ -31,6 +42,7 @@ public class Receipt {
         image = new ReceiptImage();
         receiptItems = new ReceiptItem();
         receiptDate = new java.util.Date();
+        finalized = false; 
     }
 
     public ReceiptType getType() {

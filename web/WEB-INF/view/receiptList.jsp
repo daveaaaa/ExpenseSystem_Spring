@@ -5,7 +5,7 @@
         <thead>
             <tr>
                 <th></th>
-                    <c:if test="${user.type.getValue == ItemType.Manager.getValue}">
+                    <c:if test="${sessionScope.currentUser.securityGroup == SecurityGroup.ReceiptManager}">
                     <th>User</th>
                     </c:if>
                 <th>Receipt Date</th>
@@ -20,7 +20,7 @@
                     <td>   
                         <img alt="receipt" height="150" width="100" src="data:${receipt.image.format};base64,${receipt.image.base64}">
                     </td>
-                    <c:if test="${user.type.getValue == ItemType.Manager.getValue}">
+                    <c:if test="${sessionScope.currentUser.securityGroup == SecurityGroup.ReceiptManager}">
                         <td>${receipt.user.username}</td>
                     </c:if>
                     <td>
@@ -32,12 +32,22 @@
                         <c:set value="${receipt.createdOn}" var="dateCreated" />
                         <fmt:formatDate pattern="dd/MM/yyyy" value="${dateCreated}"/>
                     </td>
-            <form method="get" action="editReceipt">
-                <input type="hidden" value="${receipt.receiptID}" name="receiptID"/>
-                <td><input type="submit" class="btn btn-default" value="Edit Receipt" name="edit"/></td>
-            </form> 
-            </tr>
-        </c:forEach>
+                    <td>
+                        <c:if test="${receipt.finalized == false}">
+                            <form method="get" action="editReceipt">
+                                <input type="hidden" value="${receipt.receiptID}" name="receiptID"/>
+                                <input type="submit" class="btn btn-default" value="Edit Receipt" name="edit"/>
+                            </form> 
+                        </c:if>
+                        <c:if test="${receipt.finalized == true}">
+                            <form method="get" action="viewReceipt">
+                                <input type="hidden" value="${receipt.receiptID}" name="receiptID"/>
+                                <input type="submit" class="btn btn-default" value="View Receipt" name="edit"/>
+                            </form> 
+                        </c:if>
+                    </td>
+                </tr>
+            </c:forEach>
         </tbody>
     </table>
 </div>

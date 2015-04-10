@@ -85,29 +85,118 @@ public class Individual {
     }
 
     public void mutate(int position) {
+        int newValue = 0;
+
         switch (position) {
             case MIN_ITEMS:
+                newValue = doCreep(GA.MIN_ITEMS, individual[MAX_ITEMS], individual[position]);
                 break;
             case MAX_ITEMS:
+                newValue = doCreep(individual[MIN_ITEMS], GA.MAX_ITEMS, individual[position]);
                 break;
             case MIN_TOTAL:
+                newValue = doCreep(GA.MIN_TOTAL, individual[MAX_TOTAL], individual[position]);
                 break;
             case MAX_TOTAL:
+                newValue = doCreep(individual[MIN_TOTAL], GA.MAX_TOTAL, individual[position]);
                 break;
             case TYPE:
+                doTypeChange();
                 break;
+        }
+
+        if (position != TYPE) {
+            individual[position] = newValue;
+        }
+
+    }
+
+    private void doTypeChange() {
+        double rand = Math.random();
+        if (rand > 0.66) {
+            individual[TYPE] = ReceiptType.OTHER.getValue();
+        } else if (rand > 0.33) {
+            individual[TYPE] = ReceiptType.SUBSISTANCE.getValue();
+        } else {
+            individual[TYPE] = ReceiptType.TRANSPORT.getValue();
         }
     }
 
-    private int creepPositive(int maxValue) {
-        return 0;
+    private int doCreep(int minValue, int maxValue, int oldValue) {
+        int newValue;
+        if (Math.random() > 0.5) {
+            newValue = creepPositive(maxValue, oldValue);
+        } else {
+            newValue = creepNegitive(minValue, oldValue);
+        }
+        return newValue;
     }
 
-    private int creepNegitive(int minValue) {
-        return 1;
+    private int creepPositive(int maxValue, int oldValue) {
+        int newValue = 0;
+        if ((oldValue + 1) > maxValue) {
+            newValue = oldValue;
+        } else {
+            newValue = oldValue + 1;
+        }
+        return newValue;
+    }
+
+    private int creepNegitive(int minValue, int oldValue) {
+        int newValue = 0;
+        if (minValue > (oldValue - 1)) {
+            newValue = oldValue;
+        } else {
+            newValue = oldValue - 1;
+        }
+
+        return newValue;
     }
 
     public void setIndividual(int[] individual) {
         this.individual = individual;
+    }
+
+    public boolean matches(Individual data) {
+        boolean isMatch = false;
+
+        if (betweenItems(data.getNumberOfItems())
+                && (betweenTotal(data.getTotal()))
+                && (sameType(data.getReceiptType()))) {
+            isMatch = true;
+        }
+        return isMatch;
+    }
+
+    private boolean betweenItems(int numberOfItems) {
+        boolean isBetweenItems = false;
+
+        if ((numberOfItems >= individual[MIN_ITEMS])
+                && (individual[MAX_ITEMS] >= numberOfItems)) {
+            isBetweenItems = true;
+        }
+        return isBetweenItems;
+    }
+
+    private boolean betweenTotal(double total) {
+        boolean isBetweenTotal = false;
+        int intTotal = (int) total * 100; //£44.33 == 4433
+
+        if ((intTotal >= individual[MIN_TOTAL])
+                && (individual[MAX_TOTAL] >= intTotal)) {
+            isBetweenTotal = true;
+        }
+
+        return isBetweenTotal;
+    }
+
+    private boolean sameType(ReceiptType receiptType) {
+        boolean isSameType = false;
+
+        if (individual[TYPE] == receiptType.getValue()) {
+            isSameType = true;
+        }
+
+        return isSameType;
     }
 }

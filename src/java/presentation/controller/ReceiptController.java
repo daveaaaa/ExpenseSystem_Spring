@@ -51,7 +51,7 @@ public class ReceiptController {
 
     @RequestMapping(value = "receiptUpload", method = RequestMethod.POST)
     public ModelAndView handleUpload(@RequestParam("file") MultipartFile multipartfile, @ModelAttribute("currentUser") business.businessModel.User user) {
-        String view = "receiptView";
+        String view = "receiptParse";
         ModelAndView mav = new ModelAndView();
         try {
             business.businessModel.Receipt receipt = business.businessLogic.Reciept.createReciept(multipartfile, user, MongoDBHelper.getDBHandler());
@@ -125,7 +125,7 @@ public class ReceiptController {
 
             mav.addObject("receipts", receipts);
         } catch (Exception ex) {
-            //TODO: logging
+            //TODO: loggingreceiptParse
         }
         mav.setViewName(view);
         return mav;
@@ -136,6 +136,11 @@ public class ReceiptController {
         return new ModelAndView();
     }
 
+    @RequestMapping(value = "receiptView", method = RequestMethod.GET)
+    public ModelAndView viewReceipt(@ModelAttribute("currentUser") business.businessModel.User user) {
+        return new ModelAndView("receiptView");
+    }
+    
     @RequestMapping(value = "receiptCorrection/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void updateItem(@RequestBody String json) {

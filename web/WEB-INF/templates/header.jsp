@@ -28,7 +28,7 @@
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <h1 style="display:inline">Expense System</h1>
-                    <c:if test="${sessionScope.currentUser != null}">
+                    <c:if test='${sessionScope.currentUser.userID != ""}'>
                         <p>User: <c:out value="${sessionScope.currentUser.username}"/></p>
                     </c:if>
                 </div>

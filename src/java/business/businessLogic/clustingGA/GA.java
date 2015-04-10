@@ -19,13 +19,13 @@ public class GA {
 
     public final static int MIN_ITEMS = 1;
     public final static int MAX_ITEMS = 1000;
-    public final static int MIN_TOTAL = 1;      //£ 0.01
-    public final static int MAX_TOTAL = 500000; //£ 5000.00
+    public final static int MIN_TOTAL = 1;              //£ 0.01
+    public final static int MAX_TOTAL = 500000;         //£ 5000.00
     public final static int MAX_POPULATION = 1000;
     public final static int MAX_POPULATION_SIZE = 3;
     public final static int MAX_GENERATIONS = 10000;
-    public final static double MUTATION_RATE = 0.01;  //1%
-    public final static double CROSSOVER_RATE = 0.60; //60%
+    public final static double MUTATION_RATE = 0.01;    //1%
+    public final static double CROSSOVER_RATE = 0.60;   //60%
 
     private ArrayList<Individual> trainingData;
     private ArrayList<Population> population;
@@ -59,10 +59,13 @@ public class GA {
         Random rand = new Random(System.currentTimeMillis());
         int fitness = 0;
 
+        calculateFitness();
+        
         for (int i = 0; i != MAX_GENERATIONS; i++) {
             population = doSelection(rand);
             population = doCrossOver(rand);
             population = doMutation(rand);
+            calculateFitness();
         }
         return fitness;
     }
@@ -70,9 +73,27 @@ public class GA {
     private ArrayList<Population> doSelection(Random rand) {
         ArrayList<Population> nextGeneration = new ArrayList<>();
         for (int i = 0; i != MAX_POPULATION; i++) {
+            int comp1 = rand.nextInt(population.size());
+            int comp2 = rand.nextInt(population.size());
 
+            Population competitor1 = population.get(comp1);
+            Population competitor2 = population.get(comp2);
+
+            Population winner = getWinner(competitor1, competitor2);
+
+            nextGeneration.add(winner);
         }
         return nextGeneration;
+    }
+
+    private Population getWinner(Population competitor1, Population competitor2) {
+        Population winner;
+        if (competitor1.getFitness() >= competitor2.getFitness()) {
+            winner = competitor1;
+        } else {
+            winner = competitor2;
+        }
+        return winner;
     }
 
     private ArrayList<Population> doCrossOver(Random rand) {
@@ -100,10 +121,18 @@ public class GA {
         for (Population mutant : population) {
             if (MUTATION_RATE > rand.nextDouble()) {
                 int mutantPosition = rand.nextInt(mutant.getSize());
-                mutant.mutate(mutantPosition, rand); 
+                mutant.mutate(mutantPosition, rand);
             }
         }
         return nextGeneration;
     }
 
+    private void calculateFitness(){
+        for(Population pop : population){
+            if(pop.isChanged()){
+                pop.calculateFitness(trainingData);
+            }
+        }
+    }
+    
 }
