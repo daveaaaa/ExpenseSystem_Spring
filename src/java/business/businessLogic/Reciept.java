@@ -25,7 +25,7 @@ import org.w3c.dom.Document;
  */
 public class Reciept {
 
-    public static business.businessModel.Receipt createReciept(MultipartFile multiPartFile, business.businessModel.User user,   DBHandler handler) throws Exception {
+    public static business.businessModel.Receipt createReciept(MultipartFile multiPartFile, business.businessModel.User user, DBHandler handler) throws Exception {
 
         business.businessModel.Receipt receipt = new Receipt(user.getUserID());
         business.businessModel.ReceiptImage image = createImage(multiPartFile);
@@ -81,13 +81,8 @@ public class Reciept {
         return receiptList;
     }
 
-    public static boolean parseReceiptUpdateJSON(String json, DBHandler handler) {
-        String receiptJSON = json.split(",\"item\":")[0];
-        String itemJSON = json.split(",\"item\":")[1];
-
-        business.businessModel.Receipt receipt = parseReceipt(receiptJSON);
-        Item item = parseRecieptItem(itemJSON);
-
+    public static boolean parseReceiptUpdateJSON(Receipt receipt, Item item, DBHandler handler) {
+        
         makeAdujstments(receipt, item, handler);
 
         return true;
@@ -108,69 +103,20 @@ public class Reciept {
 
     }
 
-    private static business.businessModel.Receipt parseReceipt(String recieptJSON) {
-        business.businessModel.Receipt receipt = null;
+   
 
-        recieptJSON = recieptJSON.replace("receipt", "");
-        recieptJSON = recieptJSON.replace("\"", "");
-        recieptJSON = recieptJSON.replace(":", "");
-        recieptJSON = recieptJSON.replace("{", "");
+    public static void finalizeReceipt(String json, DBHandler dbHandler) {
 
-        try {
-            DBHandler handler = MongoDBHelper.getDBHandler();
-            receipt = handler.getReceipt(recieptJSON);
-        } catch (Exception ex) {
-            // TODO logging
-        }
-        return receipt;
-    }
+        json = json.replace("\"", "");
+        json = json.replace("}", "");
+        json = json.replace("{", "");
+        json = json.replace(":", "");
+        json = json.replace("receiptID", "");
 
-    private static Item parseRecieptItem(String itemJSON) {
-        itemJSON = itemJSON.replaceAll("\\{", "");
-        itemJSON = itemJSON.replaceAll("\\}", "");
-        String[] itemParts = itemJSON.split(",");
-
-        Item item = new Item();
-
-        for (String mapString : itemParts) {
-            String keyStr = mapString.split(":")[0];
-            String valueStr = mapString.split(":")[1];
-            keyStr = keyStr.replaceAll("\"", "");
-            valueStr = valueStr.replace("\"", "");
-
-            if (valueStr.length() > 0) {
-                try {
-                    Object[] value = new Object[1];
-                    Field field = Item.class.getDeclaredField(keyStr);
-                    keyStr = keyStr.substring(0, 1).toUpperCase() + keyStr.substring(1);
-                    if (field.getType() == Integer.TYPE) {
-                        value[0] = Integer.parseInt(valueStr);
-                    } else if (field.getType() == Double.TYPE) {
-                        value[0] = Double.parseDouble(valueStr);
-                    } else if (field.getType() == Boolean.TYPE) {
-                        value[0] = Boolean.parseBoolean(valueStr);
-                    } else if (field.getType() == ItemType.class) {
-                        int valueInt = Integer.parseInt(valueStr);
-                        for (ItemType type : ItemType.values()) {
-                            if (type.getValue() == valueInt) {
-                                value[0] = type;
-                                break;
-                            }
-                        }
-                    } else {
-                        value[0] = valueStr;
-                    }
-                    java.beans.Statement stmt = new java.beans.Statement(item, "set" + keyStr, value);
-                    stmt.execute();
-                } catch (NoSuchFieldException nsf) {
-                    //TODO more logging
-                } catch (IllegalAccessException iae) {
-                    //TODO more logging
-                } catch (Exception ex) {
-                    //TODO more logging
-                }
-            }
-        }
-        return item;
+        String receiptID = json;
+        
+        Receipt receipt = dbHandler.getReceipt(receiptID);
+        receipt.setFinalized(true);
+        dbHandler.updateReceipt(receipt);
     }
 }

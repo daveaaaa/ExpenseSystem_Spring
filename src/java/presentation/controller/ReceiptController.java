@@ -137,15 +137,42 @@ public class ReceiptController {
     }
 
     @RequestMapping(value = "receiptView", method = RequestMethod.GET)
-    public ModelAndView viewReceipt(@ModelAttribute("currentUser") business.businessModel.User user) {
-        return new ModelAndView("receiptView");
+    public ModelAndView viewReceipt(@ModelAttribute("receiptID") String receiptID, @ModelAttribute("currentUser") business.businessModel.User user) {
+
+        ModelAndView mav = new ModelAndView();
+
+        try {
+            databaseAccess.DBHandler handler = databaseAccess.mongoDB.MongoDBHelper.getDBHandler();
+            business.businessModel.Receipt receipt = handler.getReceipt(receiptID);
+
+            mav = correctReceipt(receipt);
+        } catch (Exception ex) {
+            //TODO: log exception
+        }
+
+        mav.setViewName("receiptView");
+        return mav;
     }
-    
+
     @RequestMapping(value = "receiptCorrection/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void updateItem(@RequestBody String json) {
         try {
-            business.businessLogic.Reciept.parseReceiptUpdateJSON(json, MongoDBHelper.getDBHandler());
+
+            business.businessModel.Receipt receipt = JSONParser.getReceipt(json, MongoDBHelper.getDBHandler());
+            business.businessModel.Item item = JSONParser.getItem(json);
+
+            business.businessLogic.Reciept.parseReceiptUpdateJSON(receipt, item, MongoDBHelper.getDBHandler());
+        } catch (Exception ex) {
+            //TODO: Error Handling
+        }
+    }
+
+    @RequestMapping(value = "receiptList/finalize", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void finalizeReceipt(@RequestBody String json) {
+        try {
+            business.businessLogic.Reciept.finalizeReceipt(json, MongoDBHelper.getDBHandler());
         } catch (Exception ex) {
             //TODO: Error Handling
         }

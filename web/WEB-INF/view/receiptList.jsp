@@ -37,10 +37,11 @@
                             <form method="get" action="editReceipt">
                                 <input type="hidden" value="${receipt.receiptID}" name="receiptID"/>
                                 <input type="submit" class="btn btn-default" value="Edit Receipt" name="edit"/>
+                                <input type="button" class="btn btn-success" value="Finalize" onclick="finalize('${receipt.receiptID}')"/>
                             </form> 
                         </c:if>
                         <c:if test="${receipt.finalized == true}">
-                            <form method="get" action="viewReceipt">
+                            <form method="get" action="receiptView">
                                 <input type="hidden" value="${receipt.receiptID}" name="receiptID"/>
                                 <input type="submit" class="btn btn-default" value="View Receipt" name="edit"/>
                             </form> 
@@ -51,7 +52,26 @@
         </tbody>
     </table>
 </div>
+
+<script type="text/javascript">
+
+    function finalize(receiptID) {
+        var url = "http://localhost:8084/ExpensesSystem_Spring/receiptList/finalize";
+        var data = {"receiptID": receiptID};
+        $.ajax({
+            url: url,
+            type: "post",
+            data: JSON.stringify(data),
+            contentType: "application/json"
+        });
+    }
+
+</script>
 <div>
     <a href="receiptProviderHomepage.html" class="btn btn-default">Back</a>
 </div>
+
+
+
+
 <%@include file="/WEB-INF/templates/footer.jsp" %>

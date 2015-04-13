@@ -89,7 +89,7 @@
         <%@include file="/WEB-INF/templates/viewImage.jsp" %>
     </div>
     <div class="row">
-        <button type="submit" class="btn btn-success">Submit</button>
+        <button type="submit" class="btn btn-default">Back</button>
     </div>
 </form:form> 
 <%@include file="/WEB-INF/templates/logout.jsp" %>
