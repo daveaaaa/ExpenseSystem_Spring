@@ -82,7 +82,7 @@ public class Reciept {
     }
 
     public static boolean parseReceiptUpdateJSON(Receipt receipt, Item item, DBHandler handler) {
-        
+
         makeAdujstments(receipt, item, handler);
 
         return true;
@@ -103,19 +103,8 @@ public class Reciept {
 
     }
 
-   
+    public static void finalizeReceipt(Receipt receipt, DBHandler dbHandler) {
 
-    public static void finalizeReceipt(String json, DBHandler dbHandler) {
-
-        json = json.replace("\"", "");
-        json = json.replace("}", "");
-        json = json.replace("{", "");
-        json = json.replace(":", "");
-        json = json.replace("receiptID", "");
-
-        String receiptID = json;
-        
-        Receipt receipt = dbHandler.getReceipt(receiptID);
         receipt.setFinalized(true);
         dbHandler.updateReceipt(receipt);
     }

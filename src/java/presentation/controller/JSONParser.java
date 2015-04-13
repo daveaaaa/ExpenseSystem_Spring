@@ -7,6 +7,7 @@ package presentation.controller;
 
 import business.businessModel.Item;
 import business.businessModel.ItemType;
+import business.businessModel.Receipt;
 import databaseAccess.DBHandler;
 import databaseAccess.mongoDB.MongoDBHelper;
 import java.lang.reflect.Field;
@@ -29,6 +30,20 @@ public class JSONParser {
         String itemJSON = json.split(",\"item\":")[1];
 
         return parseRecieptItem(itemJSON);
+    }
+
+    public static business.businessModel.Receipt finalizeReceipt(String json, DBHandler handler) {
+
+        json = json.replace("\"", "");
+        json = json.replace("}", "");
+        json = json.replace("{", "");
+        json = json.replace(":", "");
+        json = json.replace("receiptID", "");
+
+        String receiptID = json;
+
+        return handler.getReceipt(receiptID);
+
     }
 
     private static business.businessModel.Receipt parseReceipt(String recieptJSON, DBHandler handler) {

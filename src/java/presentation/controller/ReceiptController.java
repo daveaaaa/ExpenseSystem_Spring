@@ -10,6 +10,7 @@ package presentation.controller;
  * @author david
  */
 import business.businessModel.Item;
+import databaseAccess.DBHandler;
 import databaseAccess.mongoDB.MongoDBHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +40,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class ReceiptController {
 
+    private DBHandler handler = null;
+
+    public ReceiptController() {
+        try {
+            handler = MongoDBHelper.getDBHandler();
+        } catch (Exception ex) {
+            //Do logging
+        }
+    }
+
     @RequestMapping(value = "receiptUpload", method = RequestMethod.GET)
     public String preReceiptUpload() {
         try {
@@ -54,7 +65,7 @@ public class ReceiptController {
         String view = "receiptParse";
         ModelAndView mav = new ModelAndView();
         try {
-            business.businessModel.Receipt receipt = business.businessLogic.Reciept.createReciept(multipartfile, user, MongoDBHelper.getDBHandler());
+            business.businessModel.Receipt receipt = business.businessLogic.Reciept.createReciept(multipartfile, user, handler);
             mav.addObject("receipt", receipt);
         } catch (Exception ex) {
             //TODO: log exception
@@ -81,7 +92,6 @@ public class ReceiptController {
         ModelAndView mav = new ModelAndView();
 
         try {
-            databaseAccess.DBHandler handler = databaseAccess.mongoDB.MongoDBHelper.getDBHandler();
             business.businessModel.Receipt receipt = handler.getReceipt(receiptID);
 
             mav = correctReceipt(receipt);
@@ -109,7 +119,7 @@ public class ReceiptController {
     @RequestMapping(value = "parseReceipt", method = RequestMethod.POST)
     public ModelAndView parseReceipt(@ModelAttribute("receipt") business.businessModel.Receipt receipt, @ModelAttribute("currentUser") business.businessModel.User user) {
         try {
-            receipt = business.businessLogic.Reciept.parseReceipt(receipt, MongoDBHelper.getDBHandler());
+            receipt = business.businessLogic.Reciept.parseReceipt(receipt, handler);
         } catch (Exception ex) {
             //TODO: logging
         }
@@ -121,7 +131,7 @@ public class ReceiptController {
         String view = "receiptList";
         ModelAndView mav = new ModelAndView();
         try {
-            ArrayList<business.businessModel.Receipt> receipts = business.businessLogic.Reciept.listReceipts(user, MongoDBHelper.getDBHandler());
+            ArrayList<business.businessModel.Receipt> receipts = business.businessLogic.Reciept.listReceipts(user, handler);
 
             mav.addObject("receipts", receipts);
         } catch (Exception ex) {
@@ -142,7 +152,6 @@ public class ReceiptController {
         ModelAndView mav = new ModelAndView();
 
         try {
-            databaseAccess.DBHandler handler = databaseAccess.mongoDB.MongoDBHelper.getDBHandler();
             business.businessModel.Receipt receipt = handler.getReceipt(receiptID);
 
             mav = correctReceipt(receipt);
@@ -159,10 +168,10 @@ public class ReceiptController {
     public void updateItem(@RequestBody String json) {
         try {
 
-            business.businessModel.Receipt receipt = JSONParser.getReceipt(json, MongoDBHelper.getDBHandler());
+            business.businessModel.Receipt receipt = JSONParser.getReceipt(json, handler);
             business.businessModel.Item item = JSONParser.getItem(json);
 
-            business.businessLogic.Reciept.parseReceiptUpdateJSON(receipt, item, MongoDBHelper.getDBHandler());
+            business.businessLogic.Reciept.parseReceiptUpdateJSON(receipt, item, handler);
         } catch (Exception ex) {
             //TODO: Error Handling
         }
@@ -172,7 +181,8 @@ public class ReceiptController {
     @ResponseStatus(HttpStatus.OK)
     public void finalizeReceipt(@RequestBody String json) {
         try {
-            business.businessLogic.Reciept.finalizeReceipt(json, MongoDBHelper.getDBHandler());
+            business.businessModel.Receipt receipt = JSONParser.finalizeReceipt(json, handler);
+            business.businessLogic.Reciept.finalizeReceipt(receipt, handler);
         } catch (Exception ex) {
             //TODO: Error Handling
         }
